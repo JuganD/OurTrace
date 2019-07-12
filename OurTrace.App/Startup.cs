@@ -14,6 +14,8 @@ using OurTrace.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Data.Identity.Models;
+using OurTrace.Services.Abstraction;
+using OurTrace.Services;
 
 namespace OurTrace.App
 {
@@ -28,7 +30,7 @@ namespace OurTrace.App
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -47,12 +49,16 @@ namespace OurTrace.App
                      options.Password.RequireNonAlphanumeric = false;
                      options.Password.RequireLowercase = false;
                  })
-                .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<OurTraceDbContext>();
 
+            services.AddScoped<IUsersService, UsersService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

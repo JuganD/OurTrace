@@ -1,0 +1,33 @@
+﻿@using OurTrace.App.Models.Identity
+@model LoginInputModel
+
+<form asp-controller="User" asp-action="Login" method="post">
+    <div class="row">
+        <div asp-validation-summary="All" class="text-danger col-lg-12 sn-field"></div>
+        <div class="col-lg-12 no-pdd">
+            <div class="sn-field">
+                <input asp-for="Username" type="text" name="username" placeholder="Username">
+                <span asp-validation-for="Username" class="text-danger"></span>
+                <i class="la la-user"></i>
+            </div><!--sn-field end-->
+        </div>
+        <div class="col-lg-12 no-pdd">
+            <div class="sn-field">
+                <input asp-for="Password" type="password" name="password" placeholder="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <i class="la la-lock"></i>
+            </div>
+        </div>
+
+        <div class="col-lg-12 no-pdd">
+            <label asp-for="RememberMe">
+                <input class="col-md-1 align-middle" asp-for="RememberMe" />
+                <span class="align-middle">@Html.DisplayNameFor(m => m.RememberMe)</span>
+            </label>
+        </div>
+
+        <div class="col-lg-12 no-pdd">
+            <button style="width:100%" type="submit" value="submit">Login</button>
+        </div>
+    </div>
+</form>

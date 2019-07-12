@@ -3,25 +3,54 @@
 @inject SignInManager<OurTraceUser> SignInManager
 @inject UserManager<OurTraceUser> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="user-info">
+        <img src="http://via.placeholder.com/30x30" alt="">
+        <a href="#" title="">@User.Identity.Name</a>
+    </div>
+    <div class="user-account-settingss">
+        <h3>Online Status</h3>
+        <ul class="on-off-status">
+            <li>
+                <div class="fgt-sec">
+                    <input type="radio" name="cc" id="c5">
+                    <label for="c5">
+                        <span></span>
+                    </label>
+                    <small>Online</small>
+                </div>
+            </li>
+            <li>
+                <div class="fgt-sec">
+                    <input type="radio" name="cc" id="c6">
+                    <label for="c6">
+                        <span></span>
+                    </label>
+                    <small>Offline</small>
+                </div>
+            </li>
+        </ul>
+        <h3>Custom Status</h3>
+        <div class="search_form">
+            <form>
+                <input type="text" name="search">
+                <button type="submit">Ok</button>
             </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+        </div><!--search_form end-->
+        <h3>Setting</h3>
+        <ul class="us-links">
+            <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
+            <li><a href="#" title="">Privacy</a></li>
+            <li><a href="#" title="">Faqs</a></li>
+            <li><a href="#" title="">Terms & Conditions</a></li>
+        </ul>
+        <h3 class="tc"><a asp-controller="User" asp-action="Logout" title="">Logout</a></h3>
+    </div><!--user-account-settingss end-->
+}
+else
+{
+    <div class="user-info">
+        <a asp-controller="User" asp-action="Authenticate">Login / Register</a>
+    </div>
+}

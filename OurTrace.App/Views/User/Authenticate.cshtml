@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Authenticate";
+}
+@{
+    bool RegisterLocation = false;
+    string tab1Class = "current";
+    string tab2Class = "";
+    if (ViewData["auth_location_register"] != null && (bool)ViewData["auth_location_register"] == true)
+    {
+        RegisterLocation = true;
+        tab2Class = tab1Class;
+        tab1Class = "";
+    }
+}
+<div class="sign-in-page">
+    <div class="signin-popup">
+        <div class="signin-pop">
+            <div class="login-sec">
+                <ul class="sign-control">
+                    @if (RegisterLocation)
+                    {
+                        <li data-tab="tab-1"><a href="#" title="">Login</a></li>
+                        <li data-tab="tab-2" class="current"><a href="#" title="">Register</a></li>
+                    }
+                    else
+                    {
+                        <li data-tab="tab-1" class="current"><a href="#" title="">Login</a></li>
+                        <li data-tab="tab-2"><a href="#" title="">Register</a></li>
+                    }
+                </ul>
+                <div class="sign_in_sec @tab1Class" id="tab-1">
+                    <h3 class="text-center">Login</h3>
+                    <partial name="_AuthenticateLoginPartial" />
+                </div><!--sign_in_sec end-->
+
+                <div class="sign_in_sec @tab2Class" id="tab-2">
+                    <div class="dff-tab current" id="tab-3">
+                        <h3 class="text-center">Register</h3>
+                        <partial name="_AuthenticateRegisterPartial" />
+                    </div><!--login-tab end-->
+                </div>
+            </div><!--login-sec end-->
+        </div>
+    </div><!--signin-pop end-->
+</div><!--signin-popup end-->

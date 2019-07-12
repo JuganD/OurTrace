@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurTrace.App", "OurTrace.App\OurTrace.App.csproj", "{B45A94AA-22F1-492E-87AA-81C7983FE7DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurTrace.Data", "OurTrace.Data\OurTrace.Data.csproj", "{AFA21170-B482-4062-A211-040CFEA1DB49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurTrace.Data", "OurTrace.Data\OurTrace.Data.csproj", "{AFA21170-B482-4062-A211-040CFEA1DB49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurTrace.Services", "OurTrace.Services\OurTrace.Services.csproj", "{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AFA21170-B482-4062-A211-040CFEA1DB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA21170-B482-4062-A211-040CFEA1DB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFA21170-B482-4062-A211-040CFEA1DB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
