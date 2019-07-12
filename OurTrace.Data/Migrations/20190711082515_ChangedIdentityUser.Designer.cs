@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OurTrace.App.Data;
+using OurTrace.Data;
 
-namespace OurTrace.App.Data.Migrations
+namespace OurTrace.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(OurTraceDbContext))]
     [Migration("20190711082515_ChangedIdentityUser")]
     partial class ChangedIdentityUser
     {
@@ -135,7 +135,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Identity.Models.OurTraceUser", b =>
+            modelBuilder.Entity("OurTrace.Data.Identity.Models.OurTraceUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -198,7 +198,7 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -206,7 +206,7 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -219,7 +219,7 @@ namespace OurTrace.App.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -227,7 +227,7 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

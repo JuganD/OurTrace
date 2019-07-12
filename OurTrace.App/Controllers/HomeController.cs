@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OurTrace.App.Data;
-using OurTrace.App.Data.Identity.Models;
+using OurTrace.Data;
+using OurTrace.Data.Identity.Models;
 using OurTrace.App.Models;
 
 namespace OurTrace.App.Controllers
@@ -15,13 +15,13 @@ namespace OurTrace.App.Controllers
     public class HomeController : Controller
     {
         private readonly SignInManager<OurTraceUser> _signInManager;
-        private readonly ApplicationDbContext dbContext;
+        private readonly OurTraceDbContext dbContext;
         private readonly UserManager<OurTraceUser> _userManager;
 
         public HomeController(
             UserManager<OurTraceUser> userManager,
             SignInManager<OurTraceUser> signInManager,
-            ApplicationDbContext dbContext)
+            OurTraceDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

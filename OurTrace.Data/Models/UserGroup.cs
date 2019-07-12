@@ -1,10 +1,10 @@
-﻿using OurTrace.App.Data.Identity.Models;
+﻿using OurTrace.Data.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OurTrace.App.Data.Models
+namespace OurTrace.Data.Models
 {
     public class UserGroup
     {

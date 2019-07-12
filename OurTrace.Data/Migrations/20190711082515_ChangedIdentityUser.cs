@@ -1,14 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OurTrace.App.Data.Migrations
+namespace OurTrace.Data.Migrations
 {
-    public partial class AddedBirthDate : Migration
+    public partial class ChangedIdentityUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "BirthDate",
+            migrationBuilder.AddColumn<string>(
+                name: "FullName",
                 table: "AspNetUsers",
                 nullable: true);
         }
@@ -16,7 +15,7 @@ namespace OurTrace.App.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "BirthDate",
+                name: "FullName",
                 table: "AspNetUsers");
         }
     }

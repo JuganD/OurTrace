@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using OurTrace.App.Data.Identity.Models;
+using OurTrace.Data.Identity.Models;
 
 namespace OurTrace.App.Areas.Identity.Pages.Account.Manage
 {

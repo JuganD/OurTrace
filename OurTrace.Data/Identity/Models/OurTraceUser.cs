@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OurTrace.App.Data.Models;
+using OurTrace.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OurTrace.App.Data.Identity.Models
+namespace OurTrace.Data.Identity.Models
 {
     public class OurTraceUser : IdentityUser<string>
     {

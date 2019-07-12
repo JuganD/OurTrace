@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OurTrace.App.Data;
+using OurTrace.Data;
 
-namespace OurTrace.App.Data.Migrations
+namespace OurTrace.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(OurTraceDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -133,7 +133,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Identity.Models.OurTraceUser", b =>
+            modelBuilder.Entity("OurTrace.Data.Identity.Models.OurTraceUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -194,7 +194,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Comment", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Comment", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -218,7 +218,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Friendship", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Friendship", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -240,7 +240,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Friendships");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Group", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Group", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -266,7 +266,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.GroupAdmin", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.GroupAdmin", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -286,7 +286,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("GroupAdmins");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Message", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Message", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -308,7 +308,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Post", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Post", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -342,7 +342,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Share", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Share", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -366,7 +366,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("Shares");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.UserGroup", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.UserGroup", b =>
                 {
                     b.Property<string>("GroupId");
 
@@ -379,7 +379,7 @@ namespace OurTrace.App.Data.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Wall", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Wall", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -399,7 +399,7 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -407,7 +407,7 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -420,7 +420,7 @@ namespace OurTrace.App.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -428,117 +428,117 @@ namespace OurTrace.App.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Identity.Models.OurTraceUser", b =>
+            modelBuilder.Entity("OurTrace.Data.Identity.Models.OurTraceUser", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Wall", "Wall")
+                    b.HasOne("OurTrace.Data.Models.Wall", "Wall")
                         .WithOne()
-                        .HasForeignKey("OurTrace.App.Data.Identity.Models.OurTraceUser", "WallId")
+                        .HasForeignKey("OurTrace.Data.Identity.Models.OurTraceUser", "WallId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Comment", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Comment", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Post", "Post")
+                    b.HasOne("OurTrace.Data.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "User")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Friendship", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Friendship", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "Recipient")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Recipient")
                         .WithMany("ReceivedFriendships")
                         .HasForeignKey("RecipientId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "Sender")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Sender")
                         .WithMany("SentFriendships")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Group", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Group", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "Creator")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId");
 
-                    b.HasOne("OurTrace.App.Data.Models.Wall", "Wall")
+                    b.HasOne("OurTrace.Data.Models.Wall", "Wall")
                         .WithOne()
-                        .HasForeignKey("OurTrace.App.Data.Models.Group", "WallId")
+                        .HasForeignKey("OurTrace.Data.Models.Group", "WallId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.GroupAdmin", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.GroupAdmin", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Group", "Group")
+                    b.HasOne("OurTrace.Data.Models.Group", "Group")
                         .WithMany("Admins")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "User")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Message", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Message", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "Recipient")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Recipient")
                         .WithMany()
                         .HasForeignKey("RecipientId");
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "Sender")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Post", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Post", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Wall", "Location")
+                    b.HasOne("OurTrace.Data.Models.Wall", "Location")
                         .WithMany("Posts")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "User")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.Share", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.Share", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Wall", "Destination")
+                    b.HasOne("OurTrace.Data.Models.Wall", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId");
 
-                    b.HasOne("OurTrace.App.Data.Models.Post", "Post")
+                    b.HasOne("OurTrace.Data.Models.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId");
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "User")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("OurTrace.App.Data.Models.UserGroup", b =>
+            modelBuilder.Entity("OurTrace.Data.Models.UserGroup", b =>
                 {
-                    b.HasOne("OurTrace.App.Data.Models.Group", "Group")
+                    b.HasOne("OurTrace.Data.Models.Group", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OurTrace.App.Data.Identity.Models.OurTraceUser", "User")
+                    b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
                         .WithMany("Groups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

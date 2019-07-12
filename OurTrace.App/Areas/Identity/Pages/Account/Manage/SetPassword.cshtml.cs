@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using OurTrace.App.Data.Identity.Models;
+using OurTrace.Data.Identity.Models;
 
 namespace OurTrace.App.Areas.Identity.Pages.Account.Manage
 {

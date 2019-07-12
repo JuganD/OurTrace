@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OurTrace.App.Data;
-using OurTrace.App.Data.Identity.Models;
+using OurTrace.Data;
+using OurTrace.Data.Identity.Models;
 
 [assembly: HostingStartup(typeof(OurTrace.App.Areas.Identity.IdentityHostingStartup))]
 namespace OurTrace.App.Areas.Identity

@@ -1,9 +1,9 @@
-﻿using OurTrace.App.Data.Identity.Models;
+﻿using OurTrace.Data.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Data.Models
+namespace OurTrace.Data.Models
 {
     public class Post
     {

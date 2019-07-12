@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Data.Models
+namespace OurTrace.Data.Models
 {
     public class Wall
     {

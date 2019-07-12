@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OurTrace.App.Data.Identity;
-using OurTrace.App.Data.Identity.Models;
-using OurTrace.App.Data.Models;
+using OurTrace.Data.Identity.Models;
+using OurTrace.Data.Models;
 
-namespace OurTrace.App.Data
+namespace OurTrace.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<OurTraceUser, IdentityRole, string>
+    public class OurTraceDbContext : IdentityDbContext<OurTraceUser, IdentityRole, string>
     {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
@@ -23,7 +19,7 @@ namespace OurTrace.App.Data
         public DbSet<UserGroup> UserGroups { get; set; }
 
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public OurTraceDbContext(DbContextOptions<OurTraceDbContext> options)
             : base(options)
         {
         }

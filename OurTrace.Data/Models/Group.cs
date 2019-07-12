@@ -1,10 +1,10 @@
-﻿using OurTrace.App.Data.Identity.Models;
+﻿using OurTrace.Data.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OurTrace.App.Data.Models
+namespace OurTrace.Data.Models
 {
     public class Group
     {
