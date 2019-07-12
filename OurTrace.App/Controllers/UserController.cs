@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.Identity;
@@ -27,22 +29,43 @@ namespace OurTrace.App.Controllers
             this.usersService = usersService;
         }
 
-        public async Task<IActionResult> Authenticate()
+        #region Get
+        public async Task<IActionResult> Authenticate(string ReturnUrl = null)
         {
             // Ensure not signed in
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await HttpContext.SignOutAsync();
 
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl = null)
         {
-            return RedirectToAction("Authenticate");
+            return RedirectToAction("Authenticate", ReturnUrl);
         }
-        public IActionResult Register()
+        public IActionResult Register(string ReturnUrl = null)
         {
             return RedirectToAction("Authenticate");
         }
 
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            // TODO: rework
+            return View();
+        }
+        public IActionResult Lockout()
+        {
+            return View();
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return LocalRedirect("/");
+        }
+        
+        #endregion
+
+        #region Post
         [AutoValidateAntiforgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(LoginInputModel model)
@@ -52,6 +75,10 @@ namespace OurTrace.App.Controllers
                 var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return LocalRedirect(model.ReturnUrl);
+                    }
                     return LocalRedirect("/");
                 }
                 if (result.IsLockedOut)
@@ -92,14 +119,6 @@ namespace OurTrace.App.Controllers
             ViewData["auth_location_register"] = true;
             return View("Authenticate");
         }
-        public IActionResult Lockout()
-        {
-            return View();
-        }
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return LocalRedirect("/");
-        }
+        #endregion
     }
 }

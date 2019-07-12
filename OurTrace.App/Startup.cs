@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Services.Abstraction;
 using OurTrace.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace OurTrace.App
 {
@@ -41,18 +42,21 @@ namespace OurTrace.App
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<OurTraceUser>(options =>
-                 {
-                     options.Password.RequireDigit = false;
-                     options.Password.RequiredLength = 6;
-                     options.Password.RequireUppercase = false;
-                     options.Password.RequireNonAlphanumeric = false;
-                     options.Password.RequireLowercase = false;
-                 })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<OurTraceDbContext>();
+            services.AddIdentity<OurTraceUser, IdentityRole>(options =>
+                  {
+                      options.Password.RequireDigit = false;
+                      options.Password.RequiredLength = 6;
+                      options.Password.RequireUppercase = false;
+                      options.Password.RequireNonAlphanumeric = false;
+                      options.Password.RequireLowercase = false;
+                  })
+                .AddEntityFrameworkStores<OurTraceDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Authenticate");
 
             services.AddScoped<IUsersService, UsersService>();
+
 
             services.AddMvc(options =>
             {

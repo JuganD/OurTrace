@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OurTrace.App.Attributes.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OurTrace.App.Models.Identity
@@ -35,6 +36,7 @@ namespace OurTrace.App.Models.Identity
         public string ConfirmPassword { get; set; }
 
         [Required]
+        [IsTrue(ErrorMessage = "You need to agree with the terms of service!")]
         public bool TermsOfServiceAgreement { get; set; }
     }
 }
