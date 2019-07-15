@@ -17,6 +17,7 @@ using OurTrace.Data.Identity.Models;
 using OurTrace.Services.Abstraction;
 using OurTrace.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using AutoMapper;
 
 namespace OurTrace.App
 {
@@ -31,7 +32,8 @@ namespace OurTrace.App
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddAutoMapper(typeof(Startup));
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -39,8 +41,11 @@ namespace OurTrace.App
             });
 
             services.AddDbContext<OurTraceDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => 
+                    b.MigrationsAssembly("OurTrace.App"));
+                    
+                });
 
             services.AddIdentity<OurTraceUser, IdentityRole>(options =>
                   {
@@ -83,6 +88,7 @@ namespace OurTrace.App
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            
             app.UseAuthentication();
 
             app.UseMvc(routes =>

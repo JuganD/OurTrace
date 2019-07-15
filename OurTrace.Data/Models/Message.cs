@@ -23,6 +23,7 @@ namespace OurTrace.Data.Models
         public string RecipientId { get; set; }
         public OurTraceUser Recipient { get; set; }
 
+        [Required]
         public string Content { get; set; }
 
         public DateTime CreatedOn { get; set; }

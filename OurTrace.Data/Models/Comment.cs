@@ -1,5 +1,6 @@
 ﻿using OurTrace.Data.Identity.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OurTrace.Data.Models
@@ -10,6 +11,7 @@ namespace OurTrace.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
             this.CreatedOn = DateTime.UtcNow;
+            this.Likes = new List<CommentLike>();
         }
         [Key]
         public string Id { get; set; }
@@ -22,5 +24,6 @@ namespace OurTrace.Data.Models
 
         public string PostId { get; set; }
         public Post Post { get; set; }
+        public ICollection<CommentLike> Likes { get; set; }
     }
 }

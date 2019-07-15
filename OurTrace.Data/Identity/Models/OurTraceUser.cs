@@ -15,6 +15,8 @@ namespace OurTrace.Data.Identity.Models
             this.SentFriendships = new List<Friendship>();
             this.ReceivedFriendships = new List<Friendship>();
             this.Groups = new List<UserGroup>();
+            this.Following = new List<Follow>();
+            this.Followers = new List<Follow>();
         }
         public string FullName { get; set; }
         public DateTime? BirthDate { get; set; }
@@ -27,5 +29,7 @@ namespace OurTrace.Data.Identity.Models
         public ICollection<Friendship> SentFriendships { get; set; }
         public ICollection<Friendship> ReceivedFriendships { get; set; }
         public ICollection<UserGroup> Groups { get; set; }
+        public ICollection<Follow> Following { get; set; }
+        public ICollection<Follow> Followers { get; set; }
     }
 }

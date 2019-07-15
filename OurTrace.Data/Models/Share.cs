@@ -24,8 +24,5 @@ namespace OurTrace.Data.Models
 
         public string PostId { get; set; }
         public Post Post { get; set; }
-
-        public string DestinationId { get; set; }
-        public Wall Destination { get; set; }
     }
 }

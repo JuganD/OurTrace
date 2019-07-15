@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
+using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OurTrace.App.Models.Identity;
+using Newtonsoft.Json;
+using OurTrace.App.Models.InputModels.Identity;
+using OurTrace.App.Models.InputModels.Identity.Settings;
+using OurTrace.App.Models.ViewModels.Identity.Profile;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Services;
 using OurTrace.Services.Abstraction;
@@ -19,21 +24,26 @@ namespace OurTrace.App.Controllers
         private readonly SignInManager<OurTraceUser> signInManager;
         private readonly UserManager<OurTraceUser> userManager;
         private readonly IUsersService usersService;
+        private readonly IMapper mapper;
 
         public UserController(SignInManager<OurTraceUser> signInManager,
             UserManager<OurTraceUser> userManager,
-            IUsersService usersService)
+            IUsersService usersService,
+            IMapper mapper)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.usersService = usersService;
+            this.mapper = mapper;
         }
 
         #region Get
-        public async Task<IActionResult> Authenticate(string ReturnUrl = null)
+        public IActionResult Authenticate(string ReturnUrl = null)
         {
-            // Ensure not signed in
-            await HttpContext.SignOutAsync();
+            if (this.signInManager.IsSignedIn(this.User))
+            {
+                return LocalRedirect("/");
+            }
 
             ViewData["ReturnUrl"] = ReturnUrl;
             return View();
@@ -50,13 +60,38 @@ namespace OurTrace.App.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            // TODO: rework
-            return View();
+            var user = await usersService.GetUserAsync(this.User.Identity.Name);
+            var userRandom = await usersService.GetUserAsync("Dido");
+            
+            //var post = new Data.Models.Post()
+            //{
+            //    User = user,
+            //    Content = "Originating from the number 100 written on a school exam or pap on a school exam or papon a school exam or papOriginating from the number 100 written on a school exam or pap on a school exam or papon a school exam or papOriginating from the number 100 written on a school exam or pap on a school exam or papon a school exam or pap",
+            //    Location = user.Wall
+            //};
+            //post.Comments.Add(new Data.Models.Comment()
+            //{
+            //    User = user,
+            //    Content = "Mn qko brat :D",
+            //    Post = post
+            //});
+            //user.Posts.Add(post);
+
+            //if (!await usersService.CheckFollowExistsAsync(user, userRandom))
+            //{
+            //    await usersService.AddFollowerAsync(user, userRandom);
+            //}
+
+            var profileInfo = mapper.Map<ProfileViewModel>(user);
+            return View(profileInfo);
         }
+
         public IActionResult Lockout()
         {
             return View();
         }
+
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
@@ -119,6 +154,7 @@ namespace OurTrace.App.Controllers
             ViewData["auth_location_register"] = true;
             return View("Authenticate");
         }
+        
         #endregion
     }
 }

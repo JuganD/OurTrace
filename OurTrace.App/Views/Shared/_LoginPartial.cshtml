@@ -10,6 +10,9 @@
         <a href="#" title="">@User.Identity.Name</a>
     </div>
     <div class="user-account-settingss">
+        <div class="us-links">
+            <a asp-controller="User" asp-action="Profile" title="">Profile</a>
+        </div>
         <h3>Online Status</h3>
         <ul class="on-off-status">
             <li>
@@ -40,10 +43,7 @@
         </div><!--search_form end-->
         <h3>Setting</h3>
         <ul class="us-links">
-            <li><a href="profile-account-setting.html" title="">Account Setting</a></li>
-            <li><a href="#" title="">Privacy</a></li>
-            <li><a href="#" title="">Faqs</a></li>
-            <li><a href="#" title="">Terms & Conditions</a></li>
+            <li><a asp-controller="Settings" asp-action="Index" title="">Account Settings</a></li>
         </ul>
         <h3 class="tc"><a asp-controller="User" asp-action="Logout" title="">Logout</a></h3>
     </div><!--user-account-settingss end-->

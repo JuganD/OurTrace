@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="~/lib/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="~/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="~/css/post.css">
 </head>
 <body>
 
@@ -82,7 +83,7 @@
                                 </a>
                                 <div class="notification-box msg">
                                     <div class="nt-title">
-                                        <h4>Setting</h4>
+                                        <h4>Settings</h4>
                                         <a href="#" title="">Clear all</a>
                                     </div>
                                     <div class="nott-list">
@@ -189,7 +190,8 @@
                 </div><!--header-data end-->
             </div>
         </header><!--header end-->
-        <div class="pt-5">
+        <div style="padding-top:5rem">
+            <partial name="_CookieConsentPartial" />
             @RenderBody()
         </div>
 
@@ -201,6 +203,8 @@
     <script src="~/js/jquery.range-min.js" asp-append-version="true"></script>
     <script src="~/lib/slick/slick.min.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
+    <script src="~/js/localtime.js" asp-append-version="true"></script>
+    <script src="~/js/post.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
