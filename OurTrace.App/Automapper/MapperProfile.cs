@@ -26,7 +26,9 @@ namespace OurTrace.App.Automapper
             CreateMap<Post, PostViewModel>()
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
-                .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)));
+                .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
+                .ForMember(dest => dest.Likes, actual => actual.MapFrom(x => x.Likes.Count))
+                .ForMember(dest => dest.Shares, actual => actual.MapFrom(x => x.Shares.Count));
 
             CreateMap<Comment, CommentViewModel>()
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
