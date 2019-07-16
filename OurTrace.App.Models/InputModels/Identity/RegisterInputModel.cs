@@ -1,4 +1,5 @@
-﻿using OurTrace.App.Attributes.Validation;
+﻿using OurTrace.App.Models.Attributes.Validation;
+using OurTrace.Data.Identity.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,11 +9,26 @@ namespace OurTrace.App.Models.InputModels.Identity
     {
         [Required]
         [Display(Name = "Username")]
+        [NoSpecialSymbols]
+        [StringLength(maximumLength: 20, MinimumLength = 3)]
         public string Username { get; set; }
 
         [Required]
         [Display(Name = "Full Name")]
+        [NoSpecialSymbols]
+        [StringLength(maximumLength: 50, MinimumLength = 3)]
         public string FullName { get; set; }
+
+        [Required]
+        [Display(Name = "Country")]
+        [NoSpecialSymbols]
+        [IsValidCountry(ErrorMessage = "Not a valid country.")]
+        public string Country { get; set; }
+
+        [Required]
+        [Display(Name = "Sex")]
+        [StringRange(AllowableValues = new string[] { "Male", "Female" }, ErrorMessage = "Please select sex from the dropdown")]
+        public UserSex Sex { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

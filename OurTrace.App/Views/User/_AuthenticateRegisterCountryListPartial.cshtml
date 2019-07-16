@@ -1,0 +1,9 @@
+﻿@using OurTrace.App.Models.InputModels.Identity
+@model RegisterInputModel
+
+    <select asp-for="Country" class="form-control">
+        @foreach (var country in OurTrace.App.Helpers.CountryHelper.Countries)
+        {
+            <option value="@country">@country</option>
+        }
+    </select>

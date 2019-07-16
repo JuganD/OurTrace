@@ -1,4 +1,4 @@
-﻿using OurTrace.App.Attributes.Validation;
+﻿using OurTrace.App.Models.Attributes.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace OurTrace.App.Models.InputModels.Identity.Settings

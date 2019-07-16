@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OurTrace.App.Models\OurTrace.App.Models.csproj" />
     <ProjectReference Include="..\OurTrace.Data\OurTrace.Data.csproj" />
   </ItemGroup>
 

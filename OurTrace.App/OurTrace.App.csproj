@@ -16,6 +16,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\OurTrace.App.Models\OurTrace.App.Models.csproj" />
     <ProjectReference Include="..\OurTrace.Services\OurTrace.Services.csproj" />
   </ItemGroup>
 

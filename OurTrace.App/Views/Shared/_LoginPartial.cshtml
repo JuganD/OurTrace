@@ -6,12 +6,11 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <div class="user-info">
-        <img src="http://via.placeholder.com/30x30" alt="">
-        <a href="#" title="">@User.Identity.Name</a>
+        <a href="#" onclick="return false" title="">@User.Identity.Name</a>
     </div>
     <div class="user-account-settingss">
         <div class="us-links">
-            <a asp-controller="User" asp-action="Profile" title="">Profile</a>
+            <a asp-controller="User" asp-action="Profile" asp-route-username="@User.Identity.Name" title="" style="padding-left:40%;padding-right:40%;">Profile</a>
         </div>
         <h3>Online Status</h3>
         <ul class="on-off-status">

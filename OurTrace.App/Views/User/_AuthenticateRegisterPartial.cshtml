@@ -1,4 +1,5 @@
 ﻿@using OurTrace.App.Models.InputModels.Identity
+@using OurTrace.Data.Identity.Models
 @model RegisterInputModel
 
 <form asp-controller="User" asp-action="Register" method="post">
@@ -22,6 +23,22 @@
             <div class="sn-field">
                 <input asp-for="FullName" placeholder="Full Name" class="form-control" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
+                <i class="fa fa-user"></i>
+            </div>
+        </div>
+        <div class="col-lg-12 no-pdd">
+            <div class="sn-field">
+                <partial name="_AuthenticateRegisterCountryListPartial" model="Model" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+                <i class="fa fa-user"></i>
+            </div>
+        </div>
+        <div class="col-lg-12 no-pdd">
+            <div class="sn-field">
+                <select asp-for="Sex" asp-items="Html.GetEnumSelectList<UserSex>()" class="form-control">
+                    <option selected="selected" value="">Please select sex</option>
+                </select>
+                <span asp-validation-for="Sex" class="text-danger"></span>
                 <i class="fa fa-user"></i>
             </div>
         </div>

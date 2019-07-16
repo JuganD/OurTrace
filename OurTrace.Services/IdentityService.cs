@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using OurTrace.App.Models.ViewModels.Identity.Profile;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
@@ -11,15 +11,16 @@ using System.Threading.Tasks;
 
 namespace OurTrace.Services
 {
-    public class UsersService : IUsersService
+    public class IdentityService : IIdentityService
     {
         private readonly OurTraceDbContext dbContext;
 
-        public UsersService(OurTraceDbContext dbContext)
+        public IdentityService(OurTraceDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        public OurTraceUser GetNewUser(string username, string email, string fullname, DateTime? birthDate)
+        public OurTraceUser GetNewUser(string username, string email, string fullname,
+            DateTime? birthDate, string country, UserSex sex)
         {
             var wall = new Wall();
 
@@ -29,6 +30,8 @@ namespace OurTrace.Services
                 Email = email,
                 FullName = fullname,
                 BirthDate = birthDate,
+                Country = country,
+                Sex = sex,
                 Wall = wall
             };
 
@@ -51,23 +54,7 @@ namespace OurTrace.Services
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task AddFollowerAsync(OurTraceUser sender, OurTraceUser recipient)
-        {
-            if (sender.Id != recipient.Id)
-            {
-                await this.dbContext.Follows.AddAsync(new Follow()
-                {
-                    Sender = sender,
-                    Recipient = recipient
-                });
-                await this.dbContext.SaveChangesAsync();
-            }
-        }
-        public async Task<bool> CheckFollowExistsAsync(OurTraceUser sender, OurTraceUser recipient)
-        {
-            int follows = await this.dbContext.Follows.CountAsync(x => x.Sender == sender && x.Recipient == recipient);
-            return follows > 0;
-        }
+
         private IQueryable<OurTraceUser> AttachRequiredInclusionsToUser(IQueryable<OurTraceUser> query)
         {
             return query
@@ -75,23 +62,15 @@ namespace OurTrace.Services
                 .Include(x => x.Following)
                 .Include(x => x.Wall)
                     .ThenInclude(x => x.Posts)
+                .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Sender)
+                 .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Recipient)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Sender)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Recipient)
                 .Include(x => x.Comments);
-        }
-
-        public async Task AddLikeAsync(string postId, string userId)
-        {
-            var user = await GetUserByIdAsync(userId);
-            var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);
-
-            if (!post.Likes.Any(x=>x.User == user && x.Post == post))
-            {
-                post.Likes.Add(new PostLike()
-                {
-                    Post = post,
-                    User = user
-                });
-                await this.dbContext.SaveChangesAsync();
-            }
         }
     }
 }

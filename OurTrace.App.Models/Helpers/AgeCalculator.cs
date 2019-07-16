@@ -19,25 +19,33 @@ namespace OurTrace.Services.Helpers
 
                 if (Cday.Month > Bday.Month)
                 {
-                    return Cday.Year - Bday.Year;
+                    int val = Cday.Year - Bday.Year;
+                    if (val < 0) val = 0;
+                    return val;
                 }
                 else if (Cday.Month == Bday.Month)
                 {
                     if (Cday.Day >= Bday.Day)
                     {
-                        return Cday.Year - Bday.Year;
+                        int val = Cday.Year - Bday.Year;
+                        if (val < 0) val = 0;
+                        return val;
                     }
                     else
                     {
-                        return (Cday.Year - 1) - Bday.Year;
+                        int val = (Cday.Year - 1) - Bday.Year;
+                        if (val < 0) val = 0;
+                        return val;
                     }
                 }
                 else
                 {
-                    return (Cday.Year - 1) - Bday.Year;
+                    int val = Cday.Year - Bday.Year;
+                    if (val < 0) val = 0;
+                    return val;
                 }
             }
-            return -1;
+            return 0;
         }
     }
 }

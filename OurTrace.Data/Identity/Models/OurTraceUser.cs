@@ -20,6 +20,8 @@ namespace OurTrace.Data.Identity.Models
         }
         public string FullName { get; set; }
         public DateTime? BirthDate { get; set; }
+        public string Country { get; set; }
+        public UserSex Sex { get; set; }
 
         public string WallId { get; set; }
         public Wall Wall { get; set; }
@@ -31,5 +33,12 @@ namespace OurTrace.Data.Identity.Models
         public ICollection<UserGroup> Groups { get; set; }
         public ICollection<Follow> Following { get; set; }
         public ICollection<Follow> Followers { get; set; }
+    }
+
+    // There are only two genders OKAY ? :@
+    public enum UserSex
+    {
+        Male = 1,
+        Female = 2
     }
 }

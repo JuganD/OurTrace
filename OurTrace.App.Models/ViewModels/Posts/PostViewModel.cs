@@ -17,5 +17,6 @@ namespace OurTrace.App.Models.ViewModels.Posts
         public PostVisibilityType VisibilityType { get; set; }
         public string Creator { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using OurTrace.App.Models.InputModels.Identity;
 using OurTrace.App.Models.InputModels.Identity.Settings;
@@ -23,17 +24,20 @@ namespace OurTrace.App.Controllers
     {
         private readonly SignInManager<OurTraceUser> signInManager;
         private readonly UserManager<OurTraceUser> userManager;
-        private readonly IUsersService usersService;
+        private readonly IIdentityService identityService;
+        private readonly IRelationsService relationsService;
         private readonly IMapper mapper;
 
         public UserController(SignInManager<OurTraceUser> signInManager,
             UserManager<OurTraceUser> userManager,
-            IUsersService usersService,
+            IIdentityService usersService,
+            IRelationsService relationsService,
             IMapper mapper)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
-            this.usersService = usersService;
+            this.identityService = usersService;
+            this.relationsService = relationsService;
             this.mapper = mapper;
         }
 
@@ -58,32 +62,22 @@ namespace OurTrace.App.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(string username)
         {
-            var user = await usersService.GetUserAsync(this.User.Identity.Name);
-            var userRandom = await usersService.GetUserAsync("Dido");
-            
-            //var post = new Data.Models.Post()
-            //{
-            //    User = user,
-            //    Content = "Originating from the number 100 written on a school exam or pap on a school exam or papon a school exam or papOriginating from the number 100 written on a school exam or pap on a school exam or papon a school exam or papOriginating from the number 100 written on a school exam or pap on a school exam or papon a school exam or pap",
-            //    Location = user.Wall
-            //};
-            //post.Comments.Add(new Data.Models.Comment()
-            //{
-            //    User = user,
-            //    Content = "Mn qko brat :D",
-            //    Post = post
-            //});
-            //user.Posts.Add(post);
+            if (string.IsNullOrEmpty(username))
+                return await Profile(this.User.Identity.Name);
 
-            //if (!await usersService.CheckFollowExistsAsync(user, userRandom))
-            //{
-            //    await usersService.AddFollowerAsync(user, userRandom);
-            //}
+            var visitingUser = await identityService.GetUserAsync(username);
+            if (visitingUser != null)
+            {
+                var profileInfo = mapper.Map<ProfileViewModel>(visitingUser);
 
-            var profileInfo = mapper.Map<ProfileViewModel>(user);
-            return View(profileInfo);
+                await relationsService.PrepareUserProfileForViewAsync(profileInfo,
+                    this.User.Identity.Name, visitingUser);
+
+                return View(profileInfo);
+            }
+            return LocalRedirect("/");
         }
 
         public IActionResult Lockout()
@@ -97,7 +91,7 @@ namespace OurTrace.App.Controllers
             await signInManager.SignOutAsync();
             return LocalRedirect("/");
         }
-        
+
         #endregion
 
         #region Post
@@ -138,8 +132,7 @@ namespace OurTrace.App.Controllers
             if (ModelState.IsValid)
             {
                 // Creating it here because we are using built in usermanager
-
-                var user = this.usersService.GetNewUser(model.Username, model.Email, model.FullName, model.BirthDate);
+                var user = this.identityService.GetNewUser(model.Username, model.Email, model.FullName, model.BirthDate, model.Country, model.Sex);
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -154,7 +147,7 @@ namespace OurTrace.App.Controllers
             ViewData["auth_location_register"] = true;
             return View("Authenticate");
         }
-        
+
         #endregion
     }
 }

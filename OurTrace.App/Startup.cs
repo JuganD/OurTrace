@@ -33,7 +33,7 @@ namespace OurTrace.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -42,9 +42,9 @@ namespace OurTrace.App
 
             services.AddDbContext<OurTraceDbContext>(options =>
                 {
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => 
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b =>
                     b.MigrationsAssembly("OurTrace.App"));
-                    
+
                 });
 
             services.AddIdentity<OurTraceUser, IdentityRole>(options =>
@@ -60,7 +60,8 @@ namespace OurTrace.App
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Authenticate");
 
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IRelationsService, RelationsService>();
 
 
             services.AddMvc(options =>
@@ -88,11 +89,14 @@ namespace OurTrace.App
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            
+
             app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute("Profile", "Profile/{*username}",
+                    defaults: new { controller = "User", action = "Profile" });
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

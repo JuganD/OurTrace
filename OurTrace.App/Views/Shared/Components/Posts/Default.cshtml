@@ -2,47 +2,96 @@
 
 @foreach (var post in Model)
 {
-    <div class="post-bar">
-        <div class="post_topbar">
-            <div class="usy-dt">
-                <img src="http://via.placeholder.com/50x50" alt="">
-                <div class="usy-name">
-                    <h3>@post.Creator</h3>
-                    <img src="~/images//clock.png" alt=""><span class="utcDate">@post.CreatedOn</span>
+    <div class="posty">
+        <div class="post-bar no-margin">
+            <div class="post_topbar">
+                <div class="usy-dt">
+                    <img src="http://via.placeholder.com/50x50" alt="">
+                    <div class="usy-name">
+                        <h3>@post.Creator</h3>
+                        <img src="~/images/clock.png" alt=""><span class="utcDate">@post.CreatedOn</span>
+                    </div>
+                </div>
+                <div class="ed-opts">
+                    <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                    <ul class="ed-options">
+                        <li><a href="#" title="">Edit Post</a></li>
+                        <li><a href="#" title="">Unsaved</a></li>
+                        <li><a href="#" title="">Unbid</a></li>
+                        <li><a href="#" title="">Close</a></li>
+                        <li><a href="#" title="">Hide</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="ed-opts">
-                <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                <ul class="ed-options">
-                    <li><a href="#" title="">Edit Post</a></li>
-                    <li><a href="#" title="">Unsaved</a></li>
-                    <li><a href="#" title="">Unbid</a></li>
-                    <li><a href="#" title="">Close</a></li>
-                    <li><a href="#" title="">Hide</a></li>
+            <div class="job_descp">
+                <div class="postContent">@post.Content</div>
+
+                <ul class="skill-tags">
+                    @foreach (var tag in post.Tags)
+                    {
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            <li><a href="#" title="">@tag</a></li>
+                        }
+                    }
                 </ul>
             </div>
+            <div class="job-status-bar">
+                <ul class="like-com">
+                    <li>
+                        <span></span> <!--line breaker-->
+                        <a href="#"><i class="la la-heart"></i> Like</a>
+                    </li>
+                    <li><a href="#" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a></li>
+                </ul>
+                <a><i class="la la-share"></i>Shares @post.Shares</a>
+                <a><i class="la la-heart"></i>Likes @post.Likes</a>
+            </div>
         </div>
-        <div class="job_descp">
-            <div class="postContent">@post.Content</div>
 
-            <ul class="skill-tags">
-                <li><a href="#" title="">HTML</a></li>
-                <li><a href="#" title="">PHP</a></li>
-                <li><a href="#" title="">CSS</a></li>
-                <li><a href="#" title="">Javascript</a></li>
-                <li><a href="#" title="">Wordpress</a></li>
-            </ul>
-        </div>
-        <div class="job-status-bar">
-            <ul class="like-com">
-                <li>
-                    <a href="#"><i class="la la-heart"></i> Like</a>
-                    <img src="images/liked-img.png" alt="">
-                    <span>25</span>
-                </li>
-                <li><a href="#" title="" class="com"><img src="images/com.png" alt=""> Comments @post.Comments.Count</a></li>
-            </ul>
-            <a><i class="la la-eye"></i>Views 50</a>
+        <div class="comment-section" style="display: block;">
+            <div class="comment-sec">
+                <ul>
+                    @foreach (var comment in post.Comments)
+                    {
+                        <li>
+                            <div class="comment-list">
+                                <div class="bg-img">
+                                    <img src="http://via.placeholder.com/40x40" alt="">
+                                </div>
+                                <div class="comment">
+                                    <h3>@comment.Creator</h3>
+                                    <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
+                                    <p class="postContent">@comment.Content</p>
+                                </div>
+                            </div><!--comment-list end-->
+                        </li>
+                    }
+                </ul>
+            </div><!--comment-sec end-->
+            <div class="post-comment">
+                <div class="cm_img">
+                    <img src="http://via.placeholder.com/40x40" alt="">
+                </div>
+                <div class="comment_box">
+                    <form>
+                        <input type="text" placeholder="Post a comment">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div><!--post-comment end-->
+        </div><!--comment-section end-->
+    </div>
+}
+@if (Model.Count() == 0)
+{
+    <div class="post-bar no-margin">
+        <div class="post_topbar">
+            <div class="usy-dt">
+                <div class="usy-name ">
+                    <h3>Nothing to see here, I'm afraid.</h3>
+                </div>
+            </div>
         </div>
     </div>
 }

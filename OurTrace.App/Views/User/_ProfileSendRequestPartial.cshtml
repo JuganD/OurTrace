@@ -1,0 +1,44 @@
+﻿@using OurTrace.App.Models.ViewModels.Identity.Profile
+@model ProfileViewModel
+
+@if (!Model.IsHimself)
+{
+
+    @if (!Model.AreFriends)
+    {
+        if (Model.PendingFriendship)
+        {
+
+            <li class="btn-info" style="width:100%"><a> Pending friendship request</a></li>
+
+        }
+        else
+        {
+            <form asp-controller="Relations" asp-action="SendFriendship" method="post">
+                <input type="hidden" name="receiver" value="@Model.Username" />
+                <li style="width:100%"><button class="btn-info" style="width:100%" type="submit" value="submit"> Send friend request</button></li>
+            </form>
+        }
+    }
+    else
+    {
+        <form asp-controller="Relations" asp-action="RevokeFriendship" method="post">
+            <input type="hidden" name="receiver" value="@Model.Username" />
+            <li style="width:100%"><button class="btn-danger" style="width:100%" type="submit" value="submit"> Unfriend</button></li>
+        </form>
+    }
+    @if (!Model.IsFollowing)
+    {
+        <form asp-controller="Relations" asp-action="Follow" method="post">
+            <input type="hidden" name="receiver" value="@Model.Username" />
+            <li style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Follow</button></li>
+        </form>
+    }
+    else
+    {
+        <form asp-controller="Relations" asp-action="Unfollow" method="post">
+            <input type="hidden" name="receiver" value="@Model.Username" />
+            <li style="width:100%"><button class="btn-danger" style="width:100%" type="submit" value="submit"> Unfollow</button></li>
+        </form>
+    }
+}
