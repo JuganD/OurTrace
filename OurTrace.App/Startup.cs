@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.Data;
@@ -16,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Services.Abstraction;
 using OurTrace.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using AutoMapper;
 
 namespace OurTrace.App
@@ -58,10 +51,11 @@ namespace OurTrace.App
                 .AddEntityFrameworkStores<OurTraceDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/User/Authenticate");
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Authentication/User");
 
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRelationsService, RelationsService>();
+            services.AddScoped<IPostService, PostService>();
 
 
             services.AddMvc(options =>
@@ -88,12 +82,16 @@ namespace OurTrace.App
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            
 
             app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute("Profile", "Profile/{*username}",
                     defaults: new { controller = "User", action = "Profile" });
 

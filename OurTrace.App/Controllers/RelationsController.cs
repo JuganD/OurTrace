@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OurTrace.Services.Abstraction;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace OurTrace.App.Controllers
             this.relationsService = relationsService;
         }
 
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> SendFriendship(string receiver)
         {
@@ -31,6 +33,7 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> RevokeFriendship(string receiver)
         {
@@ -46,6 +49,7 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Follow(string receiver)
         {
@@ -61,6 +65,7 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [Authorize]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Unfollow(string receiver)
         {

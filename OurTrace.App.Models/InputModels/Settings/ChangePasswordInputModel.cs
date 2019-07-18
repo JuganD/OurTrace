@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Models.InputModels.Identity.Settings
+namespace OurTrace.App.Models.InputModels.Settings
 {
     public class ChangePasswordInputModel
     {

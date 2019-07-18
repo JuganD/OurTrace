@@ -22,7 +22,8 @@
 
 
   <ItemGroup>
-    <Folder Include="Areas\" />
+    <Folder Include="Areas\Authentication\Data\" />
+    <Folder Include="Areas\Authentication\Models\" />
   </ItemGroup>
 
 </Project>

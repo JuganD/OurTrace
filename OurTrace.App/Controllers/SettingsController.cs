@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OurTrace.App.Models.InputModels.Identity.Settings;
+using OurTrace.App.Models.InputModels.Settings;
 using OurTrace.Data.Identity.Models;
 
-namespace OurTrace.App.Controllers
+namespace OurTrace.App.Areas.Settings.Controllers
 {
     // controller-based authorization
     [Authorize]
@@ -26,7 +26,6 @@ namespace OurTrace.App.Controllers
             this.userManager = userManager;
         }
         #region Get
-
         public IActionResult Index()
         {
             return View();

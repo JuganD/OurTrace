@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OurTrace.App.Models.ViewModels.Identity.Profile;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using OurTrace.App.Models.ViewModels.Post;
+using OurTrace.App.Models.ViewModels.Profile;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
@@ -16,12 +18,17 @@ namespace OurTrace.Services
     {
         private readonly OurTraceDbContext dbContext;
         private readonly IIdentityService identityService;
+        private readonly IMapper mapper;
+        private readonly WallService wallService;
 
         public RelationsService(OurTraceDbContext dbContext,
-            IIdentityService identityService)
+            IIdentityService identityService,
+            IMapper mapper)
         {
             this.dbContext = dbContext;
             this.identityService = identityService;
+            this.mapper = mapper;
+            this.wallService = new WallService(dbContext);
         }
         public async Task<bool> AreFriendsWithAsync(string firstUser, string secondUser)
         {
@@ -153,6 +160,8 @@ namespace OurTrace.Services
 
         public async Task PrepareUserProfileForViewAsync(ProfileViewModel model, string actualUserName, OurTraceUser visitingUser)
         {
+            model.Posts = mapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(model.WallId));
+
             if (actualUserName != visitingUser.UserName)
             {
                 var actualUser = await identityService.GetUserAsync(actualUserName);

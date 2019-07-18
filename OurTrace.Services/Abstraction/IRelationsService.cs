@@ -1,4 +1,4 @@
-﻿using OurTrace.App.Models.ViewModels.Identity.Profile;
+﻿using OurTrace.App.Models.ViewModels.Profile;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
 using System.Threading.Tasks;

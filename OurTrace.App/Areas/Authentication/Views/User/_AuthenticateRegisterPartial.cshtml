@@ -1,5 +1,5 @@
-﻿@using OurTrace.App.Models.InputModels.Identity
-@using OurTrace.Data.Identity.Models
+﻿@using OurTrace.App.Models.Authenticate
+@using OurTrace.Data.Identity.Models;
 @model RegisterInputModel
 
 <form asp-controller="User" asp-action="Register" method="post">
@@ -36,7 +36,7 @@
         <div class="col-lg-12 no-pdd">
             <div class="sn-field">
                 <select asp-for="Sex" asp-items="Html.GetEnumSelectList<UserSex>()" class="form-control">
-                    <option selected="selected" value="">Please select sex</option>
+                    <option selected="selected" value="Empty">Please select sex</option>
                 </select>
                 <span asp-validation-for="Sex" class="text-danger"></span>
                 <i class="fa fa-user"></i>

@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="OurTrace - the leading social network!" />
+    <meta name="keywords" content="social,network,ourtrace" />
+    <title>@ViewData["Title"] - OurTrace</title>
+
+    <link rel="stylesheet" type="text/css" href="~/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/line-awesome.css">
+    <link rel="stylesheet" type="text/css" href="~/css/line-awesome-font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/css/responsive.css">
+</head>
+<body>
+
+
+    <div class="wrapper">
+        <header class="fixed-top">
+            <div class="container">
+                <div class="header-data">
+                    <div class="logo">
+                    </div>
+                </div><!--header-data end-->
+            </div>
+        </header><!--header end-->
+        <div style="padding-top:3.5rem">
+            <partial name="_CookieConsentPartial" />
+            @RenderBody()
+        </div>
+
+    </div>
+
+    <script src="~/js/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/js/popper.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.range-min.js" asp-append-version="true"></script>
+    <script src="~/lib/slick/slick.min.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    <script src="~/js/localtime.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

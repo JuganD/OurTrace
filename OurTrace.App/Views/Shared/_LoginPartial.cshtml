@@ -44,12 +44,12 @@
         <ul class="us-links">
             <li><a asp-controller="Settings" asp-action="Index" title="">Account Settings</a></li>
         </ul>
-        <h3 class="tc"><a asp-controller="User" asp-action="Logout" title="">Logout</a></h3>
+        <h3 class="tc"><a asp-area="Authentication" asp-controller="User" asp-action="Logout" title="">Logout</a></h3>
     </div><!--user-account-settingss end-->
 }
 else
 {
     <div class="user-info">
-        <a asp-controller="User" asp-action="Authenticate">Login / Register</a>
+        <a asp-area="Authentication" asp-controller="User" asp-action="Index">Login / Register</a>
     </div>
 }

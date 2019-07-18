@@ -1,4 +1,4 @@
-﻿@using OurTrace.App.Models.ViewModels.Identity.Profile
+﻿@using OurTrace.App.Models.ViewModels.Profile
 @model ProfileViewModel
 
 @{
@@ -123,6 +123,7 @@
                         </div><!--user-tab-sec end-->
                         <div class="product-feed-tab current" id="feed-dd">
                             <div class="posts-section">
+                                <vc:create-post model="@Model.WallId"></vc:create-post>
                                 <vc:posts model="@Model.Posts"></vc:posts>
                                 <!--<div class="process-comm">
                                     <div class="spinner">
@@ -206,7 +207,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="right-sidebar">
-                    <div class="pt-xl-4"></div>
+                        <div class="pt-xl-4"></div>
                         <div class="widget widget-portfolio">
                             <div class="wd-heady">
                                 <h3>Portfolio</h3>

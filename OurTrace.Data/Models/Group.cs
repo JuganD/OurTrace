@@ -24,10 +24,9 @@ namespace OurTrace.Data.Models
         public string WallId { get; set; }
         public Wall Wall { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public string Url { get; set; }
 
-        public int Likes { get; set; }
-        public int Shares { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public ICollection<GroupAdmin> Admins { get; set; }
         public ICollection<UserGroup> Members { get; set; }

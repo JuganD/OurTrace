@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Models.InputModels.Identity
+namespace OurTrace.App.Models.Authenticate
 {
     public class LoginInputModel
     {

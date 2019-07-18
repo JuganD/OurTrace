@@ -1,9 +1,10 @@
-﻿using OurTrace.App.Models.Attributes.Validation;
+﻿using AutoMapper.Configuration.Annotations;
+using OurTrace.App.Models.Attributes.Validation;
 using OurTrace.Data.Identity.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Models.InputModels.Identity
+namespace OurTrace.App.Models.Authenticate
 {
     public class RegisterInputModel
     {
@@ -45,12 +46,14 @@ namespace OurTrace.App.Models.InputModels.Identity
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
-
+        
+        [Ignore] // automapper
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
+        [Ignore] // automapper
         [Required]
         [IsTrue(ErrorMessage = "You need to agree with the terms of service!")]
         public bool TermsOfServiceAgreement { get; set; }

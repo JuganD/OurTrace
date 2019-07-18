@@ -3,7 +3,7 @@ using OurTrace.Data.Models;
 using System;
 using System.Collections.Generic;
 
-namespace OurTrace.App.Models.ViewModels.Posts
+namespace OurTrace.App.Models.ViewModels.Post
 {
     public class PostViewModel
     {

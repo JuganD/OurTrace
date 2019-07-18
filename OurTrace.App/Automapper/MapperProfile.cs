@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
 using OurTrace.App.Models.ViewModels.Comments;
-using OurTrace.App.Models.ViewModels.Identity.Profile;
-using OurTrace.App.Models.ViewModels.Posts;
+using OurTrace.App.Models.ViewModels.Profile;
+using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
 using OurTrace.Services.Helpers;
 using System;
 using System.Linq;
+using OurTrace.App.Models.Authenticate;
+using OurTrace.App.Models.InputModels.Posts;
 
 namespace OurTrace.App.Automapper
 {
@@ -23,6 +25,9 @@ namespace OurTrace.App.Automapper
                                                x.SentFriendships.Count(y => y.AcceptedOn != null) +
                                                x.ReceivedFriendships.Count(y => y.AcceptedOn != null)))
                 .ForMember(dest => dest.Sex, actual => actual.MapFrom(x => x.Sex));
+
+            CreateMap<RegisterInputModel, OurTraceUser>();
+            CreateMap<CreatePostInputModel, Post>();
 
             CreateMap<Post, PostViewModel>()
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))

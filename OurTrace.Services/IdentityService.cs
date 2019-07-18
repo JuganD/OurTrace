@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OurTrace.App.Models.ViewModels.Identity.Profile;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using OurTrace.App.Models.Authenticate;
+using OurTrace.App.Models.ViewModels.Profile;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
@@ -14,26 +16,20 @@ namespace OurTrace.Services
     public class IdentityService : IIdentityService
     {
         private readonly OurTraceDbContext dbContext;
+        private readonly IMapper mapper;
 
-        public IdentityService(OurTraceDbContext dbContext)
+        public IdentityService(OurTraceDbContext dbContext,
+            IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
-        public OurTraceUser GetNewUser(string username, string email, string fullname,
-            DateTime? birthDate, string country, UserSex sex)
+        public OurTraceUser GetNewUser(RegisterInputModel model)
         {
             var wall = new Wall();
 
-            var user = new OurTraceUser
-            {
-                UserName = username,
-                Email = email,
-                FullName = fullname,
-                BirthDate = birthDate,
-                Country = country,
-                Sex = sex,
-                Wall = wall
-            };
+            var user = mapper.Map<OurTraceUser>(model);
+            user.Wall = wall;
 
             return user;
         }

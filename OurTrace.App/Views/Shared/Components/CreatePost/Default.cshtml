@@ -1,0 +1,45 @@
+﻿@using OurTrace.App.Models.InputModels.Posts
+@model CreatePostInputModel
+
+<div class="post-topbar">
+    <div class="user-picy">
+        <img src="http://via.placeholder.com/100x100" alt="">
+    </div>
+    <div class="post-st">
+        <ul>
+            <li><a class="post_project active" href="#" title="">New Post</a></li>
+        </ul>
+    </div><!--post-st end-->
+</div><!--post-topbar end-->
+
+<div class="post-popup pst-pj">
+    <div class="post-project">
+        <h3>Create New Post</h3>
+        <div class="post-project-fields">
+            <form asp-controller="Post" asp-action="Create" method="post">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <textarea asp-for="Content"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="col-lg-12">
+                        <input asp-for="MediaFile" />
+                        <span asp-validation-for="MediaFile" class="text-danger"></span>
+                    </div>
+                    <div class="col-lg-12">
+                        <input asp-for="Tags" />
+                        <span asp-validation-for="Tags" class="text-danger"></span>
+                    </div>
+                    <input asp-for="Location" type="hidden" value="@Model.Location" />
+                    <div class="col-lg-12">
+                        <ul>
+                            <li><button class="active" type="submit" value="post">Post</button></li>
+                            <li><a href="#" title="">Cancel</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div><!--post-project-fields end-->
+        <a href="#" title=""><i class="la la-times-circle-o"></i></a>
+    </div><!--post-project end-->
+</div><!--post-project-popup end-->

@@ -1,7 +1,7 @@
 ﻿using OurTrace.App.Models.Attributes.Validation;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Models.InputModels.Identity.Settings
+namespace OurTrace.App.Models.InputModels.Settings
 {
     public class DeleteAccountInputModel
     {
