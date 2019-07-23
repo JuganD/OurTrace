@@ -8,7 +8,7 @@
                 <div class="usy-dt">
                     <img src="http://via.placeholder.com/50x50" alt="">
                     <div class="usy-name">
-                        <h3>@post.Creator</h3>
+                        <h3><a asp-controller="User" asp-action="Profile" asp-username="@post.Creator" class="text-black-50">@post.Creator</a></h3>
                         <img src="~/images/clock.png" alt=""><span class="utcDate">@post.CreatedOn</span>
                     </div>
                 </div>
@@ -24,7 +24,13 @@
                 </div>
             </div>
             <div class="job_descp">
-                <div class="postContent">@post.Content</div>
+                <div class="postContent">
+                    @post.Content
+                    @if (post.MediaUrl != null)
+                    {
+                        <img class="mt-2 img-fluid" src="@post.MediaUrl">
+                    }
+                </div>
 
                 <ul class="skill-tags">
                     @foreach (var tag in post.Tags)

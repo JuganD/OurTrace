@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using GeekLearning.Storage;
+using GeekLearning.Storage.Internal;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.Data;
@@ -15,23 +19,28 @@ namespace OurTrace.Services
         private readonly OurTraceDbContext dbContext;
         private readonly IIdentityService identityService;
         private readonly IRelationsService relationsService;
+        private readonly IMapper automapper;
         private readonly WallService wallService;
+        private readonly IStore fileStore;
 
         public PostService(OurTraceDbContext dbContext,
             IIdentityService identityService,
-            IRelationsService relationsService)
+            IRelationsService relationsService,
+            IStorageFactory storageFactory,
+            IMapper automapper)
         {
             this.dbContext = dbContext;
             this.identityService = identityService;
             this.relationsService = relationsService;
+            this.automapper = automapper;
             this.wallService = new WallService(dbContext);
+            this.fileStore = storageFactory.GetStore("LocalFileStorage");
         }
 
         public async Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model)
         {
             if (await IsUserCanPostToWallAsync(username, model.Location))
             {
-                // TODO: save the file somewhere and add mediaUrl
                 var wall = await wallService.GetWallAsync(model.Location);
 
                 IEnumerable<string> tags = new string[0];
@@ -40,13 +49,31 @@ namespace OurTrace.Services
                     tags = model.Tags.Split(',').Select(x => x.Trim());
                 }
 
-                wall.Posts.Add(new Post()
+                Post post = automapper.Map<Post>(model);
+                post.Location = wall;
+                post.User = await identityService.GetUserAsync(username);
+                post.Tags = tags;
+                
+
+                // FILE SAVING PROCEDURE
+                if (model.MediaFile != null && model.MediaFile.Length > 0)
                 {
-                    Location = wall,
-                    User = await identityService.GetUserAsync(username),
-                    Content = model.Content,
-                    Tags = tags
-                });
+                    using (var ms = new MemoryStream())
+                    {
+                        model.MediaFile.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        await fileStore.SaveAsync(fileBytes, new PrivateFileReference(Path.Combine(username, post.Id)), "image/jpeg");
+                    }
+                    post.IsImageOnFileSystem = true;
+                } else if (model.ExternalMediaUrl != null)
+                {
+                    post.MediaUrl = model.ExternalMediaUrl;
+                }
+                // logic separator
+
+                
+
+                wall.Posts.Add(post);
                 await this.dbContext.SaveChangesAsync();
                 return true;
             }
@@ -80,6 +107,37 @@ namespace OurTrace.Services
                     return false;
             }
         }
+        public async Task<bool> IsUserCanSeePostAsync(string username, string postId)
+        {
+            var user = await identityService.GetUserAsync(username);
+            var post = await this.dbContext.Posts
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == postId);
+            var postOwner = post.User.UserName;
 
+            if (user == null || post == null) return false;
+
+            var postVisibility = post.VisibilityType;
+
+            switch (postVisibility)
+            {
+                case PostVisibilityType.Public:
+                    return true;
+                case PostVisibilityType.FriendsOnly:
+                    if (username == postOwner || await relationsService.AreFriendsWithAsync(username, postOwner))
+                    {
+                        return true;
+                    }
+                    return false;
+                case PostVisibilityType.Private:
+                    if (username == postOwner)
+                    {
+                        return true;
+                    }
+                    return false;
+            }
+
+            return false;
+        }
     }
 }

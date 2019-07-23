@@ -9,5 +9,6 @@ namespace OurTrace.Services.Abstraction
     {
         Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model);
         Task<bool> IsUserCanPostToWallAsync(string username, string WallId);
+        Task<bool> IsUserCanSeePostAsync(string username, string postId);
     }
 }

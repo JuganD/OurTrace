@@ -7,7 +7,9 @@ namespace OurTrace.App.Models.ViewModels.Post
 {
     public class PostViewModel
     {
+        public string Id { get; set; }
         public string MediaUrl { get; set; }
+        public bool IsImageOnFileSystem { get; set; }
         public string Content { get; set; }
         public string CreatedOn { get; set; }
         public string EditedOn { get; set; }

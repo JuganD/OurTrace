@@ -17,8 +17,8 @@ window.onload = function(){
 function InsertReadMoreButton(selector){
 	$(selector).each(function() {
 		if (isOverflown(this)){
-			($('<button class="more btn btn-sm">Read more </button>').on('click', function() {
-				$(this).prev().css({'height':'auto'});
+			($('<button class="more btn btn-sm">See more </button>').on('click', function() {
+				$(this).prev().css({'max-height':'100%', 'height':'auto'});
 				$(this).hide();
 			})).insertAfter($(this));
 		}
@@ -44,8 +44,12 @@ function DateToLocal(selector){
 	let counter = 0;
 	$(selector).each(function () {
 		let d = currentDates[counter];
-		var datestring = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+		var datestring = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + time_with_leading_zeros(d.getHours()) + ":" + time_with_leading_zeros(d.getMinutes()) + ":" + time_with_leading_zeros(d.getSeconds());
 		this.innerHTML = datestring;
 		counter++;
 	});
+}
+function time_with_leading_zeros(time) 
+{ 
+  return (time < 10 ? '0' : '') + time;
 }

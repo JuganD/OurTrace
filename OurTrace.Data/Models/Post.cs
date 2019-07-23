@@ -20,6 +20,7 @@ namespace OurTrace.Data.Models
         public string Id { get; set; }
         public string MediaUrl { get; set; }
         public string Content { get; set; }
+        public bool IsImageOnFileSystem { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? EditedOn { get; set; } // can be null if never edited
         public PostMimeType MimeType { get; set; }
@@ -43,7 +44,6 @@ namespace OurTrace.Data.Models
         Regular = 0, // default value - intended
         Picture = 1,
         ProfilePicture = 2,
-        Video = 3,
     }
     public enum PostVisibilityType
     {

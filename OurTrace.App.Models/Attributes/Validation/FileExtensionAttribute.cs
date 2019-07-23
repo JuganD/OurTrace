@@ -19,13 +19,23 @@ namespace OurTrace.App.Models.Attributes.Validation
 
         public override bool IsValid(object value)
         {
-            IFormFile file = value as IFormFile;
-
-            if (file != null)
+            if (value is IFormFile)
             {
-                var fileName = file.FileName;
+                IFormFile file = value as IFormFile;
+                if (file != null)
+                {
+                    var fileName = file.FileName;
 
-                return AllowedExtensions.Any(y => fileName.EndsWith(y));
+                    return AllowedExtensions.Any(y => fileName.EndsWith(y));
+                }
+            }
+            else if (value is string)
+            {
+                var file = value as string;
+                if (file != null)
+                {
+                    return AllowedExtensions.Any(y => file.EndsWith(y));
+                }
             }
 
             return true;

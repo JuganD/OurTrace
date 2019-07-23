@@ -11,21 +11,29 @@ using OurTrace.Data.Identity.Models;
 using OurTrace.Services.Abstraction;
 using OurTrace.Services;
 using AutoMapper;
+using GeekLearning.Storage;
+using GeekLearning.Storage.Configuration;
 
 namespace OurTrace.App
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        private readonly IHostingEnvironment hostingEnvironment;
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+            services.AddStorage(this.Configuration.GetSection("Storage"))
+                .AddFileSystemStorage(hostingEnvironment.ContentRootPath)
+                .AddFileSystemExtendedProperties();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

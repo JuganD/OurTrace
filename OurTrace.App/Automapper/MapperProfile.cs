@@ -27,7 +27,8 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Sex, actual => actual.MapFrom(x => x.Sex));
 
             CreateMap<RegisterInputModel, OurTraceUser>();
-            CreateMap<CreatePostInputModel, Post>();
+            CreateMap<CreatePostInputModel, Post>()
+                .ForMember(x=>x.Location, option => option.Ignore());
 
             CreateMap<Post, PostViewModel>()
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
