@@ -7,13 +7,10 @@ namespace OurTrace.App.Controllers
 {
     public class RelationsController : Controller
     {
-        private readonly IIdentityService identityService;
         private readonly IRelationsService relationsService;
 
-        public RelationsController(IIdentityService usersService, 
-            IRelationsService relationsService)
+        public RelationsController(IRelationsService relationsService)
         {
-            this.identityService = usersService;
             this.relationsService = relationsService;
         }
 

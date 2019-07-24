@@ -19,6 +19,6 @@ namespace OurTrace.Services.Abstraction
         Task<Friendship> GetFriendshipAsync(string firstUsername, string secondUsername);
         Task<Follow> GetFollowAsync(string firstUsername, string secondUsername);
 
-        Task PrepareUserProfileForViewAsync(ProfileViewModel model, string actualUserName, OurTraceUser visitingUser);
+        Task<ProfileViewModel> PrepareUserProfileForViewAsync(string actualUserName, string visitingUserName);
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurTrace.Data;
 
 namespace OurTrace.App.Migrations
 {
     [DbContext(typeof(OurTraceDbContext))]
-    partial class OurTraceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190724105131_ChangedGroupAndUserProperties")]
+    partial class ChangedGroupAndUserProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -555,9 +557,8 @@ namespace OurTrace.App.Migrations
             modelBuilder.Entity("OurTrace.Data.Models.Group", b =>
                 {
                     b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "Creator")
-                        .WithMany("Groups")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
 
                     b.HasOne("OurTrace.Data.Models.Wall", "Wall")
                         .WithOne()
@@ -630,12 +631,12 @@ namespace OurTrace.App.Migrations
                     b.HasOne("OurTrace.Data.Models.Group", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OurTrace.Data.Identity.Models.OurTraceUser", "User")
-                        .WithMany()
+                        .WithMany("Groups")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

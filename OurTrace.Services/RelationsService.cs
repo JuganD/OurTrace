@@ -17,18 +17,17 @@ namespace OurTrace.Services
     public class RelationsService : IRelationsService
     {
         private readonly OurTraceDbContext dbContext;
-        private readonly IIdentityService identityService;
+        private readonly IdentityService identityService;
         private readonly IMapper mapper;
         private readonly WallService wallService;
 
         public RelationsService(OurTraceDbContext dbContext,
-            IIdentityService identityService,
             IMapper mapper)
         {
             this.dbContext = dbContext;
-            this.identityService = identityService;
             this.mapper = mapper;
             this.wallService = new WallService(dbContext);
+            this.identityService = new IdentityService(dbContext);
         }
         public async Task<bool> AreFriendsWithAsync(string firstUser, string secondUser)
         {
@@ -60,9 +59,9 @@ namespace OurTrace.Services
                 return;
             }
 
-            var sender = await identityService.GetUserAsync(senderUsername);
-            var receiver = await identityService.GetUserAsync(receiverUsername);
-            
+            var sender = await identityService.GetUserByName(senderUsername).SingleOrDefaultAsync();
+            var receiver = await identityService.GetUserByName(receiverUsername).SingleOrDefaultAsync();
+
 
             if (sender != null && receiver != null)
             {
@@ -92,11 +91,11 @@ namespace OurTrace.Services
                 await this.dbContext.SaveChangesAsync();
             }
         }
-        
-        
+
+
         public async Task AddLikeAsync(string postId, string userId)
         {
-            var user = await identityService.GetUserByIdAsync(userId);
+            var user = await identityService.GetUserById(userId).SingleOrDefaultAsync();
             var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);
 
             if (!post.Likes.Any(x => x.User == user && x.Post == post))
@@ -115,12 +114,12 @@ namespace OurTrace.Services
         {
             if (senderUsername != receiverUsername)
             {
-                if (!await IsFollowingAsync(senderUsername,receiverUsername))
+                if (!await IsFollowingAsync(senderUsername, receiverUsername))
                 {
                     await this.dbContext.Follows.AddAsync(new Follow()
                     {
-                        Sender = await identityService.GetUserAsync(senderUsername),
-                        Recipient = await identityService.GetUserAsync(receiverUsername)
+                        Sender = await identityService.GetUserByName(senderUsername).SingleOrDefaultAsync(),
+                        Recipient = await identityService.GetUserByName(receiverUsername).SingleOrDefaultAsync()
                     });
                     await this.dbContext.SaveChangesAsync();
                 }
@@ -158,13 +157,18 @@ namespace OurTrace.Services
             return follow;
         }
 
-        public async Task PrepareUserProfileForViewAsync(ProfileViewModel model, string actualUserName, OurTraceUser visitingUser)
+        public async Task<ProfileViewModel> PrepareUserProfileForViewAsync(string actualUserName, string visitingUserName)
         {
+            var visitingUser = await IncludeAllProfileDetails(identityService.GetUserByName(visitingUserName))
+                .SingleOrDefaultAsync();
+            ProfileViewModel model = mapper.Map<ProfileViewModel>(visitingUser);
+
             model.Posts = mapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(model.WallId));
 
             if (actualUserName != visitingUser.UserName)
             {
-                var actualUser = await identityService.GetUserAsync(actualUserName);
+                var actualUser = await IncludeFriendship(identityService.GetUserByName(actualUserName))
+                    .SingleOrDefaultAsync();
 
                 if (await AreFriendsWithAsync(actualUserName, visitingUser.UserName))
                 {
@@ -196,6 +200,37 @@ namespace OurTrace.Services
             {
                 model.IsHimself = true;
             }
+
+            return model;
+        }
+        private IQueryable<OurTraceUser> IncludeFriendship(IQueryable<OurTraceUser> query)
+        {
+            return query
+                .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Sender)
+                 .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Recipient)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Sender)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Recipient);
+        }
+        private IQueryable<OurTraceUser> IncludeAllProfileDetails(IQueryable<OurTraceUser> query)
+        {
+            return query
+                .Include(x => x.Followers)
+                .Include(x => x.Following)
+                .Include(x => x.Wall)
+                    .ThenInclude(x => x.Posts)
+                .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Sender)
+                 .Include(x => x.SentFriendships)
+                    .ThenInclude(x => x.Recipient)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Sender)
+                .Include(x => x.ReceivedFriendships)
+                    .ThenInclude(x => x.Recipient)
+                .Include(x => x.Comments);
         }
     }
 }

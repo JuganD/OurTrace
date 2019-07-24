@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurTrace.Data;
 
 namespace OurTrace.App.Migrations
 {
     [DbContext(typeof(OurTraceDbContext))]
-    partial class OurTraceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190724110744_ChangedBaseUserGroupRelations")]
+    partial class ChangedBaseUserGroupRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using OurTrace.App.Models.Authenticate;
 using OurTrace.App.Models.InputModels.Posts;
+using OurTrace.App.Models.ViewModels.Group;
 
 namespace OurTrace.App.Automapper
 {
@@ -28,7 +29,7 @@ namespace OurTrace.App.Automapper
 
             CreateMap<RegisterInputModel, OurTraceUser>();
             CreateMap<CreatePostInputModel, Post>()
-                .ForMember(x=>x.Location, option => option.Ignore());
+                .ForMember(x => x.Location, option => option.Ignore());
 
             CreateMap<Post, PostViewModel>()
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
@@ -42,7 +43,10 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName));
 
-
+            CreateMap<Group, GroupWindowViewModel>()
+                .ForMember(dest => dest.Name, act => act.MapFrom(x => x.Name))
+                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Count))
+                .ForMember(dest => dest.Url, act => act.MapFrom(x => x.Url));
         }
     }
 }

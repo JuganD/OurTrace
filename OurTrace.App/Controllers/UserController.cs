@@ -9,15 +9,12 @@ namespace OurTrace.App.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IIdentityService identityService;
         private readonly IRelationsService relationsService;
         private readonly IMapper mapper;
 
-        public UserController(IIdentityService usersService,
-            IRelationsService relationsService,
+        public UserController(IRelationsService relationsService,
             IMapper mapper)
         {
-            this.identityService = usersService;
             this.relationsService = relationsService;
             this.mapper = mapper;
         }
@@ -27,16 +24,14 @@ namespace OurTrace.App.Controllers
             if (string.IsNullOrEmpty(username))
                 return await Profile(this.User.Identity.Name);
 
-            var visitingUser = await identityService.GetUserAsync(username);
-            if (visitingUser != null)
+            if (!string.IsNullOrEmpty(username))
             {
-                var profileInfo = mapper.Map<ProfileViewModel>(visitingUser);
-                
-                await relationsService.PrepareUserProfileForViewAsync(profileInfo,
-                    this.User.Identity.Name, visitingUser);
+                var profileViewModel = await relationsService.PrepareUserProfileForViewAsync(
+                    this.User.Identity.Name, username);
 
-                return View(profileInfo);
+                return View(profileViewModel);
             }
+
             return LocalRedirect("/");
         }
     }

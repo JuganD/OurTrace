@@ -14,9 +14,12 @@ namespace OurTrace.Data.Models
             this.CreatedOn = DateTime.UtcNow;
             this.Admins = new List<GroupAdmin>();
             this.Members = new List<UserGroup>();
+            this.Wall = new Wall();
         }
         [Key]
         public string Id { get; set; }
+
+        public string Name { get; set; }
 
         public string CreatorId { get; set; }
         public OurTraceUser Creator { get; set; }

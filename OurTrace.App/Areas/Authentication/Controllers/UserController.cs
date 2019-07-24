@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,15 @@ namespace OurTrace.App.Areas.Authentication.Controllers
     {
         private readonly SignInManager<OurTraceUser> signInManager;
         private readonly UserManager<OurTraceUser> userManager;
-        private readonly IIdentityService identityService;
+        private readonly IMapper mapper;
 
         public UserController(SignInManager<OurTraceUser> signInManager,
             UserManager<OurTraceUser> userManager,
-            IIdentityService usersService)
+            IMapper mapper)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
-            this.identityService = usersService;
+            this.mapper = mapper;
         }
 
         #region Get
@@ -94,7 +95,7 @@ namespace OurTrace.App.Areas.Authentication.Controllers
             if (ModelState.IsValid)
             {
                 // Creating it here because we are using built in usermanager
-                var user = this.identityService.GetNewUser(model);
+                var user = mapper.Map<OurTraceUser>(model);
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

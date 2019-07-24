@@ -61,9 +61,9 @@ namespace OurTrace.App
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Authentication/User");
 
-            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRelationsService, RelationsService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IGroupService, GroupService>();
 
 
             services.AddMvc(options =>

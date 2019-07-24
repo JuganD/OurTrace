@@ -17,23 +17,22 @@ namespace OurTrace.Services
     public class PostService : IPostService
     {
         private readonly OurTraceDbContext dbContext;
-        private readonly IIdentityService identityService;
         private readonly IRelationsService relationsService;
         private readonly IMapper automapper;
         private readonly WallService wallService;
         private readonly IStore fileStore;
+        private readonly IdentityService identityService;
 
         public PostService(OurTraceDbContext dbContext,
-            IIdentityService identityService,
             IRelationsService relationsService,
             IStorageFactory storageFactory,
             IMapper automapper)
         {
             this.dbContext = dbContext;
-            this.identityService = identityService;
             this.relationsService = relationsService;
             this.automapper = automapper;
             this.wallService = new WallService(dbContext);
+            this.identityService = new IdentityService(dbContext);
             this.fileStore = storageFactory.GetStore("LocalFileStorage");
         }
 
@@ -51,9 +50,9 @@ namespace OurTrace.Services
 
                 Post post = automapper.Map<Post>(model);
                 post.Location = wall;
-                post.User = await identityService.GetUserAsync(username);
+                post.User = await identityService.GetUserByName(username).SingleOrDefaultAsync();
                 post.Tags = tags;
-                
+
 
                 // FILE SAVING PROCEDURE
                 if (model.MediaFile != null && model.MediaFile.Length > 0)
@@ -65,13 +64,14 @@ namespace OurTrace.Services
                         await fileStore.SaveAsync(fileBytes, new PrivateFileReference(Path.Combine(username, post.Id)), "image/jpeg");
                     }
                     post.IsImageOnFileSystem = true;
-                } else if (model.ExternalMediaUrl != null)
+                }
+                else if (model.ExternalMediaUrl != null)
                 {
                     post.MediaUrl = model.ExternalMediaUrl;
                 }
                 // logic separator
 
-                
+
 
                 wall.Posts.Add(post);
                 await this.dbContext.SaveChangesAsync();
@@ -82,7 +82,11 @@ namespace OurTrace.Services
 
         public async Task<bool> IsUserCanPostToWallAsync(string username, string WallId)
         {
-            var user = await identityService.GetUserAsync(username);
+            var user = await identityService.GetUserByName(username)
+                .Include(x => x.UserName)
+                .Include(x => x.Id)
+                .SingleOrDefaultAsync();
+
             var wall = await wallService.GetWallAsync(WallId);
             var wallOwnerId = await wallService.GetWallOwnerIdAsync(wall);
 
@@ -90,7 +94,9 @@ namespace OurTrace.Services
 
             if (wallOwnerId == user.Id) return true;
 
-            var wallUser = await identityService.GetUserByIdAsync(wallOwnerId);
+            var wallUser = await identityService.GetUserById(wallOwnerId)
+                .Include(x => x.UserName)
+                .SingleOrDefaultAsync();
             if (wallUser != null)
             {
                 if (await relationsService.AreFriendsWithAsync(user.UserName, wallUser.UserName))
@@ -109,7 +115,7 @@ namespace OurTrace.Services
         }
         public async Task<bool> IsUserCanSeePostAsync(string username, string postId)
         {
-            var user = await identityService.GetUserAsync(username);
+            var user = await identityService.GetUserByName(username).SingleOrDefaultAsync();
             var post = await this.dbContext.Posts
                 .Include(x => x.User)
                 .SingleOrDefaultAsync(x => x.Id == postId);

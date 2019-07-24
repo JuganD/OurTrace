@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OurTrace.App.Models.ViewModels.Group
+﻿namespace OurTrace.App.Models.ViewModels.Group
 {
     public class GroupWindowViewModel
     {

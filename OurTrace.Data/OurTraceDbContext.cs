@@ -37,6 +37,12 @@ namespace OurTrace.Data
             builder.Entity<OurTraceUser>((user) =>
             {
                 user
+                .HasMany(x => x.Groups)
+                .WithOne(x => x.Creator)
+                .HasForeignKey(x => x.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                user
                 .HasOne(x => x.Wall)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Restrict);
@@ -66,9 +72,9 @@ namespace OurTrace.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
                 user
-                .HasMany(x=>x.Followers)
-                .WithOne(x=>x.Recipient)
-                .HasForeignKey(x=>x.RecipientId)
+                .HasMany(x => x.Followers)
+                .WithOne(x => x.Recipient)
+                .HasForeignKey(x => x.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
                 user
@@ -76,6 +82,7 @@ namespace OurTrace.Data
                 .WithOne(x => x.Sender)
                 .HasForeignKey(x => x.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             });
 
             builder.Entity<Post>((post) =>
@@ -106,8 +113,8 @@ namespace OurTrace.Data
             builder.Entity<Comment>((comment) =>
             {
                 comment
-                .HasMany(x=>x.Likes)
-                .WithOne(x=>x.Comment)
+                .HasMany(x => x.Likes)
+                .WithOne(x => x.Comment)
                 .HasForeignKey(x => x.CommentId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
@@ -125,16 +132,25 @@ namespace OurTrace.Data
                 .WithOne()
                 .OnDelete(DeleteBehavior.Restrict);
 
+                group
+                .HasMany(x => x.Members)
+                .WithOne(x => x.Group)
+                .HasForeignKey(x=>x.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             });
             builder.Entity<Wall>()
                 .HasMany(x => x.Posts)
                 .WithOne(x => x.Location)
                 .HasForeignKey(x => x.LocationId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
 
-            builder.Entity<UserGroup>()
-                .HasKey(ug => new { ug.GroupId, ug.UserId });
+
+            builder.Entity<UserGroup>((ug) =>
+            {
+                ug
+                .HasKey(x => new { x.GroupId, x.UserId });
+            });
         }
 
     }
