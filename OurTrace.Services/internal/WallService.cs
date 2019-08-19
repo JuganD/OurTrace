@@ -24,6 +24,7 @@ namespace OurTrace.Services
         {
             return await this.dbContext.Walls
                 .Include(x=>x.Posts)
+                    .ThenInclude(x=>x.User)
                     .ThenInclude(x=>x.Comments)
                         .ThenInclude(x=>x.User)
                 .SingleOrDefaultAsync(x => x.Id == wallId);

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.ViewModels.Group;
+using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
@@ -20,7 +22,7 @@ namespace OurTrace.App.Controllers
         {
             //await groupService.CreateNewGroupAsync("TestGroup1", "Testcho");
 
-            var viewmodel = await groupService.DiscoverGroupsAsync();
+            var viewmodel = await groupService.DiscoverGroupsAsync(this.User.Identity.Name);
             return View(viewmodel);
         }
         [Authorize]
@@ -33,6 +35,18 @@ namespace OurTrace.App.Controllers
             }
 
             return View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Open(string name)
+        {
+            var group = await this.groupService.PrepareGroupForViewAsync(name);
+            if (group != null)
+            {
+                return View(group);
+            }
+
+            return RedirectToAction("Discover");
         }
     }
 }

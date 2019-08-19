@@ -40,9 +40,20 @@ namespace OurTrace.App.Controllers
             var fileRef = await this.fileStore.GetAsync(Path.Combine(username, "ProfilePicture"));
             if (fileRef != null)
             {
-                    return File(await fileRef.ReadAllBytesAsync(), "image/jpeg");
+                return File(await fileRef.ReadAllBytesAsync(), "image/jpeg");
             }
             return File("~/images/default_user.png", "image/png");
+        }
+
+        [HttpGet("file/grouppicture/{username}")]
+        public async Task<IActionResult> GroupPicture(string name)
+        {
+            var fileRef = await this.fileStore.GetAsync(Path.Combine("Group_"+name, "GroupPicture"));
+            if (fileRef != null)
+            {
+                return File(await fileRef.ReadAllBytesAsync(), "image/jpeg");
+            }
+            return File("~/images/default_group.png", "image/png");
         }
     }
 }

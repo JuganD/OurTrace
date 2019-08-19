@@ -1,0 +1,227 @@
+﻿@using OurTrace.App.Models.ViewModels.Group
+@model GroupOpenViewModel
+
+@{
+    ViewData["Title"] = "Group";
+}
+
+<section class="cover-sec">
+    <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
+</section>
+
+
+<div class="main-section">
+    <div class="container">
+        <div class="main-section-data">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="main-left-sidebar">
+                        <div class="user_profile">
+                            <div class="user-pro-img">
+                                <img src="/file/grouppicture/@Model.Name" style="width:170px; height: 170px;" alt="">
+                            </div><!--user-pro-img end-->
+                            <div class="user_pro_status">
+                                <ul class="flw-status">
+                                    <li>
+                                        <span>Following</span>
+                                        <b>0</b>
+                                    </li>
+                                    <li>
+                                        <span>Followers</span>
+                                        <b>0</b>
+                                    </li>
+                                </ul>
+                            </div><!--user_pro_status end-->
+                            <ul class="social_links">
+                                <li><i class="la la-user"></i> @Model.Name</li>
+                                <li><i class="la la-users"></i> @Model.MembersCount</li>
+                            </ul>
+                        </div><!--user_profile end-->
+                        <div class="suggestions full-width">
+                            <div class="sd-title">
+                                <h3>Suggestions</h3>
+                                <i class="la la-ellipsis-v"></i>
+                            </div><!--sd-title end-->
+                            <div class="suggestions-list">
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>Jessica William</h4>
+                                        <span>Graphic Designer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>John Doe</h4>
+                                        <span>PHP Developer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>Poonam</h4>
+                                        <span>Wordpress Developer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>Bill Gates</h4>
+                                        <span>C & C++ Developer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>Jessica William</h4>
+                                        <span>Graphic Designer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="suggestion-usd">
+                                    <img src="http://via.placeholder.com/35x35" alt="">
+                                    <div class="sgt-text">
+                                        <h4>John Doe</h4>
+                                        <span>PHP Developer</span>
+                                    </div>
+                                    <span><i class="la la-plus"></i></span>
+                                </div>
+                                <div class="view-more">
+                                    <a href="#" title="">View More</a>
+                                </div>
+                            </div><!--suggestions-list end-->
+                        </div><!--suggestions end-->
+                    </div><!--main-left-sidebar end-->
+                </div>
+                <div class="col-lg-6">
+                    <div class="main-ws-sec">
+                        <div class="user-tab-sec">
+                            <h3>@Model.Name</h3>
+                            <div class="star-descp">
+                                <span>@@@Model.Name</span>
+                            </div><!--star-descp end-->
+                        </div><!--user-tab-sec end-->
+                        <div class="product-feed-tab current" id="feed-dd">
+                            <div class="posts-section">
+                                <vc:create-post model="@Model.WallId"></vc:create-post>
+                                <vc:posts model="@Model.Posts"></vc:posts>
+                                <!--<div class="process-comm">
+                                    <div class="spinner">
+                                        <div class="bounce1"></div>
+                                        <div class="bounce2"></div>
+                                        <div class="bounce3"></div>
+                                    </div>
+                                </div>-->
+                            </div><!--posts-section end-->
+                        </div><!--product-feed-tab end-->
+                        <div class="product-feed-tab" id="portfolio-dd">
+                            <div class="portfolio-gallery-sec">
+                                <h3>Portfolio</h3>
+                                <div class="gallery_pf">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/271x174" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
+                                            <div class="gallery_pt">
+                                                <img src="http://via.placeholder.com/170x170" alt="">
+                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
+                                            </div><!--gallery_pt end-->
+                                        </div>
+                                    </div>
+                                </div><!--gallery_pf end-->
+                            </div><!--portfolio-gallery-sec end-->
+                        </div><!--product-feed-tab end-->
+                    </div><!--main-ws-sec end-->
+                </div>
+                <div class="col-lg-3">
+                    <div class="right-sidebar">
+                        <div class="pt-xl-4"></div>
+                        <div class="widget widget-portfolio">
+                            <div class="wd-heady">
+                                <h3>Portfolio</h3>
+                                <img src="images/photo-icon.png" alt="">
+                            </div>
+                            <div class="pf-gallery">
+                                <ul>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                </ul>
+                            </div><!--pf-gallery end-->
+                        </div><!--widget-portfolio end-->
+                    </div><!--right-sidebar end-->
+                </div>
+            </div>
+        </div><!-- main-section-data end-->
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/post.js" asp-append-version="true"></script>
+}

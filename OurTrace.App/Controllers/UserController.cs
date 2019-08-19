@@ -9,13 +9,13 @@ namespace OurTrace.App.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IRelationsService relationsService;
+        private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public UserController(IRelationsService relationsService,
+        public UserController(IUserService userService,
             IMapper mapper)
         {
-            this.relationsService = relationsService;
+            this.userService = userService;
             this.mapper = mapper;
         }
         [Authorize]
@@ -26,7 +26,7 @@ namespace OurTrace.App.Controllers
 
             if (!string.IsNullOrEmpty(username))
             {
-                var profileViewModel = await relationsService.PrepareUserProfileForViewAsync(
+                var profileViewModel = await userService.PrepareUserProfileForViewAsync(
                     this.User.Identity.Name, username);
 
                 return View(profileViewModel);

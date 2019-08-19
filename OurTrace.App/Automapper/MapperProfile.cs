@@ -47,6 +47,9 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Name, act => act.MapFrom(x => x.Name))
                 .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Count))
                 .ForMember(dest => dest.Url, act => act.MapFrom(x => x.Url));
+
+            CreateMap<Group, GroupOpenViewModel>()
+                .ForMember(dest => dest.MembersCount, act => act.MapFrom(x => x.Members.Count));
         }
     }
 }

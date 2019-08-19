@@ -62,6 +62,7 @@ namespace OurTrace.App
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Authentication/User");
 
             services.AddScoped<IRelationsService, RelationsService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IGroupService, GroupService>();
 
@@ -102,6 +103,9 @@ namespace OurTrace.App
 
                 routes.MapRoute("Profile", "Profile/{*username}",
                     defaults: new { controller = "User", action = "Profile" });
+
+                routes.MapRoute("Group", "Group/{*name}",
+                    defaults: new { controller = "Group", action = "Open" });
 
                 routes.MapRoute(
                     name: "default",

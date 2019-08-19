@@ -8,7 +8,6 @@ using GeekLearning.Storage.Internal;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.Data;
-using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
 
@@ -19,8 +18,8 @@ namespace OurTrace.Services
         private readonly OurTraceDbContext dbContext;
         private readonly IRelationsService relationsService;
         private readonly IMapper automapper;
-        private readonly WallService wallService;
         private readonly IStore fileStore;
+        private readonly WallService wallService;
         private readonly IdentityService identityService;
 
         public PostService(OurTraceDbContext dbContext,
@@ -83,8 +82,6 @@ namespace OurTrace.Services
         public async Task<bool> IsUserCanPostToWallAsync(string username, string WallId)
         {
             var user = await identityService.GetUserByName(username)
-                .Include(x => x.UserName)
-                .Include(x => x.Id)
                 .SingleOrDefaultAsync();
 
             var wall = await wallService.GetWallAsync(WallId);
@@ -95,8 +92,8 @@ namespace OurTrace.Services
             if (wallOwnerId == user.Id) return true;
 
             var wallUser = await identityService.GetUserById(wallOwnerId)
-                .Include(x => x.UserName)
                 .SingleOrDefaultAsync();
+
             if (wallUser != null)
             {
                 if (await relationsService.AreFriendsWithAsync(user.UserName, wallUser.UserName))
@@ -106,7 +103,9 @@ namespace OurTrace.Services
             }
             else
             {
-                var wallGroup = await this.dbContext.Groups.SingleOrDefaultAsync(x => x.Id == wallOwnerId);
+                var wallGroup = await this.dbContext.Groups
+                    .Include(x=>x.Members)
+                    .SingleOrDefaultAsync(x => x.Id == wallOwnerId);
                 if (wallGroup.Members.Any(x => x.User == user))
                     return true;
                 else

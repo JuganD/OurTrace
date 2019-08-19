@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.App.Models.ViewModels.Group;
+using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Data;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
@@ -15,12 +16,15 @@ namespace OurTrace.Services
         private readonly OurTraceDbContext dbContext;
         private readonly IMapper automapper;
         private readonly IdentityService identityService;
+        private readonly WallService wallService;
 
         public GroupService(OurTraceDbContext dbContext,
             IMapper automapper)
         {
             this.dbContext = dbContext;
             this.automapper = automapper;
+
+            this.wallService = new WallService(dbContext);
             this.identityService = new IdentityService(dbContext);
         }
 
@@ -43,10 +47,11 @@ namespace OurTrace.Services
             }
         }
 
-        public async Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync()
+        public async Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username)
         {
             // TODO: figure out a better algoritm for finding groups
             var famousGroups = await dbContext.Groups
+                .Where(x=>!x.Members.Any(y=>y.User.UserName == username))
                 .OrderByDescending(x => x.Members.Count)
                 .Take(50)
                 .ToListAsync();
@@ -57,7 +62,7 @@ namespace OurTrace.Services
         public async Task<IEnumerable<GroupWindowViewModel>> GetUserGroupsAsync(string username)
         {
             var user = await identityService.GetUserByName(username)
-                .Include(x=>x.Groups).SingleOrDefaultAsync();
+                .Include(x => x.Groups).SingleOrDefaultAsync();
 
             if (user != null)
             {
@@ -66,6 +71,25 @@ namespace OurTrace.Services
                     .ToList();
 
                 return automapper.Map<IEnumerable<GroupWindowViewModel>>(groups);
+            }
+
+            return null;
+        }
+
+        public async Task<GroupOpenViewModel> PrepareGroupForViewAsync(string name)
+        {
+            var group = await this.dbContext.Groups
+            .Include(x => x.Members)
+            .SingleOrDefaultAsync(x => x.Name == name ||
+                x.Url == StringifyGroupName(name));
+
+            if (group != null)
+            {
+                var groupViewModel = automapper.Map<GroupOpenViewModel>(group);
+
+                groupViewModel.Posts = automapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(groupViewModel.WallId));
+
+                return groupViewModel;
             }
 
             return null;
