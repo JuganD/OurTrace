@@ -4,6 +4,7 @@
 {
     <div class="posty mb-4">
         <div class="post-bar no-margin">
+            <input name="postId" type="hidden" value="@post.Id" />
             <div class="post_topbar">
                 <div class="usy-dt">
                     <img src="/file/profilepicture/@post.Creator" style="width:50px; height:50px;" alt="">
@@ -66,9 +67,12 @@
                                     <img src="/file/profilepicture/@comment.Creator" style="width:40px; height:40px;" alt="">
                                 </div>
                                 <div class="comment">
+                                    <input name="commentId" type="hidden" value="@comment.Id" />
                                     <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@comment.Creator" class="text-black-50">@comment.Creator</a></h3>
                                     <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
                                     <p class="postContent">@comment.Content</p>
+
+                                    <a href="#"><i class="la la-heart"></i> Like</a>
                                 </div>
                             </div><!--comment-list end-->
                         </li>
