@@ -22,7 +22,11 @@ namespace OurTrace.Services
 
         internal async Task<Wall> GetWallAsync(string wallId)
         {
-            return await this.dbContext.Walls.SingleOrDefaultAsync(x => x.Id == wallId);
+            return await this.dbContext.Walls
+                .Include(x=>x.Posts)
+                    .ThenInclude(x=>x.Comments)
+                        .ThenInclude(x=>x.User)
+                .SingleOrDefaultAsync(x => x.Id == wallId);
         }
 
         internal async Task<string> GetWallOwnerIdAsync(Wall wall)
@@ -39,7 +43,9 @@ namespace OurTrace.Services
         internal async Task<ICollection<Post>> GetPostsFromWallDescendingAsync(string wallId)
         {
             var wall = await GetWallAsync(wallId);
-            return wall.Posts.OrderByDescending(x => x.CreatedOn).ToArray();
+            return wall.Posts
+                .OrderByDescending(x => x.CreatedOn)
+                .ToArray();
         }
     }
 }

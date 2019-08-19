@@ -6,9 +6,9 @@
         <div class="post-bar no-margin">
             <div class="post_topbar">
                 <div class="usy-dt">
-                    <img src="http://via.placeholder.com/50x50" alt="">
+                    <img src="/file/profilepicture/@post.Creator" style="width:50px; height:50px;" alt="">
                     <div class="usy-name">
-                        <h3><a asp-controller="User" asp-action="Profile" asp-username="@post.Creator" class="text-black-50">@post.Creator</a></h3>
+                        <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@post.Creator" class="text-black-50">@post.Creator</a></h3>
                         <img src="~/images/clock.png" alt=""><span class="utcDate">@post.CreatedOn</span>
                     </div>
                 </div>
@@ -63,10 +63,10 @@
                         <li>
                             <div class="comment-list">
                                 <div class="bg-img">
-                                    <img src="http://via.placeholder.com/40x40" alt="">
+                                    <img src="/file/profilepicture/@comment.Creator" style="width:40px; height:40px;" alt="">
                                 </div>
                                 <div class="comment">
-                                    <h3>@comment.Creator</h3>
+                                    <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@comment.Creator" class="text-black-50">@comment.Creator</a></h3>
                                     <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
                                     <p class="postContent">@comment.Content</p>
                                 </div>
@@ -77,7 +77,7 @@
             </div><!--comment-sec end-->
             <div class="post-comment">
                 <div class="cm_img">
-                    <img src="http://via.placeholder.com/40x40" alt="">
+                    <img src="/file/profilepicture/@this.User.Identity.Name" style="width:40px; height:40px;" alt="">
                 </div>
                 <div class="comment_box">
                     <form>

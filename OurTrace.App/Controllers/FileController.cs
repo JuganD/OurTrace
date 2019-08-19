@@ -33,5 +33,16 @@ namespace OurTrace.App.Controllers
             }
             return Unauthorized();
         }
+
+        [HttpGet("file/profilepicture/{username}")]
+        public async Task<IActionResult> ProfilePicture(string username)
+        {
+            var fileRef = await this.fileStore.GetAsync(Path.Combine(username, "ProfilePicture"));
+            if (fileRef != null)
+            {
+                    return File(await fileRef.ReadAllBytesAsync(), "image/jpeg");
+            }
+            return File("~/images/default_user.png", "image/png");
+        }
     }
 }
