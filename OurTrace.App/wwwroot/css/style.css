@@ -2565,28 +2565,28 @@ footer {
 	width: 100%;
 	margin-bottom: 30px;
 }
-.flw-hr li {
+.flw-hr div {
 	display: inline-block;
 	margin-right: 17px;
 }
-.flw-hr li:last-child {
+.flw-hr div:last-child {
 	margin-right: 0;
 }
-.flw-hr li a {
+.flw-hr div a {
 	display: inline-block;
 	color: #ffffff;
 	font-size: 16px;
 	font-weight: 600;
 	padding: 11px 15px;
 }
-.flw-hr li button {
+.flw-hr div button {
 	display: inline-block;
 	color: #ffffff;
 	font-size: 16px;
 	font-weight: 600;
 	padding: 11px 15px;
 }
-.flw-hr li a i {
+.flw-hr div a i {
 	padding-right: 5px;
 }
 .flww {
@@ -2805,6 +2805,7 @@ footer {
 	color: #000000;
 	font-size: 18px;
 	font-weight: 700;
+	padding-top:5px;
 	float: left;
 }
 .wd-heady img {
@@ -2833,6 +2834,28 @@ footer {
 	transform: scale(1.2);
 }
 .pf-gallery img {
+	width: 100%;	
+}
+.pf-gallery-extended {
+	float: left;
+	padding: 15px 15px;
+}
+.pf-gallery-extended ul {
+	float: left;
+}
+.pf-gallery-extended ul li {
+	float: left;
+	padding: 8px;
+	overflow: hidden;
+}
+.pf-gallery-extended ul li:hover {
+	-webkit-transform: scale(1.2);
+	-moz-transform: scale(1.2);
+	-ms-transform: scale(1.2);
+	-o-transform: scale(1.2);
+	transform: scale(1.2);
+}
+.pf-gallery-extended img {
 	width: 100%;	
 }
 
@@ -3518,14 +3541,15 @@ a:hover {
 	display: inline-block;
 	margin-right: 6px;
 }
-.company-up-info ul li a {
+.company-up-info ul li form {
 	display: inline-block;
 	padding: 0 12px;
 	color: #fff;
 	height: 35px;
 	line-height: 35px;
+	width:100%;
 }
-.company-up-info ul li a i {
+.company-up-info ul li form div {
 	font-size: 24px;
 	position: relative;
 	top: 3px;

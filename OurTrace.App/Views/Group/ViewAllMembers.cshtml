@@ -1,0 +1,37 @@
+﻿@using OurTrace.App.Models.ViewModels.Group
+@model IEnumerable<GroupMemberViewModel>
+
+@{
+    ViewData["Title"] = Context.Request.Query["name"] + " members";
+}
+
+<div class="widget widget-portfolio suggestions-list">
+    <a href="#" onclick="window.history.back()" class="la la-3x la-arrow-left"></a>
+    <div class="wd-heady">
+        <h3>Users in group <a asp-controller="Group" asp-action="Open" asp-route-name="@Context.Request.Query["name"]">@Context.Request.Query["name"]</a></h3>
+        <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
+    </div>
+    <div>
+        <input class="form-control" type="text" id="myInput" onkeyup="filterSearch()" placeholder="Search..">
+    </div>
+    <div id="searchPanel" class="pf-gallery-extended">
+        <ul>
+            @if (Model.Any())
+            {
+                @foreach (var member in Model)
+                {
+                    <li>
+                        <a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50">
+                            <img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.FullName" search-title="@member.FullName">
+                            <div>@@@member.Username</div>
+                        </a>
+                    </li>
+                }
+
+            }
+        </ul>
+    </div><!--pf-gallery end-->
+</div><!--widget-portfolio end-->
+@section Scripts {
+    <script src="~/js/viewallusers.js" asp-append-version="true"></script>
+}

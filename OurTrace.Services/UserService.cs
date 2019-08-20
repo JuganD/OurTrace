@@ -34,6 +34,9 @@ namespace OurTrace.Services
         {
             var visitingUser = await IncludeAllProfileDetails(identityService.GetUserByName(visitingUserName))
                 .SingleOrDefaultAsync();
+
+            if (visitingUser == null) return null;
+
             ProfileViewModel model = mapper.Map<ProfileViewModel>(visitingUser);
 
             model.Posts = mapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(model.WallId));

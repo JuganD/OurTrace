@@ -17,7 +17,7 @@ window.onload = function(){
 function InsertReadMoreButton(selector){
 	$(selector).each(function() {
 		if (isOverflown(this)){
-			($('<button class="more btn btn-sm">See more </button>').on('click', function() {
+			($('<button class="more btn btn-sm">See more </button>').fadeIn(800).on('click', function() {
 				$(this).prev().css({'max-height':'100%', 'height':'auto'});
 				$(this).hide();
 			})).insertAfter($(this));
@@ -36,9 +36,11 @@ function DateToLocal(selector){
 	
 	let arrayLength = currentDates.length;
 	for (let i = 0; i < arrayLength; i++) {
-		let dateStr = JSON.parse(currentDates[i]);  
+		let dateStr = JSON.parse(currentDates[i]);
+		if (dateStr.slice(-1) != "Z"){
+			dateStr = dateStr+"Z";
+		}
 		currentDates[i] = new Date(dateStr);
-		
 	}
 	
 	let counter = 0;
@@ -46,6 +48,7 @@ function DateToLocal(selector){
 		let d = currentDates[counter];
 		var datestring = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear() + " " + time_with_leading_zeros(d.getHours()) + ":" + time_with_leading_zeros(d.getMinutes()) + ":" + time_with_leading_zeros(d.getSeconds());
 		this.innerHTML = datestring;
+		$(this).fadeIn();
 		counter++;
 	});
 }

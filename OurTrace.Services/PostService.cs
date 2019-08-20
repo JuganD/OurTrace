@@ -52,6 +52,10 @@ namespace OurTrace.Services
                 post.User = await identityService.GetUserByName(username).SingleOrDefaultAsync();
                 post.Tags = tags;
 
+                if (await wallService.IsWallBelongsToGroup(model.Location))
+                {
+                    post.VisibilityType = PostVisibilityType.Public;
+                }
 
                 // FILE SAVING PROCEDURE
                 if (model.MediaFile != null && model.MediaFile.Length > 0)

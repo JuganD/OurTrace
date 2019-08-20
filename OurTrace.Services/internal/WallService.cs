@@ -48,5 +48,10 @@ namespace OurTrace.Services
                 .OrderByDescending(x => x.CreatedOn)
                 .ToArray();
         }
+
+        internal async Task<bool> IsWallBelongsToGroup(string wallId)
+        {
+            return await this.dbContext.Groups.AnyAsync(x => x.WallId == wallId);
+        }
     }
 }

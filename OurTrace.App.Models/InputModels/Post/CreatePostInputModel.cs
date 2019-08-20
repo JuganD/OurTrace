@@ -41,5 +41,8 @@ namespace OurTrace.App.Models.InputModels.Posts
 
         [Ignore]
         public string PostState { get; set; }
+
+        [Ignore]
+        public bool IsGroupPost { get; set; }
     }
 }

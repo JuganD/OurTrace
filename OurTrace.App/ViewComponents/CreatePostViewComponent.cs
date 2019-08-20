@@ -11,10 +11,10 @@ namespace OurTrace.App.ViewComponents
         // Prevents unnecessary errors to just keep it async
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task<IViewComponentResult> InvokeAsync(string model)
+        public async Task<IViewComponentResult> InvokeAsync(string model, bool isGroup)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            return View(new CreatePostInputModel() { Location = model });
+            return View(new CreatePostInputModel() { Location = model, IsGroupPost = isGroup });
         }
     }
 }

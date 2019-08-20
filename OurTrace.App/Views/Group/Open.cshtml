@@ -20,96 +20,95 @@
                             <div class="user-pro-img">
                                 <img src="/file/grouppicture/@Model.Name" style="width:170px; height: 170px;" alt="">
                             </div><!--user-pro-img end-->
+                            @if (!Model.IsUserMemberOfGroup)
+                            {
+                                <div class="flw-hr">
+                                    <form asp-controller="Group" asp-action="Join" asp-route-name="@Model.Name" method="post">
+                                        <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Join</button></div>
+                                    </form>
+                                </div>
+                            }
                             <div class="user_pro_status">
                                 <ul class="flw-status">
                                     <li>
-                                        <span>Following</span>
-                                        <b>0</b>
-                                    </li>
-                                    <li>
-                                        <span>Followers</span>
-                                        <b>0</b>
+                                        <span>Group popularity rank </span>
+                                        <b>@Model.GroupRank</b>
                                     </li>
                                 </ul>
                             </div><!--user_pro_status end-->
                             <ul class="social_links">
-                                <li><i class="la la-user"></i> @Model.Name</li>
-                                <li><i class="la la-users"></i> @Model.MembersCount</li>
+                                <li><i class="la la-user p-1"></i> @Model.Name</li>
+                                <li><i class="la la-users p-1"></i> @Model.Members.Count members</li>
+                                <li><i class="la la-birthday-cake p-1"></i>Established on <span class="utcDate">@Model.CreatedOn</span></li>
                             </ul>
                         </div><!--user_profile end-->
-                        <div class="suggestions full-width">
-                            <div class="sd-title">
-                                <h3>Suggestions</h3>
-                                <i class="la la-ellipsis-v"></i>
-                            </div><!--sd-title end-->
-                            <div class="suggestions-list">
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Jessica William</h4>
-                                        <span>Graphic Designer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>John Doe</h4>
-                                        <span>PHP Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Poonam</h4>
-                                        <span>Wordpress Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Bill Gates</h4>
-                                        <span>C & C++ Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Jessica William</h4>
-                                        <span>Graphic Designer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>John Doe</h4>
-                                        <span>PHP Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="view-more">
-                                    <a href="#" title="">View More</a>
-                                </div>
-                            </div><!--suggestions-list end-->
-                        </div><!--suggestions end-->
+                        @if (Model.IsModerator || Model.IsAdministrator)
+                        {
+                            <div class="suggestions full-width">
+                                <div class="sd-title">
+                                    <h3>Join requests</h3>
+                                </div><!--sd-title end-->
+                                <div id="requests-list" class="suggestions-list">
+                                    @if (Model.JoinRequests.Count > 0)
+                                    {
+                                        <form method="post" id="_AjaxAntiForgeryRequestAccept">
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                    }
+                                    @foreach (var request in Model.JoinRequests)
+                                    {
+                                        <div class="suggestion-usd">
+                                            <img src="/file/profilepicture/@request.Username" style="width:35px;height:35px;" alt="">
+                                            <div class="sgt-text">
+                                                <h4><a asp-controller="User" asp-action="Profile" asp-route-username="@request.Username" class="text-black-50">@request.Username</a></h4>
+                                                <span>Requested join on <br /></span>
+                                                <span class="utcDate">@request.JoinedOn</span>
+                                            </div>
+                                            <span class="joinRequest-accept" data-url="@Url.Action("AcceptMember","Group")">
+                                                <i class="la la-plus"></i>
+                                            </span>
+                                        </div>
+                                    }
+                                </div><!--suggestions-list end-->
+                            </div><!--suggestions end-->
+                        }
                     </div><!--main-left-sidebar end-->
                 </div>
                 <div class="col-lg-6">
                     <div class="main-ws-sec">
                         <div class="user-tab-sec">
-                            <h3>@Model.Name</h3>
+                            <h3 id="groupName">@Model.Name</h3>
                             <div class="star-descp">
                                 <span>@@@Model.Name</span>
                             </div><!--star-descp end-->
                         </div><!--user-tab-sec end-->
                         <div class="product-feed-tab current" id="feed-dd">
                             <div class="posts-section">
-                                <vc:create-post model="@Model.WallId"></vc:create-post>
-                                <vc:posts model="@Model.Posts"></vc:posts>
+                                @if (Model.IsUserMemberOfGroup && Model.IsUserConfirmed)
+                                {
+                                    <vc:create-post model="@Model.WallId" is-group="true"></vc:create-post>
+                                    <vc:posts model="@Model.Posts"></vc:posts>
+                                }
+                                else
+                                {
+                                    <div class="post-bar no-margin">
+                                        <div class="post_topbar">
+                                            <div class="usy-dt">
+                                                <div class="usy-info">
+                                                    @if (!Model.IsUserMemberOfGroup)
+                                                    {
+                                                        <h3>Only members of the group can see the posts. Join the group if you want to participate!</h3>
+                                                    }
+                                                    else if (!Model.IsUserConfirmed)
+                                                    {
+                                                        <h3>No group administrator has approven your join request yet!</h3>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
                                 <!--<div class="process-comm">
                                     <div class="spinner">
                                         <div class="bounce1"></div>
@@ -119,101 +118,30 @@
                                 </div>-->
                             </div><!--posts-section end-->
                         </div><!--product-feed-tab end-->
-                        <div class="product-feed-tab" id="portfolio-dd">
-                            <div class="portfolio-gallery-sec">
-                                <h3>Portfolio</h3>
-                                <div class="gallery_pf">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/271x174" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                    </div>
-                                </div><!--gallery_pf end-->
-                            </div><!--portfolio-gallery-sec end-->
-                        </div><!--product-feed-tab end-->
                     </div><!--main-ws-sec end-->
                 </div>
                 <div class="col-lg-3">
                     <div class="right-sidebar">
                         <div class="pt-xl-4"></div>
-                        <div class="widget widget-portfolio">
+                        <div class="widget widget-portfolio suggestions-list">
                             <div class="wd-heady">
-                                <h3>Portfolio</h3>
-                                <img src="images/photo-icon.png" alt="">
+                                <h3>Users in group</h3>
+                                <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
                             </div>
                             <div class="pf-gallery">
                                 <ul>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    @if (Model.Members.Any())
+                                    {
+                                        @foreach (var member in Model.Members.Take(15))
+                                        {
+                                            <li><a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50"><img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.Username"></a></li>
+                                        }
+                                    }
                                 </ul>
                             </div><!--pf-gallery end-->
+                            <div class="view-more">
+                                <a asp-controller="Group" asp-action="ViewAllMembers" asp-route-name="@Model.Name">View all users</a>
+                            </div>
                         </div><!--widget-portfolio end-->
                     </div><!--right-sidebar end-->
                 </div>
@@ -224,4 +152,5 @@
 
 @section Scripts {
     <script src="~/js/post.js" asp-append-version="true"></script>
+    <script src="~/js/joinrequests.js" asp-append-version="true"></script>
 }

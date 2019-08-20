@@ -23,7 +23,6 @@
                             <div class="user_pro_status">
                                 <ul class="flw-hr">
                                     <partial name="_ProfileSendRequestPartial" model="Model" />
-
                                 </ul>
                                 <ul class="flw-status">
                                     <li>
@@ -123,7 +122,7 @@
                         </div><!--user-tab-sec end-->
                         <div class="product-feed-tab current" id="feed-dd">
                             <div class="posts-section">
-                                <vc:create-post model="@Model.WallId"></vc:create-post>
+                                <vc:create-post model="@Model.WallId" is-group="false"></vc:create-post>
                                 <vc:posts model="@Model.Posts"></vc:posts>
                                 <!--<div class="process-comm">
                                     <div class="spinner">

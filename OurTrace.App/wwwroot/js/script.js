@@ -1,7 +1,11 @@
 $(window).on("load", function() {
     "use strict";
 
-    
+	$(".all-users").on("click", function(){
+        $(".all-users-popup").addClass("active");
+        $(".wrapper").addClass("overlay");
+        return false;
+    });
 
     //  ============= POST PROJECT POPUP FUNCTION =========
 

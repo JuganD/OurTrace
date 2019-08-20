@@ -8,8 +8,14 @@ namespace OurTrace.Services.Abstraction
     {
         Task CreateNewGroupAsync(string name, string ownerUsername);
         Task<bool> GroupExistAsync(string name);
+        Task<bool> IsUserMemberOfGroupAsync(string groupname, string username);
+        Task<bool> IsUserConfirmedMemberAsync(string groupname, string username);
+        Task<bool> IsUserHaveRoleAsync(string groupname, string username, string roleName);
+        Task<bool> JoinGroupAsync(string groupname, string username);
+        Task<bool> AcceptMemberAsync(string groupname, string username);
         Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username);
         Task<IEnumerable<GroupWindowViewModel>> GetUserGroupsAsync(string username);
-        Task<GroupOpenViewModel> PrepareGroupForViewAsync(string name);
+        Task<IEnumerable<GroupMemberViewModel>> GetGroupMembersAsync(string groupname);
+        Task<GroupOpenViewModel> PrepareGroupForViewAsync(string name, string username);
     }
 }

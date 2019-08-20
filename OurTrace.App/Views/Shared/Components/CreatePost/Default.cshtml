@@ -48,11 +48,13 @@
                         <span>Tags (separated by comma, Example: happy,graduated,school)</span>
                         <input asp-for="Tags" class="mt-2" />
                     </div>
-                    <div class="col-lg-12">
-                        <span>Post Visibility</span>
-                        <select asp-for="VisibilityType" asp-items="Html.GetEnumSelectList<PostVisibilityType>()" class="mt-2">
-                        </select>
-                    </div>
+                    @if (!Model.IsGroupPost)
+                    {
+                        <div class="col-lg-12">
+                            <span>Post Visibility</span>
+                            <select asp-for="VisibilityType" asp-items="Html.GetEnumSelectList<PostVisibilityType>()" class="mt-2"></select>
+                        </div>
+                    }
                     <input asp-for="Location" type="hidden" value="@Model.Location" />
                     <div class="col-lg-12">
                         <ul>

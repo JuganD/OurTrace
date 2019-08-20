@@ -29,7 +29,8 @@ namespace OurTrace.App.Controllers
                 var profileViewModel = await userService.PrepareUserProfileForViewAsync(
                     this.User.Identity.Name, username);
 
-                return View(profileViewModel);
+                if (profileViewModel != null)
+                    return View(profileViewModel);
             }
 
             return LocalRedirect("/");

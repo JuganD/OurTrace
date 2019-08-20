@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurTrace.Data;
 
 namespace OurTrace.App.Migrations
 {
     [DbContext(typeof(OurTraceDbContext))]
-    partial class OurTraceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190820082642_AddedGroupMembershipConfirm")]
+    partial class AddedGroupMembershipConfirm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,8 +434,6 @@ namespace OurTrace.App.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<bool>("ConfirmedMember");
-
-                    b.Property<DateTime>("JoinedOn");
 
                     b.HasKey("GroupId", "UserId");
 

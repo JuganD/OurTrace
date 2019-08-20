@@ -30,8 +30,8 @@
                         <div class="col-lg-3 col-md-4 col-sm-6">
                             <div class="company_profile_info">
                                 <div class="company-up-info">
-                                    <img src="http://via.placeholder.com/90x90" alt="">
-                                    <h3>@group.Name</h3>
+                                    <img src="/file/grouppicture/@group.Name" style="width:90px; height: 90px;" alt="">
+                                    <h3><a asp-controller="Group" asp-action="Open" asp-route-name="@group.Name" class="text-black-50">@group.Name</a></h3>
                                     <h4>@group.Members members</h4>
                                 </div>
                                 <a href="/Group/@group.Url" title="" class="view-more-pro">View Group</a>

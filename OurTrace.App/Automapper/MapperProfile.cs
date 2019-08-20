@@ -49,7 +49,13 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Url, act => act.MapFrom(x => x.Url));
 
             CreateMap<Group, GroupOpenViewModel>()
-                .ForMember(dest => dest.MembersCount, act => act.MapFrom(x => x.Members.Count));
+                .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
+                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Where(y=>y.ConfirmedMember==true)));
+
+            CreateMap<UserGroup, GroupMemberViewModel>()
+                .ForMember(dest => dest.Username, act => act.MapFrom(x => x.User.UserName))
+                .ForMember(dest => dest.FullName, act => act.MapFrom(x => x.User.FullName))
+                .ForMember(dest => dest.JoinedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.JoinedOn)));
         }
     }
 }
