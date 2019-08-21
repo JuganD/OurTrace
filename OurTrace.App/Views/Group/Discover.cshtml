@@ -22,13 +22,30 @@
                                 <h4>@group.Members members</h4>
                                 <ul>
                                     <li style="width:100%">
-                                        <form asp-controller="Group" asp-action="Join" asp-route-name="@group.Name" method="post">
-                                            <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Join</button></div>
-                                        </form>
+                                        @if (group.PendingJoin)
+                                        {
+                                            <div style="width:100%">Not yet accepted</div>
+                                        }
+                                        else
+                                        {
+                                            <form asp-controller="Group" asp-action="Join" asp-route-name="@group.Name" method="post">
+                                                <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Join</button></div>
+                                            </form>
+                                        }
                                     </li>
                                 </ul>
                             </div>
                             <a href="@group.Url" title="" class="view-more-pro">View Group</a>
+                        </div>
+                    </div>
+                }
+                @if (!Model.Any())
+                {
+                    <div class="col-sm-12">
+                        <div class="company_profile_info">
+                            <div class="company-up-info font-weight-bolder">
+                                Woah! You have discovered everything!!
+                            </div>
                         </div>
                     </div>
                 }

@@ -7,7 +7,7 @@
 <div class="row mt-2">
     @if (TempData.ContainsKey("KickResult"))
     {
-        <div class="full-width bg-danger text-white p-2 m-2 text-center">@TempData["KickResult"]</div>
+        <div class="full-width bg-primary text-white p-2 m-2 text-center">@TempData["KickResult"]</div>
         { TempData.Remove("KickResult"); }
     }
     <div class="col-md-6">

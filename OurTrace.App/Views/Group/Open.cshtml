@@ -43,20 +43,23 @@
                             </ul>
                         </div><!--user_profile end-->
 
-                        <ul class="social_links bg-white mb-4">
-                            @{
-                                string groupstatus = "Member";
-                                if (Model.IsAdministrator)
-                                {
-                                    groupstatus = "Administrator";
+                        @if (Model.IsUserConfirmed)
+                        {
+                            <ul class="social_links bg-white mb-4">
+                                @{
+                                    string groupstatus = "Member";
+                                    if (Model.IsAdministrator)
+                                    {
+                                        groupstatus = "Administrator";
+                                    }
+                                    else if (Model.IsModerator)
+                                    {
+                                        groupstatus = "Moderator";
+                                    }
                                 }
-                                else if (Model.IsModerator)
-                                {
-                                    groupstatus = "Moderator";
-                                }
-                            }
-                            <li><i class="la la-user-plus p-1"></i>Your group status: @groupstatus</li>
-                        </ul>
+                                <li><i class="la la-user-plus p-1"></i>Your group status: @groupstatus</li>
+                            </ul>
+                        }
 
                         @if (Model.IsModerator || Model.IsAdministrator)
                         {
@@ -148,16 +151,19 @@
                                 <ul>
                                     @if (Model.Members.Any())
                                     {
-                                        @foreach (var member in Model.Members.Take(15))
+                                        @foreach (var member in Model.Members)
                                         {
                                             <li><a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50"><img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.Username"></a></li>
                                         }
                                     }
                                 </ul>
                             </div><!--pf-gallery end-->
-                            <div class="view-more">
-                                <a asp-controller="Group" asp-action="ViewAllMembers" asp-route-name="@Model.Name">View all users</a>
-                            </div>
+                            @if (Model.IsUserConfirmed)
+                            {
+                                <div class="view-more">
+                                    <a asp-controller="Group" asp-action="ViewAllMembers" asp-route-name="@Model.Name">View all users</a>
+                                </div>
+                            }
                         </div><!--widget-portfolio end-->
                     </div><!--right-sidebar end-->
                 </div>

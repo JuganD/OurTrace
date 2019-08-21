@@ -6,7 +6,7 @@ namespace OurTrace.Services.Abstraction
 {
     public interface IGroupService
     {
-        Task CreateNewGroupAsync(string name, string ownerUsername);
+        Task<bool> CreateNewGroupAsync(string name, string ownerUsername);
         Task<bool> GroupExistAsync(string name);
         Task<bool> IsUserMemberOfGroupAsync(string groupname, string username);
         Task<bool> IsUserConfirmedMemberAsync(string groupname, string username);

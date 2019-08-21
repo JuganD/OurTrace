@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OurTrace.App.Models.InputModels.Group;
 using OurTrace.App.Models.ViewModels.Group;
 using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Services.Abstraction;
@@ -166,6 +167,30 @@ namespace OurTrace.App.Controllers
             }
 
             return RedirectToAction("ViewAllMembers", new { name = group });
+        }
+
+        [Authorize]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Create(GroupCreateInputModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!await this.groupService.CreateNewGroupAsync(model.Name, this.User.Identity.Name))
+                {
+                    TempData.Add("CreateGroupResult", "Failed to create group! Group name already taken!");
+                } else
+                {
+                    return RedirectToAction("MyGroups");
+                }
+            }
+            return View();
         }
     }
 }

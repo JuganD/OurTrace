@@ -30,7 +30,7 @@ namespace OurTrace.Services
             this.identityService = new IdentityService(dbContext);
         }
 
-        public async Task CreateNewGroupAsync(string name, string ownerUsername)
+        public async Task<bool> CreateNewGroupAsync(string name, string ownerUsername)
         {
             var user = await identityService.GetUserByName(ownerUsername).SingleOrDefaultAsync();
             if (user != null)
@@ -57,21 +57,37 @@ namespace OurTrace.Services
                         AdminType = GroupAdminType.Admin
                     });
                     await this.dbContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
+            return false;
         }
 
         public async Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username)
         {
             // TODO: figure out a better algoritm for finding groups
             var famousGroups = await dbContext.Groups
-                .Where(x => !x.Members.Any(y => y.User.UserName == username))
+                .Where(x => !x.Members.Any(y => y.User.UserName == username && y.ConfirmedMember == true))
                 .Include(x => x.Members)
+                    .ThenInclude(x => x.User)
                 .OrderByDescending(x => x.Members.Count)
                 .Take(50)
                 .ToListAsync();
 
-            return automapper.Map<IEnumerable<GroupWindowViewModel>>(famousGroups);
+            var viewModels = automapper.Map<IEnumerable<GroupWindowViewModel>>(famousGroups);
+            var pendingGroups = famousGroups.Where(x => x.Members.Any(y => y.User.UserName == username && y.ConfirmedMember == false));
+            foreach (var model in viewModels)
+            {
+                if (pendingGroups.Any(x => x.Name == model.Name))
+                {
+                    model.PendingJoin = true;
+                }
+            }
+            return viewModels;
         }
 
         public async Task<IEnumerable<GroupWindowViewModel>> GetUserGroupsAsync(string username)
@@ -101,6 +117,9 @@ namespace OurTrace.Services
 
             if (group != null)
             {
+                // EF core currently can't be limited to include only 15
+                group.Members = group.Members.Take(15).ToList();
+
                 var groupViewModel = automapper.Map<GroupOpenViewModel>(group);
 
                 groupViewModel.Posts = automapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(groupViewModel.WallId));
@@ -117,6 +136,7 @@ namespace OurTrace.Services
 
                 groupViewModel.GroupRank = this.dbContext.Groups
                     .OrderByDescending(x => x.Members.Count)
+                    .ThenBy(x => x.CreatedOn)
                     .IndexOf(group) + 1;
 
                 if (!groupViewModel.IsAdministrator)
