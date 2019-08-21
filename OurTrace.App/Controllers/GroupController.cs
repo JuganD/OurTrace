@@ -21,8 +21,6 @@ namespace OurTrace.App.Controllers
         [Authorize]
         public async Task<IActionResult> Discover()
         {
-            //await groupService.CreateNewGroupAsync("TestGroup1", "Testcho");
-
             var viewmodel = await groupService.DiscoverGroupsAsync(this.User.Identity.Name);
             return View(viewmodel);
         }

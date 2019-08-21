@@ -26,6 +26,7 @@ namespace OurTrace.App.Models.ViewModels.Profile
         [Ignore]
         public bool IsHimself { get; set; }
         public ICollection<PostViewModel> Posts { get; set; }
+        public ProfileLastPicturesViewModel LastPictures { get; set; }
         
     }
 }

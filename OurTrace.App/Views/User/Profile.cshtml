@@ -18,7 +18,9 @@
                     <div class="main-left-sidebar">
                         <div class="user_profile">
                             <div class="user-pro-img">
-                                <img src="/file/profilepicture/@Model.Username" style="width:170px; height: 170px;" alt="">
+                                <a class="popup-image" asp-controller="File" asp-action="ProfilePicture" asp-route-username="@Model.Username">
+                                    <img src="@Url.Action("ProfilePicture","File",new { username = Model.Username })" style="width:170px; height: 170px;" alt="">
+                                </a>
                             </div><!--user-pro-img end-->
                             <div class="user_pro_status">
                                 <ul class="flw-hr">
@@ -133,75 +135,6 @@
                                 </div>-->
                             </div><!--posts-section end-->
                         </div><!--product-feed-tab end-->
-                        <div class="product-feed-tab" id="portfolio-dd">
-                            <div class="portfolio-gallery-sec">
-                                <h3>Portfolio</h3>
-                                <div class="gallery_pf">
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/271x174" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-6 col-6">
-                                            <div class="gallery_pt">
-                                                <img src="http://via.placeholder.com/170x170" alt="">
-                                                <a href="#" title=""><img src="images/all-out.png" alt=""></a>
-                                            </div><!--gallery_pt end-->
-                                        </div>
-                                    </div>
-                                </div><!--gallery_pf end-->
-                            </div><!--portfolio-gallery-sec end-->
-                        </div><!--product-feed-tab end-->
                     </div><!--main-ws-sec end-->
                 </div>
                 <div class="col-lg-3">
@@ -209,23 +142,35 @@
                         <div class="pt-xl-4"></div>
                         <div class="widget widget-portfolio">
                             <div class="wd-heady">
-                                <h3>Portfolio</h3>
-                                <img src="images/photo-icon.png" alt="">
+                                <h3>Last 15 pictures</h3>
+                                <img src="~/images/profile_pictures.png" style="width:30px;height:30px" alt="">
                             </div>
                             <div class="pf-gallery">
                                 <ul>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
-                                    <li><a href="#" title=""><img src="http://via.placeholder.com/70x70" alt=""></a></li>
+                                    @foreach (var pictureId in Model.LastPictures.InternalIds)
+                                    {
+                                        <li style="width:50%">
+                                            <a class="popup-image" asp-controller="File" asp-action="Image" asp-route-username="@Model.Username" asp-route-id="@pictureId" title="">
+                                                <img src="@Url.Action("Image","File",new { username = Model.Username, id = pictureId })" alt="">
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @foreach (var pictureUrl in Model.LastPictures.ExternalUrls)
+                                    {
+                                        <li style="width:50%">
+                                            <a class="popup-image" href="@pictureUrl" title="">
+                                                <img src="@pictureUrl" alt="">
+                                            </a>
+                                        </li>
+                                    }
+                                    @if(Model.LastPictures.ExternalUrls.Count + Model.LastPictures.InternalIds.Count == 0)
+                                    {
+                                        <li class="text-center" style="width:100%">
+                                            <span class="font-weight-bold">Woops! No pictures yet!</span>
+                                            Nothing a post with image can't change!
+                                        </li>
+                                    }
                                 </ul>
                             </div><!--pf-gallery end-->
                         </div><!--widget-portfolio end-->

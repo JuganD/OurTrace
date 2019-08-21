@@ -31,7 +31,9 @@
                     </div>
                     @if (post.MediaUrl != null)
                     {
-                        <img class="mt-2 img-fluid" src="@post.MediaUrl">
+                        <a class="popup-image" href="@post.MediaUrl">
+                            <img class="mt-2 img-fluid" src="@post.MediaUrl">
+                        </a>
                     }
                 </div>
 

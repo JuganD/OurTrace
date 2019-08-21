@@ -77,6 +77,38 @@ namespace OurTrace.Services
                 model.IsHimself = true;
             }
 
+            if (model.IsHimself || model.AreFriends)
+            {
+                model.LastPictures = await GetLastNPicturesAsync(visitingUserName, 15);
+            }
+
+            return model;
+        }
+        public async Task<ProfileLastPicturesViewModel> GetLastNPicturesAsync(string username, int picturesCount)
+        {
+            var user = await identityService.GetUserByName(username)
+                .Include(x => x.Wall)
+                    .ThenInclude(x => x.Posts)
+                 .SingleOrDefaultAsync();
+
+            var posts = user.Wall.Posts.Where(x => x.User == user &&
+                (x.MediaUrl != null || x.IsImageOnFileSystem == true))
+                                .OrderByDescending(x => x.CreatedOn)
+                                .Take(picturesCount)
+                                .ToList();
+
+            ProfileLastPicturesViewModel model = new ProfileLastPicturesViewModel();
+            foreach (var post in posts)
+            {
+                if (post.MediaUrl == null)
+                {
+                    model.InternalIds.Add(post.Id);
+                }
+                else
+                {
+                    model.ExternalUrls.Add(post.MediaUrl);
+                }
+            }
             return model;
         }
         private IQueryable<OurTraceUser> IncludeFriendship(IQueryable<OurTraceUser> query)

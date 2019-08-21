@@ -2529,23 +2529,8 @@ footer {
 	margin-top: -95px;
 	position: relative;
 }
-.user-pro-img > a {
-	width: 40px;
-	height: 40px;
-	-webkit-border-radius: 100px;
-	-moz-border-radius: 100px;
-	-ms-border-radius: 100px;
-	-o-border-radius: 100px;
-	border-radius: 100px;
-	color: #fff;
-	line-height: 40px;
-	background-color: #C150FF;
-	position: absolute;
-	top: 0;
-	left: 60%;
-}
 
-.user-pro-img img {
+.user-pro-img img, .user-pro-img a img {
 	-webkit-border-radius: 100px;
 	-moz-border-radius: 100px;
 	-ms-border-radius: 100px;
