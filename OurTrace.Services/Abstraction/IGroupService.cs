@@ -11,6 +11,8 @@ namespace OurTrace.Services.Abstraction
         Task<bool> IsUserMemberOfGroupAsync(string groupname, string username);
         Task<bool> IsUserConfirmedMemberAsync(string groupname, string username);
         Task<bool> IsUserHaveRoleAsync(string groupname, string username, string roleName);
+        Task<bool> IsUserHaveAnyAdministratorRightsAsync(string groupname, string username);
+        Task<bool> KickMemberAsync(string groupname, string username);
         Task<bool> JoinGroupAsync(string groupname, string username);
         Task<bool> AcceptMemberAsync(string groupname, string username);
         Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username);

@@ -3473,7 +3473,7 @@ a:hover {
 /* ============== companies-info ============== */
 
 .companies-info {
-	padding: 60px 0;
+	padding: 20px 0;
 }
 .company-title {
 	float: left;
@@ -3563,12 +3563,14 @@ a:hover {
 .hire-us {
 	background-color: #51a5fb;
 }
-.company_profile_info > a {
+.company_profile_info > a, .company_profile_info > form input[type="submit"] {
 	display: inline-block;
 	color: #000000;
 	font-size: 16px;
 	font-weight: 600;
 	padding: 18px 0;
+	border: none;
+	background: none;
 }
 
 

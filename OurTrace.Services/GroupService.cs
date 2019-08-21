@@ -232,15 +232,55 @@ namespace OurTrace.Services
 
             return false;
         }
+        public async Task<bool> KickMemberAsync(string groupname, string username)
+        {
+            var user = await identityService.GetUserByName(username)
+                .SingleOrDefaultAsync();
+            var group = await GetGroup(groupname)
+                .SingleOrDefaultAsync();
+
+            if (user != null && group != null)
+            {
+                var userGroup = await this.dbContext.UserGroups
+                    .SingleOrDefaultAsync(x => x.Group == group &&
+                                          x.User == user &&
+                                          x.ConfirmedMember == true);
+                if (userGroup != null)
+                {
+                    this.dbContext.UserGroups.Remove(userGroup);
+                    await this.dbContext.SaveChangesAsync();
+                    return true;
+                }
+            }
+            return false;
+        }
         public async Task<IEnumerable<GroupMemberViewModel>> GetGroupMembersAsync(string groupname)
         {
             var userGroups = await GetGroup(groupname)
                 .SelectMany(x => x.Members)
                     .Include(x => x.User)
-                .Where(x=>x.ConfirmedMember==true)
+                .Where(x => x.ConfirmedMember == true)
                 .ToListAsync();
 
             return automapper.Map<IEnumerable<GroupMemberViewModel>>(userGroups);
+        }
+        public async Task<bool> IsUserHaveAnyAdministratorRightsAsync(string groupname, string username)
+        {
+            var user = await identityService.GetUserByName(username)
+                .SingleOrDefaultAsync();
+            var group = await GetGroup(groupname)
+                .SingleOrDefaultAsync();
+
+            if (user != null && group != null)
+            {
+                var groupAdmin = await this.dbContext.GroupAdmins
+                    .SingleOrDefaultAsync(x => x.User == user && x.Group == group);
+                if (groupAdmin != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public async Task<bool> GroupExistAsync(string name)

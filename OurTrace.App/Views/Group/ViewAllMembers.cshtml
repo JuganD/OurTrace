@@ -4,34 +4,70 @@
 @{
     ViewData["Title"] = Context.Request.Query["name"] + " members";
 }
+<div class="row mt-2">
+    @if (TempData.ContainsKey("KickResult"))
+    {
+        <div class="full-width bg-danger text-white p-2 m-2 text-center">@TempData["KickResult"]</div>
+        { TempData.Remove("KickResult"); }
+    }
+    <div class="col-md-6">
+        <div id="search-bar" class="widget widget-portfolio suggestions-list">
+            <a href="#" onclick="window.history.back()" class="la la-3x la-arrow-left"></a>
+            <div class="wd-heady">
+                <h3>Users in group <a asp-controller="Group" asp-action="Open" asp-route-name="@Context.Request.Query["name"]" id="group-name">@Context.Request.Query["name"]</a></h3>
+                <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
+            </div>
+            <div>
+                <input class="form-control" type="text" id="myInput" onkeyup="filterSearch()" placeholder="Search..">
+            </div>
+            <div id="searchPanel" class="pf-gallery-extended">
+                <ul>
+                    @if (Model.Any())
+                    {
+                        @foreach (var member in Model)
+                        {
+                            <li>
+                                <a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50 member-link">
+                                    <img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.FullName" search-title="@member.FullName">
+                                    <div>@@@member.Username</div>
+                                </a>
+                            </li>
+                        }
 
-<div class="widget widget-portfolio suggestions-list">
-    <a href="#" onclick="window.history.back()" class="la la-3x la-arrow-left"></a>
-    <div class="wd-heady">
-        <h3>Users in group <a asp-controller="Group" asp-action="Open" asp-route-name="@Context.Request.Query["name"]">@Context.Request.Query["name"]</a></h3>
-        <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
+                    }
+                </ul>
+            </div><!--pf-gallery end-->
+        </div><!--widget-portfolio end-->
     </div>
-    <div>
-        <input class="form-control" type="text" id="myInput" onkeyup="filterSearch()" placeholder="Search..">
+    <div class="col-md-6">
+        <div class="widget widget-portfolio suggestions-list">
+            <h2 class="text-center font-weight-bold mb-4">Currently selected user</h2>
+            <div id="selectedUser">
+                <div id="user-data" style="display:none">
+                    <div class="company_profile_info">
+                        <div class="company-up-info">
+                            <img id="user-data-img" src="" alt="">
+                            <h3 id="user-data-name"></h3>
+                            <h4 id="user-data-fullname"></h4>
+                        </div>
+                        <a id="user-data-viewprofile" href="#" title="" class="view-more-pro">View Profile</a>
+                        @if ((bool)ViewData["IsUserAdministrator"] == true)
+                        {
+                            <br />
+                            <form asp-controller="Group" asp-action="KickMember" method="post">
+                                <input type="hidden" value="@Context.Request.Query["name"]" name="group" />
+                                <input id="user-data-kick-username" type="hidden" value="" name="username" />
+                                <input type="submit" class="view-more-pro" value="Kick from group" />
+                            </form>
+                        }
+                    </div><!--company_profile_info end-->
+                </div>
+                <div id="none-message" class="text-center">None</div>
+            </div>
+        </div>
     </div>
-    <div id="searchPanel" class="pf-gallery-extended">
-        <ul>
-            @if (Model.Any())
-            {
-                @foreach (var member in Model)
-                {
-                    <li>
-                        <a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50">
-                            <img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.FullName" search-title="@member.FullName">
-                            <div>@@@member.Username</div>
-                        </a>
-                    </li>
-                }
+</div>
 
-            }
-        </ul>
-    </div><!--pf-gallery end-->
-</div><!--widget-portfolio end-->
 @section Scripts {
     <script src="~/js/viewallusers.js" asp-append-version="true"></script>
 }

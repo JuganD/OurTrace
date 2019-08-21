@@ -47,7 +47,7 @@ namespace OurTrace.App.Controllers
                 return View(group);
             }
 
-            return RedirectToAction("Discover");
+            return RedirectToAction("MyGroups");
         }
 
         [Authorize]
@@ -77,8 +77,7 @@ namespace OurTrace.App.Controllers
         public async Task<IActionResult> AcceptMember(string groupname, string membername)
         {
             bool canInvokeAcceptance =
-               await this.groupService.IsUserHaveRoleAsync(groupname, this.User.Identity.Name, "Admin") ||
-               await this.groupService.IsUserHaveRoleAsync(groupname, this.User.Identity.Name, "Moderator");
+               await this.groupService.IsUserHaveAnyAdministratorRightsAsync(groupname, this.User.Identity.Name);
 
             if (canInvokeAcceptance)
             {
@@ -99,7 +98,7 @@ namespace OurTrace.App.Controllers
         {
             if (string.IsNullOrEmpty(name))
             {
-                return RedirectToAction("Discover");
+                return RedirectToAction("MyGroups");
             }
 
             bool userParticipatesInGroup = await this.groupService
@@ -110,10 +109,63 @@ namespace OurTrace.App.Controllers
                 var members = await this.groupService
                     .GetGroupMembersAsync(name);
 
+                bool isCurrentUserAdministrator =
+                    await this.groupService.IsUserHaveAnyAdministratorRightsAsync(name, this.User.Identity.Name);
+
+                ViewData.Add("IsUserAdministrator", isCurrentUserAdministrator);
+
                 return View(members);
             }
 
-            return RedirectToAction("Discover");
+            return RedirectToAction("MyGroups");
+        }
+        [Authorize]
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> KickMember(string group, string username)
+        {
+            if (string.IsNullOrEmpty(group) || string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("ViewAllMembers", new { name = group });
+            }
+
+            bool issuerParticipatesInGroup = await this.groupService
+                .IsUserConfirmedMemberAsync(group, this.User.Identity.Name);
+
+            bool kickedUserParticipatesInGroup = await this.groupService
+                .IsUserConfirmedMemberAsync(group, username);
+
+            if (issuerParticipatesInGroup && kickedUserParticipatesInGroup)
+            {
+                bool isIssuerUserAdministrator =
+                    await this.groupService.IsUserHaveAnyAdministratorRightsAsync(group, this.User.Identity.Name);
+
+                // Because admins should be able to kick every other role
+                bool isKickedUserAdministrator =
+                    await this.groupService.IsUserHaveRoleAsync(group, username, "Admin");
+
+                if (isIssuerUserAdministrator == true && isKickedUserAdministrator == false)
+                {
+                    if (await this.groupService.KickMemberAsync(group, username))
+                    {
+                        TempData["KickResult"] = "Successful!";
+                    }
+                    else
+                    {
+                        TempData["KickResult"] = "Failed!";
+                    }
+                }
+                else
+                {
+                    TempData["KickResult"] = "Not enough privileges to kick this user.";
+                }
+            }
+            else
+            {
+                TempData["KickResult"] = "Invalid data.";
+            }
+
+            return RedirectToAction("ViewAllMembers", new { name = group });
         }
     }
 }

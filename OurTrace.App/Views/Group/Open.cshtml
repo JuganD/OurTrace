@@ -42,6 +42,22 @@
                                 <li><i class="la la-birthday-cake p-1"></i>Established on <span class="utcDate">@Model.CreatedOn</span></li>
                             </ul>
                         </div><!--user_profile end-->
+
+                        <ul class="social_links bg-white mb-4">
+                            @{
+                                string groupstatus = "Member";
+                                if (Model.IsAdministrator)
+                                {
+                                    groupstatus = "Administrator";
+                                }
+                                else if (Model.IsModerator)
+                                {
+                                    groupstatus = "Moderator";
+                                }
+                            }
+                            <li><i class="la la-user-plus p-1"></i>Your group status: @groupstatus</li>
+                        </ul>
+
                         @if (Model.IsModerator || Model.IsAdministrator)
                         {
                             <div class="suggestions full-width">
