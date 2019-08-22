@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OurTrace.App.Models.InputModels.Settings;
+using OurTrace.App.Models.ViewModels.Settings;
 using OurTrace.Data.Identity.Models;
+using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Areas.Settings.Controllers
 {
@@ -18,18 +20,23 @@ namespace OurTrace.App.Areas.Settings.Controllers
     {
         private readonly SignInManager<OurTraceUser> signInManager;
         private readonly UserManager<OurTraceUser> userManager;
+        private readonly IRelationsService relationsService;
 
         public SettingsController(SignInManager<OurTraceUser> signInManager,
-            UserManager<OurTraceUser> userManager)
+            UserManager<OurTraceUser> userManager,
+            IRelationsService relationsService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.relationsService = relationsService;
         }
         #region Get
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await GetIndexViewModel());
         }
+        [Authorize]
         public IActionResult ChangePassword()
         {
             return RedirectToAction("Index");
@@ -37,8 +44,9 @@ namespace OurTrace.App.Areas.Settings.Controllers
         #endregion
         #region Post
 
-        [AutoValidateAntiforgeryToken]
+        [Authorize]
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordInputModel model)
         {
             if (ModelState.IsValid)
@@ -56,17 +64,18 @@ namespace OurTrace.App.Areas.Settings.Controllers
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    return View("Settings");
+                    return View("Index", await GetIndexViewModel());
                 }
 
                 await signInManager.RefreshSignInAsync(user);
                 ViewData["change-password-message"] = "Password successfuly changed!";
-                return View("Settings");
+                return View("Index", await GetIndexViewModel());
             }
-            return View("Settings");
+            return View("Index", await GetIndexViewModel());
         }
-        [AutoValidateAntiforgeryToken]
+        [Authorize]
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DownloadPersonalData()
         {
             var user = await userManager.GetUserAsync(User);
@@ -88,8 +97,9 @@ namespace OurTrace.App.Areas.Settings.Controllers
             return new FileContentResult(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData)), "text/json");
         }
 
-        [AutoValidateAntiforgeryToken]
+        [Authorize]
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AccountDelete(DeleteAccountInputModel model)
         {
             if (ModelState.IsValid)
@@ -107,5 +117,11 @@ namespace OurTrace.App.Areas.Settings.Controllers
             return LocalRedirect("/");
         }
         #endregion
+        [NonAction]
+        private async Task<ICollection<SettingsFriendRequestViewModel>> GetIndexViewModel()
+        {
+            return await relationsService
+                .GetPendingFriendRequestsAsync(this.User.Identity.Name);
+        }
     }
 }

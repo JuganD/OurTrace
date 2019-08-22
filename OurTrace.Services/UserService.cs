@@ -36,7 +36,7 @@ namespace OurTrace.Services
                 .SingleOrDefaultAsync();
 
             if (visitingUser == null) return null;
-
+            
             ProfileViewModel model = mapper.Map<ProfileViewModel>(visitingUser);
 
             model.Posts = mapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(model.WallId));
@@ -65,6 +65,11 @@ namespace OurTrace.Services
                     {
                         model.PendingFriendship = true;
                     }
+                    if (actualUser.ReceivedFriendships.Any( x=> 
+                        x.Sender == visitingUser && x.AcceptedOn == null))
+                    {
+                        model.CanAcceptFriendship = true;
+                    }
                 }
 
                 if (await relationsService.IsFollowingAsync(actualUser, visitingUser))
@@ -74,6 +79,7 @@ namespace OurTrace.Services
             }
             else
             {
+                model.FriendSuggestions = await relationsService.GetFriendsOfFriendsAsync(actualUserName, 15);
                 model.IsHimself = true;
             }
 
@@ -111,6 +117,7 @@ namespace OurTrace.Services
             }
             return model;
         }
+
         private IQueryable<OurTraceUser> IncludeFriendship(IQueryable<OurTraceUser> query)
         {
             return query

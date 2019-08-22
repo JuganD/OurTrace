@@ -1,6 +1,8 @@
 ﻿using OurTrace.App.Models.ViewModels.Profile;
+using OurTrace.App.Models.ViewModels.Settings;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OurTrace.Services.Abstraction
@@ -15,8 +17,7 @@ namespace OurTrace.Services.Abstraction
         Task AddFriendshipAsync(string senderUsername, string receiverUsername);
         Task RevokeFriendshipAsync(string senderUsername, string receiverUsername);
         Task RevokeFollowingAsync(string senderUsername, string receiverUsername);
-
-        Task<Friendship> GetFriendshipAsync(string firstUsername, string secondUsername);
-        Task<Follow> GetFollowAsync(string firstUsername, string secondUsername);
+        Task<ICollection<ProfileFriendSuggestionViewModel>> GetFriendsOfFriendsAsync(string username, int count);
+        Task<ICollection<SettingsFriendRequestViewModel>> GetPendingFriendRequestsAsync(string username);
     }
 }

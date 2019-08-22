@@ -4,124 +4,28 @@
 @{
     ViewData["Title"] = "Profile";
 }
-
+<!--user-background-cover-section-start-->
 <section class="cover-sec">
     <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
 </section>
-
+<!--user-background-cover-section-end-->
 
 <div class="main-section">
     <div class="container">
         <div class="main-section-data">
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="main-left-sidebar">
-                        <div class="user_profile">
-                            <div class="user-pro-img">
-                                <a class="popup-image" asp-controller="File" asp-action="ProfilePicture" asp-route-username="@Model.Username">
-                                    <img src="@Url.Action("ProfilePicture","File",new { username = Model.Username })" style="width:170px; height: 170px;" alt="">
-                                </a>
-                            </div><!--user-pro-img end-->
-                            <div class="user_pro_status">
-                                <ul class="flw-hr">
-                                    <partial name="_ProfileSendRequestPartial" model="Model" />
-                                </ul>
-                                <ul class="flw-status">
-                                    <li>
-                                        <span>Following</span>
-                                        <b>@Model.Following</b>
-                                    </li>
-                                    <li>
-                                        <span>Followers</span>
-                                        <b>@Model.Followers</b>
-                                    </li>
-                                </ul>
-                            </div><!--user_pro_status end-->
-                            <ul class="social_links">
-                                <li><i class="la la-user"></i> @Model.FullName</li>
-                                @if (Model.Sex == OurTrace.Data.Identity.Models.UserSex.Male)
-                                {
-                                    <li><i class="la la-male"></i> @Model.Sex</li>
-                                }
-                                else if (Model.Sex == OurTrace.Data.Identity.Models.UserSex.Female)
-                                {
-                                    <li><i class="la la-female"></i> @Model.Sex</li>
-                                }
-
-                                <li><i class="la la-birthday-cake"></i> @Model.Years years old</li>
-                                <li><i class="la la-building"></i> @Model.Country</li>
-                                <li><i class="la la-plus-square"></i> Friends (@Model.FriendsCount)</li>
-                            </ul>
-                        </div><!--user_profile end-->
-                        <div class="suggestions full-width">
-                            <div class="sd-title">
-                                <h3>Suggestions</h3>
-                                <i class="la la-ellipsis-v"></i>
-                            </div><!--sd-title end-->
-                            <div class="suggestions-list">
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Jessica William</h4>
-                                        <span>Graphic Designer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>John Doe</h4>
-                                        <span>PHP Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Poonam</h4>
-                                        <span>Wordpress Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Bill Gates</h4>
-                                        <span>C & C++ Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>Jessica William</h4>
-                                        <span>Graphic Designer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="suggestion-usd">
-                                    <img src="http://via.placeholder.com/35x35" alt="">
-                                    <div class="sgt-text">
-                                        <h4>John Doe</h4>
-                                        <span>PHP Developer</span>
-                                    </div>
-                                    <span><i class="la la-plus"></i></span>
-                                </div>
-                                <div class="view-more">
-                                    <a href="#" title="">View More</a>
-                                </div>
-                            </div><!--suggestions-list end-->
-                        </div><!--suggestions end-->
-                    </div><!--main-left-sidebar end-->
-                </div>
+                <partial name="_ProfileLeftBarPartial" model="Model" />
                 <div class="col-lg-6">
                     <div class="main-ws-sec">
+                        <!--user-name-tags-section-start-->
                         <div class="user-tab-sec">
                             <h3>@Model.FullName</h3>
                             <div class="star-descp">
                                 <span>@@@Model.Username</span>
-                            </div><!--star-descp end-->
-                        </div><!--user-tab-sec end-->
+                            </div>
+                        </div>
+                        <!--user-name-tags-section-end-->
+                        <!--user-core-posts-section-start-->
                         <div class="product-feed-tab current" id="feed-dd">
                             <div class="posts-section">
                                 <vc:create-post model="@Model.WallId" is-group="false"></vc:create-post>
@@ -133,51 +37,14 @@
                                         <div class="bounce3"></div>
                                     </div>
                                 </div>-->
-                            </div><!--posts-section end-->
-                        </div><!--product-feed-tab end-->
-                    </div><!--main-ws-sec end-->
-                </div>
-                <div class="col-lg-3">
-                    <div class="right-sidebar">
-                        <div class="pt-xl-4"></div>
-                        <div class="widget widget-portfolio">
-                            <div class="wd-heady">
-                                <h3>Last 15 pictures</h3>
-                                <img src="~/images/profile_pictures.png" style="width:30px;height:30px" alt="">
                             </div>
-                            <div class="pf-gallery">
-                                <ul>
-                                    @foreach (var pictureId in Model.LastPictures.InternalIds)
-                                    {
-                                        <li style="width:50%">
-                                            <a class="popup-image" asp-controller="File" asp-action="Image" asp-route-username="@Model.Username" asp-route-id="@pictureId" title="">
-                                                <img src="@Url.Action("Image","File",new { username = Model.Username, id = pictureId })" alt="">
-                                            </a>
-                                        </li>
-                                    }
-
-                                    @foreach (var pictureUrl in Model.LastPictures.ExternalUrls)
-                                    {
-                                        <li style="width:50%">
-                                            <a class="popup-image" href="@pictureUrl" title="">
-                                                <img src="@pictureUrl" alt="">
-                                            </a>
-                                        </li>
-                                    }
-                                    @if(Model.LastPictures.ExternalUrls.Count + Model.LastPictures.InternalIds.Count == 0)
-                                    {
-                                        <li class="text-center" style="width:100%">
-                                            <span class="font-weight-bold">Woops! No pictures yet!</span>
-                                            Nothing a post with image can't change!
-                                        </li>
-                                    }
-                                </ul>
-                            </div><!--pf-gallery end-->
-                        </div><!--widget-portfolio end-->
-                    </div><!--right-sidebar end-->
+                        </div>
+                        <!--user-core-posts-section-end-->
+                    </div>
                 </div>
+                <partial name="_ProfileRightBarPartial" model="Model" />
             </div>
-        </div><!-- main-section-data end-->
+        </div>
     </div>
 </div>
 

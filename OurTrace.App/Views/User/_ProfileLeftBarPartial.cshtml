@@ -1,0 +1,73 @@
+﻿@using OurTrace.App.Models.ViewModels.Profile
+@model ProfileViewModel
+
+<div class="col-lg-3">
+    <div class="main-left-sidebar">
+        <div class="user_profile">
+            <!--user-image-section-start-->
+            <div class="user-pro-img">
+                <a class="popup-image" asp-controller="File" asp-action="ProfilePicture" asp-route-username="@Model.Username">
+                    <img src="@Url.Action("ProfilePicture","File",new { username=Model.Username })" style="width:170px; height: 170px;" alt="">
+                </a>
+            </div>
+            <!--user-image-section-end-->
+            <!--user-actions-section-start-->
+            <div class="user_pro_status">
+                <ul class="flw-hr">
+                    <partial name="_ProfileSendRequestPartial" model="Model" />
+                </ul>
+                <ul class="flw-status">
+                    <li>
+                        <span>Following</span>
+                        <b>@Model.Following</b>
+                    </li>
+                    <li>
+                        <span>Followers</span>
+                        <b>@Model.Followers</b>
+                    </li>
+                </ul>
+            </div>
+            <!--user-actions-section-end-->
+            <!--user-description-section-start-->
+            <ul class="social_links">
+                <li><i class="la la-user"></i> @Model.FullName</li>
+                @if (Model.Sex == OurTrace.Data.Identity.Models.UserSex.Male)
+                {
+                    <li><i class="la la-male"></i> @Model.Sex</li>
+                }
+                else if (Model.Sex == OurTrace.Data.Identity.Models.UserSex.Female)
+                {
+                    <li><i class="la la-female"></i> @Model.Sex</li>
+                }
+
+                <li><i class="la la-birthday-cake"></i> @Model.Years years old</li>
+                <li><i class="la la-building"></i> @Model.Country</li>
+                <li><i class="la la-plus-square"></i> Friends (@Model.FriendsCount)</li>
+                <li><i class="la la-user-times"></i> Member since @Model.JoinedOn.ToString("MMMM") @Model.JoinedOn.Year</li>
+            </ul>
+        </div>
+        <!--user-description-section-end-->
+        <!--user-friend-suggestions-section-start-->
+        @if (Model.IsHimself)
+        {
+            <div class="suggestions full-width">
+                <div class="sd-title">
+                    <h3>People you might know</h3>
+                </div><!--sd-title end-->
+                <div class="suggestions-list">
+                    @foreach (var suggestedUser in Model.FriendSuggestions)
+                    {
+                        <div class="suggestion-usd">
+                            <img style="max-width:20%" src="/file/profilepicture/@suggestedUser.Username" alt="">
+                            <div style="max-width:80%" class="sgt-text text-wrap">
+                                <h4><a asp-controller="User" asp-action="Profile" asp-route-username="@suggestedUser.Username" class="text-black-50">@suggestedUser.Username</a></h4>
+                                <span style="overflow-wrap: break-word;word-wrap: break-word;">@suggestedUser.FullName (friend of @suggestedUser.HisFriendUsername)</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <!--user-friend-suggestions-section-end-->
+    </div>
+</div>

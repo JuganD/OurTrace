@@ -18,11 +18,14 @@ namespace OurTrace.Data.Identity.Models
             this.Following = new List<Follow>();
             this.Followers = new List<Follow>();
             this.Wall = new Wall();
+            this.JoinedOn = DateTime.UtcNow;
         }
         public string FullName { get; set; }
         public DateTime? BirthDate { get; set; }
         public string Country { get; set; }
         public UserSex Sex { get; set; }
+
+        public DateTime JoinedOn { get; set; }
 
         public string WallId { get; set; }
         public Wall Wall { get; set; }

@@ -2810,6 +2810,11 @@ footer {
 	width: 33.33%;
 	padding: 5px;
 	overflow: hidden;
+	-webkit-transition: transform 0.2s ease-in-out;
+    -moz-transition: transform 0.2s ease-in-out;
+	-ms-transform: transform 0.2s ease-in-out;
+	-o-transform: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
 }
 .pf-gallery ul li:hover {
 	-webkit-transform: scale(1.2);

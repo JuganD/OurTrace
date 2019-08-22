@@ -15,6 +15,7 @@ namespace OurTrace.App.Controllers
         }
 
         [Authorize]
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> SendFriendship(string receiver)
         {
@@ -22,6 +23,7 @@ namespace OurTrace.App.Controllers
                 !string.IsNullOrEmpty(receiver))
             {
                 await relationsService.AddFriendshipAsync(this.User.Identity.Name, receiver);
+                await relationsService.AddFollowerAsync(this.User.Identity.Name, receiver);
             }
 
             // Returns user to the same page
@@ -31,6 +33,7 @@ namespace OurTrace.App.Controllers
         }
 
         [Authorize]
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> RevokeFriendship(string receiver)
         {
@@ -47,6 +50,7 @@ namespace OurTrace.App.Controllers
         }
 
         [Authorize]
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Follow(string receiver)
         {
@@ -63,6 +67,7 @@ namespace OurTrace.App.Controllers
         }
 
         [Authorize]
+        [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Unfollow(string receiver)
         {

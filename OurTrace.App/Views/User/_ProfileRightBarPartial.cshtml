@@ -1,0 +1,43 @@
+﻿@using OurTrace.App.Models.ViewModels.Profile
+@model ProfileViewModel
+
+<div class="col-lg-3">
+    <div class="right-sidebar">
+        <div class="pt-xl-4"></div>
+        <div class="widget widget-portfolio">
+            <div class="wd-heady">
+                <h3>Last 15 pictures</h3>
+                <img src="~/images/profile_pictures.png" style="width:30px;height:30px" alt="">
+            </div>
+            <div class="pf-gallery">
+                <ul>
+                    @foreach (var pictureId in Model.LastPictures.InternalIds)
+                    {
+
+                        <li style="width:50%">
+                            <a class="popup-image" asp-controller="File" asp-action="Image" asp-route-username="@Model.Username" asp-route-id="@pictureId" title="">
+                                <img src="@Url.Action(" Image","File",new { username=Model.Username, id=pictureId })" alt="">
+                            </a>
+                        </li>
+                    }
+
+                    @foreach (var pictureUrl in Model.LastPictures.ExternalUrls)
+                    {
+                        <li style="width:50%">
+                            <a class="popup-image" href="@pictureUrl" title="">
+                                <img src="@pictureUrl" alt="">
+                            </a>
+                        </li>
+                    }
+                    @if (Model.LastPictures.ExternalUrls.Count + Model.LastPictures.InternalIds.Count == 0)
+                    {
+                        <li class="text-center" style="width:100%">
+                            <span class="font-weight-bold">Woops! No pictures yet!</span>
+                            Nothing a post with image can't change!
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

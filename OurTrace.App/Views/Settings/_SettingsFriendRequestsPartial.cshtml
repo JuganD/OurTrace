@@ -1,97 +1,36 @@
-﻿<div class="tab-pane fade" id="nav-requests" role="tabpanel" aria-labelledby="nav-requests-tab">
+﻿@using OurTrace.App.Models.ViewModels.Settings
+@model ICollection<SettingsFriendRequestViewModel>
+
+<div class="tab-pane fade" id="nav-requests" role="tabpanel" aria-labelledby="nav-requests-tab">
     <div class="acc-setting">
         <h3>Friend Requests</h3>
         <div class="requests-list">
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
+            @if (Model.Any())
+            {
+                <form method="post" id="_AjaxAntiForgeryRequestAccept">
+                    @Html.AntiForgeryToken()
+                </form>
+            }
+
+            @foreach (var request in Model)
+            {
+                <div class="request-details">
+                    <div class="noty-user-img">
+                        <img src="/file/profilepicture/@request.Username" alt="">
+                    </div>
+                    <div class="request-info">
+                        <h3>@request.Username</h3>
+                        <span>@request.FullName</span>
+                    </div>
+                    <div class="accept-feat">
+                        <ul>
+                            <li><button type="submit" class="accept-req" data-url="@Url.Action("SendFriendship","Relations")">Accept</button></li>
+                            <li><button type="submit" class="close-req" data-url="@Url.Action("RevokeFriendship","Relations")"><i class="la la-close"></i></button></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="request-info">
-                    <h3>Jessica William</h3>
-                    <span>Graphic Designer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                </div>
-                <div class="request-info">
-                    <h3>John Doe</h3>
-                    <span>PHP Developer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                </div>
-                <div class="request-info">
-                    <h3>Poonam</h3>
-                    <span>Wordpress Developer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                </div>
-                <div class="request-info">
-                    <h3>Bill Gates</h3>
-                    <span>C & C++ Developer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                </div>
-                <div class="request-info">
-                    <h3>Jessica William</h3>
-                    <span>Graphic Designer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-            <div class="request-details">
-                <div class="noty-user-img">
-                    <img src="http://via.placeholder.com/35x35" alt="">
-                </div>
-                <div class="request-info">
-                    <h3>John Doe</h3>
-                    <span>PHP Developer</span>
-                </div>
-                <div class="accept-feat">
-                    <ul>
-                        <li><button type="submit" class="accept-req">Accept</button></li>
-                        <li><button type="submit" class="close-req"><i class="la la-close"></i></button></li>
-                    </ul>
-                </div><!--accept-feat end-->
-            </div><!--request-detailse end-->
-        </div><!--requests-list end-->
-    </div><!--acc-setting end-->
+            }
+
+        </div>
+    </div>
 </div>

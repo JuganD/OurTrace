@@ -1,31 +1,36 @@
-﻿
+﻿@using OurTrace.App.Models.ViewModels.Settings
+@model ICollection<SettingsFriendRequestViewModel>
+
 @{
     ViewData["Title"] = "Settings";
 }
 
-    <section class="profile-account-setting">
-        <div class="container">
-            <div class="account-tabs-setting">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="acc-leftbar">
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link" id="nav-password-tab" data-toggle="tab" href="#nav-password" role="tab" aria-controls="nav-password" aria-selected="false"><i class="fa fa-lock"></i>Change Password</a>
-                                <a class="nav-item nav-link" id="nav-requests-tab" data-toggle="tab" href="#nav-requests" role="tab" aria-controls="nav-requests" aria-selected="false"><i class="fa fa-group"></i>Friend Requests</a>
-                                <a class="nav-item nav-link" id="nav-privacy-tab" data-toggle="tab" href="#nav-privacy" role="tab" aria-controls="nav-privacy" aria-selected="false"><i class="fa fa-paw"></i>Privacy</a>
-                                <a class="nav-item nav-link" id="nav-deactivate-tab" data-toggle="tab" href="#nav-deactivate" role="tab" aria-controls="nav-deactivate" aria-selected="false"><i class="fa fa-random"></i>Delete Account</a>
-                            </div>
-                        </div><!--acc-leftbar end-->
-                    </div>
-                    <div class="col-lg-9">
-                        <div class="tab-content" id="nav-tabContent">
-                            <partial name="_SettingsChangePasswordPartial" />
-                            <partial name="_SettingsFriendRequestsPartial" />
-                            <partial name="_SettingsPrivacyPartial" />
-                            <partial name="_SettingsDeactivateAccountPartial" />
+<section class="profile-account-setting">
+    <div class="container">
+        <div class="account-tabs-setting">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="acc-leftbar">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link" id="nav-password-tab" data-toggle="tab" href="#nav-password" role="tab" aria-controls="nav-password" aria-selected="false"><i class="fa fa-lock"></i>Change Password</a>
+                            <a class="nav-item nav-link" id="nav-requests-tab" data-toggle="tab" href="#nav-requests" role="tab" aria-controls="nav-requests" aria-selected="false"><i class="fa fa-group"></i>Friend Requests</a>
+                            <a class="nav-item nav-link" id="nav-privacy-tab" data-toggle="tab" href="#nav-privacy" role="tab" aria-controls="nav-privacy" aria-selected="false"><i class="fa fa-paw"></i>Privacy</a>
+                            <a class="nav-item nav-link" id="nav-deactivate-tab" data-toggle="tab" href="#nav-deactivate" role="tab" aria-controls="nav-deactivate" aria-selected="false"><i class="fa fa-random"></i>Delete Account</a>
                         </div>
+                    </div><!--acc-leftbar end-->
+                </div>
+                <div class="col-lg-9">
+                    <div class="tab-content" id="nav-tabContent">
+                        <partial name="_SettingsChangePasswordPartial" model="null" />
+                        <partial name="_SettingsFriendRequestsPartial" model="Model" />
+                        <partial name="_SettingsPrivacyPartial" model="null" />
+                        <partial name="_SettingsDeactivateAccountPartial" model="null" />
                     </div>
                 </div>
-            </div><!--account-tabs-setting end-->
-        </div>
-    </section>
+            </div>
+        </div><!--account-tabs-setting end-->
+    </div>
+</section>
+@section Scripts {
+    <script src="~/js/settings.js" asp-append-version="true"></script>
+}

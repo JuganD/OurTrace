@@ -11,6 +11,7 @@ using System.Linq;
 using OurTrace.App.Models.Authenticate;
 using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.App.Models.ViewModels.Group;
+using OurTrace.App.Models.ViewModels.Settings;
 
 namespace OurTrace.App.Automapper
 {
@@ -50,12 +51,15 @@ namespace OurTrace.App.Automapper
 
             CreateMap<Group, GroupOpenViewModel>()
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
-                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Where(y=>y.ConfirmedMember==true)));
+                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Where(y => y.ConfirmedMember == true)));
 
             CreateMap<UserGroup, GroupMemberViewModel>()
                 .ForMember(dest => dest.Username, act => act.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.FullName, act => act.MapFrom(x => x.User.FullName))
                 .ForMember(dest => dest.JoinedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.JoinedOn)));
+
+            CreateMap<OurTraceUser, ProfileFriendSuggestionViewModel>();
+            CreateMap<OurTraceUser, SettingsFriendRequestViewModel>();
         }
     }
 }

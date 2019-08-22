@@ -8,15 +8,29 @@
     {
         if (Model.PendingFriendship)
         {
-
-            <li class="btn-info" style="width:100%"><a> Pending friendship request</a></li>
-
+            <form asp-controller="Relations" asp-action="RevokeFriendship" method="post">
+                <input type="hidden" name="receiver" value="@Model.Username" />
+                <div style="width:100%">
+                    <button class="btn-info" style="width:100%" type="submit" value="submit">Pending friendship request</button>
+                </div>
+            </form>
+        }
+        else if (Model.CanAcceptFriendship)
+        {
+            <form asp-controller="Relations" asp-action="SendFriendship" method="post">
+                <input type="hidden" name="receiver" value="@Model.Username" />
+                <div style="width:100%">
+                    <button class="btn-primary btn-outline-secondary" style="width:100%" type="submit" value="submit"> Accept friendship</button>
+                </div>
+            </form>
         }
         else
         {
             <form asp-controller="Relations" asp-action="SendFriendship" method="post">
                 <input type="hidden" name="receiver" value="@Model.Username" />
-                <div style="width:100%"><button class="btn-info" style="width:100%" type="submit" value="submit"> Send friend request</button></div>
+                <div style="width:100%">
+                    <button class="btn-info" style="width:100%" type="submit" value="submit"> Send friend request</button>
+                </div>
             </form>
         }
     }
