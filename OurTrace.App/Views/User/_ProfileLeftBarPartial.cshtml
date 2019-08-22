@@ -55,6 +55,13 @@
                     <h3>People you might know</h3>
                 </div><!--sd-title end-->
                 <div class="suggestions-list">
+                    @if (Model.FriendSuggestions.Count == 0)
+                    {
+                        <div class="suggestion-usd text-center zoomable">
+                            <h3 class="font-weight-bold">No new suggestions.</h3>
+                            <small>Make few new friends so we can recommend you some!</small>
+                        </div>
+                    }
                     @foreach (var suggestedUser in Model.FriendSuggestions)
                     {
                         <div class="suggestion-usd">

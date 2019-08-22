@@ -273,8 +273,7 @@ header {
 }
 .logo {
 	float: left;
-	width: 40px;
-	margin-right: 14px;
+	width: 5%;
 	margin-top: 10px;
 }
 .logo.pd-btm {
@@ -352,7 +351,7 @@ header {
 }
 .search-bar {
 	float: left;
-	width: 280px;
+	width: 55%;
 	margin-top: 9px;
 }
 .search-bar form {
@@ -386,9 +385,8 @@ header {
 
 nav {
 	float: left;
-	width: 60%;
+	width: 25%;
 	text-align: right;
-	padding-right: 13px;
 }
 nav ul li {
 	display: inline-block;
@@ -526,7 +524,7 @@ nav > ul > li > a:hover {
 
 .user-account {
 	float: right;
-	width: 110px;
+	width: 15%;
 	box-sizing: border-box;
 	position: relative;
 }
@@ -555,11 +553,16 @@ nav > ul > li > a:hover {
 	-ms-box-shadow: 1px 1px 6px -2px rgba(0,0,0,0.24);
 	-o-box-shadow: 1px 1px 6px -2px rgba(0,0,0,0.24);
 	box-shadow: 1px 1px 6px -2px rgba(0,0,0,0.24);
+	-webkit-transition: opacity 0.2s ease-in-out;
+    -moz-transition: opacity 0.2s ease-in-out;
+	-ms-transform: opacity 0.2s ease-in-out;
+	-o-transform: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 	opacity: 0;
 	visibility: hidden;
 }
 .user-account-settingss.active {
-	opacity: 1;
+	opacity:1;
 	visibility: visible;
 	z-index: 9999;
 }
@@ -2810,13 +2813,15 @@ footer {
 	width: 33.33%;
 	padding: 5px;
 	overflow: hidden;
+}
+.pf-gallery ul li,.zoomable {
 	-webkit-transition: transform 0.2s ease-in-out;
     -moz-transition: transform 0.2s ease-in-out;
 	-ms-transform: transform 0.2s ease-in-out;
 	-o-transform: transform 0.2s ease-in-out;
     transition: transform 0.2s ease-in-out;
 }
-.pf-gallery ul li:hover {
+.pf-gallery ul li:hover,.zoomable:hover {
 	-webkit-transform: scale(1.2);
 	-moz-transform: scale(1.2);
 	-ms-transform: scale(1.2);
@@ -2832,11 +2837,22 @@ footer {
 }
 .pf-gallery-extended ul {
 	float: left;
+	width: 100%
 }
 .pf-gallery-extended ul li {
+	position: relative;
 	float: left;
 	padding: 8px;
-	overflow: hidden;
+	padding-bottom: 30px;
+	min-width: 15%;
+	margin-bottom: 20px;
+	margin-right: 20px;
+}
+.pf-gallery-extended ul li div {
+	position:absolute;
+	bottom:0;
+	word-wrap:break-word;
+	max-width: 100px;
 }
 .pf-gallery-extended ul li:hover {
 	-webkit-transform: scale(1.2);
@@ -5406,3 +5422,7 @@ a:hover {
     transform: scale(1.0);
   }
 }
+
+
+
+/*===================== PERSONAL CSS =======================*/

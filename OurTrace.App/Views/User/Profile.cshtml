@@ -4,44 +4,18 @@
 @{
     ViewData["Title"] = "Profile";
 }
-<!--user-background-cover-section-start-->
+<!--cover-start-->
 <section class="cover-sec">
     <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
 </section>
-<!--user-background-cover-section-end-->
+<!--cover-end-->
 
 <div class="main-section">
     <div class="container">
         <div class="main-section-data">
             <div class="row">
                 <partial name="_ProfileLeftBarPartial" model="Model" />
-                <div class="col-lg-6">
-                    <div class="main-ws-sec">
-                        <!--user-name-tags-section-start-->
-                        <div class="user-tab-sec">
-                            <h3>@Model.FullName</h3>
-                            <div class="star-descp">
-                                <span>@@@Model.Username</span>
-                            </div>
-                        </div>
-                        <!--user-name-tags-section-end-->
-                        <!--user-core-posts-section-start-->
-                        <div class="product-feed-tab current" id="feed-dd">
-                            <div class="posts-section">
-                                <vc:create-post model="@Model.WallId" is-group="false"></vc:create-post>
-                                <vc:posts model="@Model.Posts"></vc:posts>
-                                <!--<div class="process-comm">
-                                    <div class="spinner">
-                                        <div class="bounce1"></div>
-                                        <div class="bounce2"></div>
-                                        <div class="bounce3"></div>
-                                    </div>
-                                </div>-->
-                            </div>
-                        </div>
-                        <!--user-core-posts-section-end-->
-                    </div>
-                </div>
+                <partial name="_ProfilePostAreaPartial" model="Model" />
                 <partial name="_ProfileRightBarPartial" model="Model" />
             </div>
         </div>

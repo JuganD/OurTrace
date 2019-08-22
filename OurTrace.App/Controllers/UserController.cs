@@ -2,11 +2,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OurTrace.App.Models.ViewModels.Profile;
 using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
 {
+    // NEEDS AUTHORIZATION
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService userService;
@@ -18,7 +19,6 @@ namespace OurTrace.App.Controllers
             this.userService = userService;
             this.mapper = mapper;
         }
-        [Authorize]
         public async Task<IActionResult> Profile(string username)
         {
             if (string.IsNullOrEmpty(username))

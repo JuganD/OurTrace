@@ -1,0 +1,53 @@
+﻿@using OurTrace.App.Models.ViewModels.Group
+@model GroupOpenViewModel
+
+<div class="col-lg-6">
+    <div class="main-ws-sec">
+        <!--group-initials-start-->
+        <div class="user-tab-sec">
+            <h3 id="groupName">@Model.Name</h3>
+            <div class="star-descp">
+                <span>@@@Model.Name</span>
+            </div>
+        </div>
+        <!--group-initials-end-->
+        <!--group-posts-start-->
+        <div class="product-feed-tab current" id="feed-dd">
+            <div class="posts-section">
+                @if (Model.IsUserMemberOfGroup && Model.IsUserConfirmed)
+                {
+                    <vc:create-post model="@Model.WallId" is-group="true"></vc:create-post>
+                    <vc:posts model="@Model.Posts"></vc:posts>
+                }
+                else
+                {
+                    <div class="post-bar no-margin">
+                        <div class="post_topbar">
+                            <div class="usy-dt">
+                                <div class="usy-info">
+                                    @if (!Model.IsUserMemberOfGroup)
+                                    {
+                                        <h3>Only members of the group can see the posts. Join the group if you want to participate!</h3>
+                                    }
+                                    else if (!Model.IsUserConfirmed)
+                                    {
+                                        <h3>No group administrator has approven your join request yet!</h3>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!--<div class="process-comm">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <!--group-posts-end-->
+    </div>
+</div>

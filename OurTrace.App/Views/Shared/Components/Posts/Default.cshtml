@@ -5,6 +5,7 @@
     <div class="posty mb-4">
         <div class="post-bar no-margin">
             <input name="postId" type="hidden" value="@post.Id" />
+            <!--post-creator-menu-start-->
             <div class="post_topbar">
                 <div class="usy-dt">
                     <img src="/file/profilepicture/@post.Creator" style="width:50px; height:50px;" alt="">
@@ -24,6 +25,8 @@
                     </ul>
                 </div>
             </div>
+            <!--post-creator-menu-end-->
+            <!--post-content-start-->
             <div class="job_descp">
                 <div class="postContent">
                     <div>
@@ -47,6 +50,8 @@
                     }
                 </ul>
             </div>
+            <!--post-content-end-->
+            <!--post-likes-shares-comments-bar-start-->
             <div class="job-status-bar">
                 <ul class="like-com">
                     <li>
@@ -58,8 +63,10 @@
                 <a><i class="la la-share"></i>Shares @post.Shares</a>
                 <a><i class="la la-heart"></i>Likes @post.Likes</a>
             </div>
+            <!--post-likes-shares-comments-bar-end-->
         </div>
 
+        <!--post-comment-section-start-->
         <div class="comment-section" style="display: none;">
             <div class="comment-sec">
                 <ul>
@@ -78,11 +85,12 @@
 
                                     <a href="#"><i class="la la-heart"></i> Like</a>
                                 </div>
-                            </div><!--comment-list end-->
+                            </div>
                         </li>
                     }
                 </ul>
-            </div><!--comment-sec end-->
+            </div>
+            <!--post-send-comment-start-->
             <div class="post-comment">
                 <div class="cm_img">
                     <img src="/file/profilepicture/@this.User.Identity.Name" style="width:40px; height:40px;" alt="">
@@ -93,8 +101,10 @@
                         <button type="submit">Send</button>
                     </form>
                 </div>
-            </div><!--post-comment end-->
-        </div><!--comment-section end-->
+            </div>
+            <!--post-send-comment-end-->
+        </div>
+        <!--post-comment-section-end-->
     </div>
 }
 @if (Model.Count() == 0)

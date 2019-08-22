@@ -14,7 +14,7 @@ using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Areas.Settings.Controllers
 {
-    // controller-based authorization
+    // NEEDS AUTHORIZATION
     [Authorize]
     public class SettingsController : Controller
     {
@@ -31,12 +31,10 @@ namespace OurTrace.App.Areas.Settings.Controllers
             this.relationsService = relationsService;
         }
         #region Get
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await GetIndexViewModel());
         }
-        [Authorize]
         public IActionResult ChangePassword()
         {
             return RedirectToAction("Index");
@@ -44,7 +42,6 @@ namespace OurTrace.App.Areas.Settings.Controllers
         #endregion
         #region Post
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordInputModel model)
@@ -73,7 +70,6 @@ namespace OurTrace.App.Areas.Settings.Controllers
             }
             return View("Index", await GetIndexViewModel());
         }
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DownloadPersonalData()
@@ -97,7 +93,6 @@ namespace OurTrace.App.Areas.Settings.Controllers
             return new FileContentResult(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData)), "text/json");
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AccountDelete(DeleteAccountInputModel model)

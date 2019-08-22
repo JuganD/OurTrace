@@ -1,0 +1,33 @@
+﻿@using OurTrace.App.Models.ViewModels.Group
+@model GroupOpenViewModel
+
+<div class="col-lg-3">
+    <div class="right-sidebar">
+        <div class="pt-xl-4"></div>
+        <!--group-view-users-start-->
+        <div class="widget widget-portfolio suggestions-list">
+            <div class="wd-heady">
+                <h3>Users in group</h3>
+                <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
+            </div>
+            <div class="pf-gallery">
+                <ul>
+                    @if (Model.Members.Any())
+                    {
+                        @foreach (var member in Model.Members)
+                        {
+                            <li><a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50"><img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.Username"></a></li>
+                        }
+                    }
+                </ul>
+            </div>
+            @if (Model.IsUserConfirmed)
+            {
+                <div class="view-more">
+                    <a asp-controller="Group" asp-action="ViewAllMembers" asp-route-name="@Model.Name">View all users</a>
+                </div>
+            }
+        </div>
+        <!--group-view-users-end-->
+    </div>
+</div>

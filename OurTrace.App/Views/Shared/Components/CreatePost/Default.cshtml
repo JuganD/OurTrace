@@ -2,24 +2,14 @@
 @using OurTrace.Data.Models;
 @model CreatePostInputModel
 
-@if  (Context.Request.Cookies["Errors"] != null)
+@if (Context.Request.Cookies["Errors"] != null)
 {
     Model.Errors = Context.Request.Cookies["Errors"].Split(';');
     Context.Response.Cookies.Delete("Errors");
     Model.PostState = "active";
 }
 
-<div class="post-topbar">
-    <div class="user-picy">
-        <img src="/file/profilepicture/@this.User.Identity.Name" style="width:50px; height:50px;" alt="">
-    </div>
-    <div class="post-st">
-        <ul>
-            <li><a class="post_project active" href="#" title="">New Post</a></li>
-        </ul>
-    </div><!--post-st end-->
-</div><!--post-topbar end-->
-
+<!--post-form-start-->
 <div class="post-popup pst-pj @Model.PostState">
     <div class="post-project">
         <h3>Create New Post</h3>
@@ -64,7 +54,8 @@
                     </div>
                 </div>
             </form>
-        </div><!--post-project-fields end-->
+        </div>
         <a href="#" title=""><i class="la la-times-circle-o"></i></a>
-    </div><!--post-project end-->
-</div><!--post-project-popup end-->
+    </div>
+</div>
+<!--post-form-end-->

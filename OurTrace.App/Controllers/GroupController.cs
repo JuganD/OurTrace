@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.InputModels.Group;
-using OurTrace.App.Models.ViewModels.Group;
-using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
 {
+    // NEEDS AUTHORIZATION
+    [Authorize]
     public class GroupController : Controller
     {
         private readonly IGroupService groupService;
@@ -18,13 +16,11 @@ namespace OurTrace.App.Controllers
         {
             this.groupService = groupService;
         }
-        [Authorize]
         public async Task<IActionResult> Discover()
         {
             var viewmodel = await groupService.DiscoverGroupsAsync(this.User.Identity.Name);
             return View(viewmodel);
         }
-        [Authorize]
         public async Task<IActionResult> MyGroups()
         {
             var groups = await groupService.GetUserGroupsAsync(this.User.Identity.Name);
@@ -36,7 +32,6 @@ namespace OurTrace.App.Controllers
             return View();
         }
 
-        [Authorize]
         public async Task<IActionResult> Open(string name)
         {
             var group = await this.groupService.PrepareGroupForViewAsync(name, this.User.Identity.Name);
@@ -49,7 +44,6 @@ namespace OurTrace.App.Controllers
             return RedirectToAction("MyGroups");
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Join(string name)
@@ -70,7 +64,6 @@ namespace OurTrace.App.Controllers
         }
 
         // Serves ajax calls
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AcceptMember(string groupname, string membername)
@@ -92,7 +85,6 @@ namespace OurTrace.App.Controllers
 
             return Json("Unauthorized");
         }
-        [Authorize]
         public async Task<IActionResult> ViewAllMembers(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -118,7 +110,6 @@ namespace OurTrace.App.Controllers
 
             return RedirectToAction("MyGroups");
         }
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> KickMember(string group, string username)
@@ -166,14 +157,19 @@ namespace OurTrace.App.Controllers
 
             return RedirectToAction("ViewAllMembers", new { name = group });
         }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Leave(string groupname)
+        {
+            await this.groupService.KickMemberAsync(groupname, this.User.Identity.Name);
+            return RedirectToAction("Discover");
+        }
 
-        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Create(GroupCreateInputModel model)

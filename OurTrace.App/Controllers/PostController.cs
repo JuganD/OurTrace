@@ -4,11 +4,12 @@ using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.Services.Abstraction;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OurTrace.App.Controllers
 {
+    // NEEDS AUTHORIZATION
+    [Authorize]
     public class PostController : Controller
     {
         private readonly IPostService postService;
@@ -17,7 +18,6 @@ namespace OurTrace.App.Controllers
         {
             this.postService = postService;
         }
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Create(CreatePostInputModel model)

@@ -135,6 +135,7 @@ namespace OurTrace.Services
 
         public async Task<ICollection<ProfileFriendSuggestionViewModel>> GetFriendsOfFriendsAsync(string username, int count)
         {
+            // TODO: rework
             string userId = (await identityService.GetUserByName(username)
                 .SingleOrDefaultAsync()).Id;
 
@@ -146,37 +147,46 @@ namespace OurTrace.Services
             var result = new List<ProfileFriendSuggestionViewModel>();
             if (friendShips != null && friendShips.Count > 0)
             {
-                Random rand = new Random();
-                int currentFriendshipNumber = 0;
-                int currentRandomFriendNumber = 0;
                 int friendsCount = friendShips.Count;
-                for (int i = 0; i < count; i++)
+                if (friendsCount > 0)
                 {
-                    currentFriendshipNumber = rand.Next(0, friendsCount - 1);
-                    var currentFriendship = friendShips[currentFriendshipNumber];
+                    Random rand = new Random();
+                    int currentFriendshipNumber = -1;
+                    int currentRandomFriendNumber = 0;
 
-                    var currentFriendId = currentFriendship.Sender.Id == userId ? currentFriendship.Recipient.Id : currentFriendship.Sender.Id;
+                    for (int i = 0; i < count; i++)
+                    {
+                        currentFriendshipNumber = friendsCount - 1 > currentFriendshipNumber ? currentFriendshipNumber + 1 : -1;
+                        if (currentFriendshipNumber == -1) break;
+                        var currentFriendship = friendShips[currentFriendshipNumber];
 
-                    var randomFriendQuery = this.dbContext.Friendships
-                        .Where(x => (x.Sender.Id == currentFriendId || x.Recipient.Id == currentFriendId) &&
-                                   x.Sender.Id != userId && x.Recipient.Id != userId);
+                        var currentFriendId = currentFriendship.Sender.Id == userId ? currentFriendship.Recipient.Id : currentFriendship.Sender.Id;
 
-                    currentRandomFriendNumber = rand.Next(0, randomFriendQuery.Count() - 1);
-                    var randomFriendship = await randomFriendQuery
-                                            .Include(x => x.Recipient)
-                                            .Include(x => x.Sender)
-                                            .Skip(currentRandomFriendNumber)
-                                            .FirstOrDefaultAsync();
+                        var randomFriendQuery = this.dbContext.Friendships
+                            .Where(x => (x.Sender.Id == currentFriendId || x.Recipient.Id == currentFriendId) &&
+                                       x.Sender.Id != userId && x.Recipient.Id != userId);
 
-                    var randomFriend = randomFriendship.Sender.Id == currentFriendId ? randomFriendship.Recipient : randomFriendship.Sender;
-                    if (await AreFriendsWithAsync(username, randomFriend.UserName)) continue;
-                    if (result.Any(x => x.Username == randomFriend.UserName)) break;
+                        if (randomFriendQuery.Count() == 0) continue;
 
-                    var viewmodel = automapper.Map<ProfileFriendSuggestionViewModel>(randomFriend);
-                    viewmodel.HisFriendUsername = randomFriendship.RecipientId == randomFriend.Id ? randomFriendship.Sender.UserName : randomFriendship.Recipient.UserName;
+                        currentRandomFriendNumber = rand.Next(0, randomFriendQuery.Count() - 1);
 
-                    result.Add(viewmodel);
+                        var randomFriendship = await randomFriendQuery
+                                                .Include(x => x.Recipient)
+                                                .Include(x => x.Sender)
+                                                .Skip(currentRandomFriendNumber)
+                                                .FirstOrDefaultAsync();
+
+                        var randomFriend = randomFriendship.Sender.Id == currentFriendId ? randomFriendship.Recipient : randomFriendship.Sender;
+                        if (await AreFriendsWithAsync(username, randomFriend.UserName)) continue;
+                        if (result.Any(x => x.Username == randomFriend.UserName)) continue;
+
+                        var viewmodel = automapper.Map<ProfileFriendSuggestionViewModel>(randomFriend);
+                        viewmodel.HisFriendUsername = randomFriendship.RecipientId == randomFriend.Id ? randomFriendship.Sender.UserName : randomFriendship.Recipient.UserName;
+
+                        result.Add(viewmodel);
+                    }
                 }
+
             }
 
             return result;
@@ -186,10 +196,10 @@ namespace OurTrace.Services
         {
             var friendshipRequests = await this.dbContext.Friendships
                 .Where(x => x.Recipient.UserName == username && x.AcceptedOn == null)
-                .Include(x=>x.Sender)
+                .Include(x => x.Sender)
                 .Select(x => x.Sender)
                 .ToListAsync();
-                
+
             return automapper.Map<List<SettingsFriendRequestViewModel>>(friendshipRequests);
         }
 

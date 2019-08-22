@@ -4,177 +4,26 @@
 @{
     ViewData["Title"] = "Group";
 }
-
+<!--cover-start-->
 <section class="cover-sec">
     <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
 </section>
-
+<!--cover-end-->
 
 <div class="main-section">
     <div class="container">
         <div class="main-section-data">
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="main-left-sidebar">
-                        <div class="user_profile">
-                            <div class="user-pro-img">
-                                <a class="popup-image" asp-controller="File" asp-action="GroupPicture" asp-route-username="@Model.Name">
-                                    <img src="@Url.Action("GroupPicture","File",new { username = Model.Name })" style="width:170px; height: 170px;" alt="">
-                                </a>
-                            </div><!--user-pro-img end-->
-                            @if (!Model.IsUserMemberOfGroup)
-                            {
-                                <div class="flw-hr">
-                                    <form asp-controller="Group" asp-action="Join" asp-route-name="@Model.Name" method="post">
-                                        <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Join</button></div>
-                                    </form>
-                                </div>
-                            }
-                            <div class="user_pro_status">
-                                <ul class="flw-status">
-                                    <li>
-                                        <span>Group popularity rank </span>
-                                        <b>@Model.GroupRank</b>
-                                    </li>
-                                </ul>
-                            </div><!--user_pro_status end-->
-                            <ul class="social_links">
-                                <li><i class="la la-user p-1"></i> @Model.Name</li>
-                                <li><i class="la la-users p-1"></i> @Model.Members.Count members</li>
-                                <li><i class="la la-birthday-cake p-1"></i>Established on <span class="utcDate">@Model.CreatedOn</span></li>
-                            </ul>
-                        </div><!--user_profile end-->
-
-                        @if (Model.IsUserConfirmed)
-                        {
-                            <ul class="social_links bg-white mb-4">
-                                @{
-                                    string groupstatus = "Member";
-                                    if (Model.IsAdministrator)
-                                    {
-                                        groupstatus = "Administrator";
-                                    }
-                                    else if (Model.IsModerator)
-                                    {
-                                        groupstatus = "Moderator";
-                                    }
-                                }
-                                <li><i class="la la-user-plus p-1"></i>Your group status: @groupstatus</li>
-                            </ul>
-                        }
-
-                        @if (Model.IsModerator || Model.IsAdministrator)
-                        {
-                            <div class="suggestions full-width">
-                                <div class="sd-title">
-                                    <h3>Join requests</h3>
-                                </div><!--sd-title end-->
-                                <div id="requests-list" class="suggestions-list">
-                                    @if (Model.JoinRequests.Count > 0)
-                                    {
-                                        <form method="post" id="_AjaxAntiForgeryRequestAccept">
-                                            @Html.AntiForgeryToken()
-                                        </form>
-                                    }
-                                    @foreach (var request in Model.JoinRequests)
-                                    {
-                                        <div class="suggestion-usd">
-                                            <img src="/file/profilepicture/@request.Username" style="width:35px;height:35px;" alt="">
-                                            <div class="sgt-text">
-                                                <h4><a asp-controller="User" asp-action="Profile" asp-route-username="@request.Username" class="text-black-50">@request.Username</a></h4>
-                                                <span>Requested join on <br /></span>
-                                                <span class="utcDate">@request.JoinedOn</span>
-                                            </div>
-                                            <span class="joinRequest-accept" data-url="@Url.Action("AcceptMember","Group")">
-                                                <i class="la la-plus"></i>
-                                            </span>
-                                        </div>
-                                    }
-                                </div><!--suggestions-list end-->
-                            </div><!--suggestions end-->
-                        }
-                    </div><!--main-left-sidebar end-->
-                </div>
-                <div class="col-lg-6">
-                    <div class="main-ws-sec">
-                        <div class="user-tab-sec">
-                            <h3 id="groupName">@Model.Name</h3>
-                            <div class="star-descp">
-                                <span>@@@Model.Name</span>
-                            </div><!--star-descp end-->
-                        </div><!--user-tab-sec end-->
-                        <div class="product-feed-tab current" id="feed-dd">
-                            <div class="posts-section">
-                                @if (Model.IsUserMemberOfGroup && Model.IsUserConfirmed)
-                                {
-                                    <vc:create-post model="@Model.WallId" is-group="true"></vc:create-post>
-                                    <vc:posts model="@Model.Posts"></vc:posts>
-                                }
-                                else
-                                {
-                                    <div class="post-bar no-margin">
-                                        <div class="post_topbar">
-                                            <div class="usy-dt">
-                                                <div class="usy-info">
-                                                    @if (!Model.IsUserMemberOfGroup)
-                                                    {
-                                                        <h3>Only members of the group can see the posts. Join the group if you want to participate!</h3>
-                                                    }
-                                                    else if (!Model.IsUserConfirmed)
-                                                    {
-                                                        <h3>No group administrator has approven your join request yet!</h3>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-
-                                <!--<div class="process-comm">
-                                    <div class="spinner">
-                                        <div class="bounce1"></div>
-                                        <div class="bounce2"></div>
-                                        <div class="bounce3"></div>
-                                    </div>
-                                </div>-->
-                            </div><!--posts-section end-->
-                        </div><!--product-feed-tab end-->
-                    </div><!--main-ws-sec end-->
-                </div>
-                <div class="col-lg-3">
-                    <div class="right-sidebar">
-                        <div class="pt-xl-4"></div>
-                        <div class="widget widget-portfolio suggestions-list">
-                            <div class="wd-heady">
-                                <h3>Users in group</h3>
-                                <img src="~/images/group_users.png" style="width:30px;height:30px" alt="">
-                            </div>
-                            <div class="pf-gallery">
-                                <ul>
-                                    @if (Model.Members.Any())
-                                    {
-                                        @foreach (var member in Model.Members)
-                                        {
-                                            <li><a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50"><img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.Username"></a></li>
-                                        }
-                                    }
-                                </ul>
-                            </div><!--pf-gallery end-->
-                            @if (Model.IsUserConfirmed)
-                            {
-                                <div class="view-more">
-                                    <a asp-controller="Group" asp-action="ViewAllMembers" asp-route-name="@Model.Name">View all users</a>
-                                </div>
-                            }
-                        </div><!--widget-portfolio end-->
-                    </div><!--right-sidebar end-->
-                </div>
+                <partial name="_OpenLeftMenuPartial" model="Model" />
+                <partial name="_OpenPostAreaPartial" model="Model" />
+                <partial name="_OpenRightMenuPartial" model="Model" />
             </div>
-        </div><!-- main-section-data end-->
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="~/js/post.js" asp-append-version="true"></script>
     <script src="~/js/joinrequests.js" asp-append-version="true"></script>
+    <script src="~/js/group.js" asp-append-version="true"></script>
 }

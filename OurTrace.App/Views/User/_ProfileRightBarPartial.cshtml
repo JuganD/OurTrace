@@ -16,7 +16,7 @@
 
                         <li style="width:50%">
                             <a class="popup-image" asp-controller="File" asp-action="Image" asp-route-username="@Model.Username" asp-route-id="@pictureId" title="">
-                                <img src="@Url.Action(" Image","File",new { username=Model.Username, id=pictureId })" alt="">
+                                <img src="@Url.Action("Image","File",new { username=Model.Username, id=pictureId })" alt="">
                             </a>
                         </li>
                     }

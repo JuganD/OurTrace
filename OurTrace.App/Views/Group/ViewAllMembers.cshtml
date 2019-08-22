@@ -29,11 +29,10 @@
                             <li>
                                 <a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50 member-link">
                                     <img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.FullName" search-title="@member.FullName">
-                                    <div>@@@member.Username</div>
+                                    <div style="word-wrap:break-word">@@@member.Username</div>
                                 </a>
                             </li>
                         }
-
                     }
                 </ul>
             </div><!--pf-gallery end-->

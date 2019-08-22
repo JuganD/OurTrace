@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace OurTrace.App.Controllers
 {
+    // NEEDS AUTHORIZATION
+    [Authorize]
     public class RelationsController : Controller
     {
         private readonly IRelationsService relationsService;
@@ -14,7 +16,6 @@ namespace OurTrace.App.Controllers
             this.relationsService = relationsService;
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> SendFriendship(string receiver)
@@ -32,7 +33,6 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> RevokeFriendship(string receiver)
@@ -49,7 +49,6 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Follow(string receiver)
@@ -66,7 +65,6 @@ namespace OurTrace.App.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        [Authorize]
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Unfollow(string receiver)

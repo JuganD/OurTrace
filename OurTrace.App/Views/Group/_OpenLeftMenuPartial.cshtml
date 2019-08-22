@@ -1,0 +1,102 @@
+﻿@using OurTrace.App.Models.ViewModels.Group
+@model GroupOpenViewModel
+
+<div class="col-lg-3">
+    <div class="main-left-sidebar">
+        <div class="user_profile">
+            <!--group-image-start-->
+            <div class="user-pro-img">
+                <a class="popup-image" asp-controller="File" asp-action="GroupPicture" asp-route-username="@Model.Name">
+                    <img src="@Url.Action("GroupPicture","File",new { username = Model.Name })" style="width:170px; height: 170px;" alt="">
+                </a>
+            </div>
+            <!--group-image-end-->
+            <!--group-join-start-->
+            @if (!Model.IsUserMemberOfGroup)
+            {
+                <div class="flw-hr">
+                    <form asp-controller="Group" asp-action="Join" asp-route-name="@Model.Name" method="post">
+                        <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Join</button></div>
+                    </form>
+                </div>
+            }
+            <!--group-join-end-->
+            <!--group-description-start-->
+            <div class="user_pro_status">
+                <ul class="flw-status">
+                    <li>
+                        <span>Group popularity rank </span>
+                        <b>@Model.GroupRank</b>
+                    </li>
+                </ul>
+            </div>
+            <ul class="social_links">
+                <li><i class="la la-user p-1"></i> @Model.Name</li>
+                <li><i class="la la-users p-1"></i> @Model.Members.Count members</li>
+                <li><i class="la la-birthday-cake p-1"></i>Established on <span class="utcDate">@Model.CreatedOn</span></li>
+            </ul>
+            <!--group-description-end-->
+        </div>
+        <!--user-status-within-group-start-->
+        @if (Model.IsUserConfirmed)
+        {
+            <ul class="social_links bg-white mb-4">
+                @{
+                    string groupstatus = "Member";
+                    if (Model.IsAdministrator)
+                    {
+                        groupstatus = "Administrator";
+                    }
+                    else if (Model.IsModerator)
+                    {
+                        groupstatus = "Moderator";
+                    }
+                }
+                <li><i class="la la-user-plus p-1"></i>Your group status: @groupstatus</li>
+            </ul>
+
+            <form asp-controller="Group" asp-action="Leave" class="mb-2" method="post">
+                <input type="hidden" name="groupname" value="@Model.Name" />
+                <button id="leave-group-button" class="btn btn-danger full-width bg-danger" onclick="return false;" type="submit">Leave group</button>
+                <div id="leave-group-box" style="display:none">
+                    <span class="full-width text-center mb-0 p-2">Are you sure?</span>
+                    <button class="btn btn-danger bg-danger float-left" style="width:48%" type="submit">Yes</button>
+                    <button id="leave-group-decline" class="btn btn-success bg-success float-right" style="width:48%" type="submit" onclick="return false;">No</button>
+                </div>
+            </form>
+        }
+        <!--user-status-within-group-end-->
+        <!--group-join-requests-start-->
+        @if (Model.IsModerator || Model.IsAdministrator)
+        {
+            <div class="suggestions full-width mt-2">
+                <div class="sd-title">
+                    <h3>Join requests</h3>
+                </div><!--sd-title end-->
+                <div id="requests-list" class="suggestions-list">
+                    @if (Model.JoinRequests.Count > 0)
+                    {
+                        <form method="post" id="_AjaxAntiForgeryRequestAccept">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    }
+                    @foreach (var request in Model.JoinRequests)
+                    {
+                        <div class="suggestion-usd">
+                            <img style="max-width:20%" src="/file/profilepicture/@request.Username" alt="">
+                            <div style="max-width:60%;word-wrap:break-word" class="sgt-text">
+                                <h4><a asp-controller="User" asp-action="Profile" asp-route-username="@request.Username" class="text-black-50">@request.Username</a></h4>
+                                <span>Requested join on <br /></span>
+                                <span class="utcDate">@request.JoinedOn</span>
+                            </div>
+                            <span style="max-width:20%" class="joinRequest-accept" data-url="@Url.Action("AcceptMember","Group")">
+                                <i class="la la-plus"></i>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <!--group-join-requests-end-->
+    </div>
+</div>

@@ -7,6 +7,7 @@ using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
 {
+    // NEEDS AUTHORIZATION
     [Authorize]
     public class FileController : Controller
     {
