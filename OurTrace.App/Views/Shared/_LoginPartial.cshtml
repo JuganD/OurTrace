@@ -6,7 +6,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <div class="user-info">
-        <a href="#" onclick="return false" title="">@User.Identity.Name</a>
+        <a href="#" id="user-identity" onclick="return false" title="">@User.Identity.Name</a>
     </div>
     <div class="user-account-settingss">
         <div class="us-links">

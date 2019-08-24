@@ -82,7 +82,52 @@ namespace OurTrace.Services
             }
             return false;
         }
+        public async Task<bool> LikePostAsync(string username, string postId)
+        {
+            var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);
+            var user = await this.identityService.GetUserByName(username).SingleOrDefaultAsync();
 
+            var isPostLikedAlready = await this.dbContext.PostLikes
+                .SingleOrDefaultAsync(x => x.Post == post && x.User == user) != null;
+
+            if (post != null && user != null && !isPostLikedAlready)
+            {
+                this.dbContext.PostLikes.Add(new PostLike()
+                {
+                    Post = post,
+                    User = user
+                });
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> CommentPostAsync(string username, string postId, string content)
+        {
+            var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);
+            var user = await this.identityService.GetUserByName(username).SingleOrDefaultAsync();
+
+            if (post != null && user != null)
+            {
+                this.dbContext.Comments.Add(new Comment()
+                {
+                    User = user,
+                    Post = post,
+                    Content = content
+                });
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<string> GetPostOwnerUsernameAsync(string postId)
+        {
+            return (await this.dbContext.Posts
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == postId)).User.UserName;
+        }
         public async Task<bool> IsUserCanPostToWallAsync(string username, string WallId)
         {
             var user = await identityService.GetUserByName(username)
@@ -108,7 +153,7 @@ namespace OurTrace.Services
             else
             {
                 var wallGroup = await this.dbContext.Groups
-                    .Include(x=>x.Members)
+                    .Include(x => x.Members)
                     .SingleOrDefaultAsync(x => x.Id == wallOwnerId);
                 if (wallGroup.Members.Any(x => x.User == user))
                     return true;

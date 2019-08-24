@@ -1642,7 +1642,7 @@ main {
 	resize: none;
 	margin-left: 20px;
 }
-.comment_box form button {
+.comment_box button {
 	float: right;
 	color: #fff;
 	background-color: #C150FF;

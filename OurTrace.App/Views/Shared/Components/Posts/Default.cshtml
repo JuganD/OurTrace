@@ -1,5 +1,23 @@
 ﻿@model IEnumerable<OurTrace.App.Models.ViewModels.Post.PostViewModel>
 
+@if (Model.Count() == 0)
+{
+    <div class="post-bar no-margin">
+        <div class="post_topbar">
+            <div class="usy-dt">
+                <div class="usy-info">
+                    <h3>Nothing to see here, I'm afraid.</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <form method="post" id="_AjaxAntiForgeryPost">
+        @Html.AntiForgeryToken()
+    </form>
+}
 @foreach (var post in Model)
 {
     <div class="posty mb-4">
@@ -53,15 +71,15 @@
             <!--post-content-end-->
             <!--post-likes-shares-comments-bar-start-->
             <div class="job-status-bar">
-                <ul class="like-com">
+                <ul class="like-com post-like" data-url="@Url.Action("Like","Post")">
                     <li>
                         <span></span> <!--line breaker-->
-                        <a href="#"><i class="la la-heart"></i> Like</a>
+                        <a href="" onclick="return false"><i class="la la-heart"></i> Like</a>
                     </li>
-                    <li><a href="#" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a></li>
+                    <li><a href="" onclick="return false" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a></li>
                 </ul>
-                <a><i class="la la-share"></i>Shares @post.Shares</a>
-                <a><i class="la la-heart"></i>Likes @post.Likes</a>
+                <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares</a>
+                <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes</a>
             </div>
             <!--post-likes-shares-comments-bar-end-->
         </div>
@@ -96,10 +114,8 @@
                     <img src="/file/profilepicture/@this.User.Identity.Name" style="width:40px; height:40px;" alt="">
                 </div>
                 <div class="comment_box">
-                    <form>
-                        <input type="text" placeholder="Post a comment">
-                        <button type="submit">Send</button>
-                    </form>
+                    <input class="post-comment-content" type="text" placeholder="Post a comment">
+                    <button class="post-comment-send" data-url="@Url.Action("Comment","Post")" onclick="return false;">Send</button>
                 </div>
             </div>
             <!--post-send-comment-end-->
@@ -107,15 +123,4 @@
         <!--post-comment-section-end-->
     </div>
 }
-@if (Model.Count() == 0)
-{
-    <div class="post-bar no-margin">
-        <div class="post_topbar">
-            <div class="usy-dt">
-                <div class="usy-info">
-                    <h3>Nothing to see here, I'm afraid.</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+

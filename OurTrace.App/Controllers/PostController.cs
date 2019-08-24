@@ -32,13 +32,39 @@ namespace OurTrace.App.Controllers
                 // Yea it may not be the best way to pass errors, but sure as hell works fine
                 List<string> errors = ModelState.Values.SelectMany(x => x.Errors.Select(y => y.ErrorMessage)).ToList();
                 string errorsAsString = string.Join(";", errors);
-                Response.Cookies.Append("Errors", errorsAsString,new Microsoft.AspNetCore.Http.CookieOptions()
+                Response.Cookies.Append("Errors", errorsAsString, new Microsoft.AspNetCore.Http.CookieOptions()
                 {
                     IsEssential = true
                 });
             }
 
             return Redirect(referer);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Like(string postId)
+        {
+            if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
+            {
+                if (await this.postService.LikePostAsync(this.User.Identity.Name, postId))
+                    return StatusCode(200, "Ok");
+            }
+
+            return StatusCode(403, "Forbidden");
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Comment(string postId, string content)
+        {
+            if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
+            {
+                if (await this.postService.CommentPostAsync(this.User.Identity.Name, postId, content))
+                    return StatusCode(200, "Ok");
+            }
+
+            return StatusCode(403, "Forbidden");
         }
     }
 }

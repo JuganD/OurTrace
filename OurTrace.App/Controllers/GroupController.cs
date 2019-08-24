@@ -75,15 +75,15 @@ namespace OurTrace.App.Controllers
             {
                 if (await this.groupService.AcceptMemberAsync(groupname, membername))
                 {
-                    return Json("Ok");
+                    return StatusCode(200, "Ok");
                 }
                 else
                 {
-                    return Json("NotFound");
+                    return StatusCode(404, "Not found");
                 }
             }
 
-            return Json("Unauthorized");
+            return StatusCode(403, "Forbidden");
         }
         public async Task<IActionResult> ViewAllMembers(string name)
         {
@@ -179,7 +179,8 @@ namespace OurTrace.App.Controllers
                 if (!await this.groupService.CreateNewGroupAsync(model.Name, this.User.Identity.Name))
                 {
                     TempData.Add("CreateGroupResult", "Failed to create group! Group name already taken!");
-                } else
+                }
+                else
                 {
                     return RedirectToAction("MyGroups");
                 }
