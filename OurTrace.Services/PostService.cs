@@ -102,7 +102,27 @@ namespace OurTrace.Services
             }
             return false;
         }
+        public async Task<bool> LikeCommentAsync(string username, string commentId)
+        {
+            var comment = await this.dbContext.Comments
+                .SingleOrDefaultAsync(x => x.Id == commentId);
+            var user = await this.identityService.GetUserByName(username).SingleOrDefaultAsync();
 
+            var isCommentLikedAlready = await this.dbContext.CommentLikes
+                .SingleOrDefaultAsync(x => x.Comment == comment && x.User == user) != null;
+
+            if (comment != null && user != null && !isCommentLikedAlready)
+            {
+                this.dbContext.CommentLikes.Add(new CommentLike()
+                {
+                    Comment = comment,
+                    User = user
+                });
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
         public async Task<bool> CommentPostAsync(string username, string postId, string content)
         {
             var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);

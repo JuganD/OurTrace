@@ -27,6 +27,7 @@ namespace OurTrace.Services
                     .ThenInclude(x=>x.Likes)
                     .ThenInclude(x=>x.User)
                     .ThenInclude(x=>x.Comments)
+                        .ThenInclude(x=>x.Likes)
                         .ThenInclude(x=>x.User)
                 .SingleOrDefaultAsync(x => x.Id == wallId);
         }

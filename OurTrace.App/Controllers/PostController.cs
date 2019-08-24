@@ -56,6 +56,19 @@ namespace OurTrace.App.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> LikeComment(string postId, string commentId)
+        {
+            if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
+            {
+                if (await this.postService.LikeCommentAsync(this.User.Identity.Name, commentId))
+                    return StatusCode(200, "Ok");
+            }
+
+            return StatusCode(403, "Forbidden");
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Comment(string postId, string content)
         {
             if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))

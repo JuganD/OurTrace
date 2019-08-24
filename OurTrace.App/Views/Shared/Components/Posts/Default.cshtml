@@ -71,15 +71,19 @@ else
             <!--post-content-end-->
             <!--post-likes-shares-comments-bar-start-->
             <div class="job-status-bar">
-                <ul class="like-com post-like" data-url="@Url.Action("Like","Post")">
+                @{
+                    bool postLiked = post.Likes.Any(x => x.Username == User.Identity.Name);
+                    string postLikeClassValue = postLiked ? "active" : "post-like";
+                }
+                <ul class="like-com">
                     <li>
                         <span></span> <!--line breaker-->
-                        <a href="" onclick="return false"><i class="la la-heart"></i> Like</a>
+                        <a href="" onclick="return false" class="@postLikeClassValue" data-url="@Url.Action("Like","Post")"><i class="la la-heart"></i> Like</a>
                     </li>
                     <li><a href="" onclick="return false" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a></li>
                 </ul>
                 <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares</a>
-                <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes</a>
+                <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes.Count</a>
             </div>
             <!--post-likes-shares-comments-bar-end-->
         </div>
@@ -101,7 +105,12 @@ else
                                     <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
                                     <p class="postContent">@comment.Content</p>
 
-                                    <a href="#"><i class="la la-heart"></i> Like</a>
+                                    @{
+                                        bool commentLiked = comment.Likes.Any(x => x.Username == User.Identity.Name);
+                                        string commentLikeClassValue = commentLiked ? "active" : "post-comment-like";
+                                    }
+                                    <a href="" onclick="return false;" class="@commentLikeClassValue" data-url="@Url.Action("LikeComment","Post")"><i class="la la-heart"></i> Like</a>
+                                    <span class="d-inline-block ml-2 post-comment-likes"><i class="la la-heart"></i> Likes @comment.Likes.Count</span>
                                 </div>
                             </div>
                         </li>

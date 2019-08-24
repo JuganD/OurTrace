@@ -36,17 +36,22 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
                 .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
-                .ForMember(dest => dest.Likes, actual => actual.MapFrom(x => x.Likes.Count))
                 .ForMember(dest => dest.Shares, actual => actual.MapFrom(x => x.Shares.Count));
+
+            CreateMap<PostLike, PostLikeViewModel>()
+                .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
 
             CreateMap<Comment, CommentViewModel>()
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
                 .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName));
 
+            CreateMap<CommentLike, CommentLikeViewModel>()
+                .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
+
             CreateMap<Group, GroupWindowViewModel>()
                 .ForMember(dest => dest.Name, act => act.MapFrom(x => x.Name))
-                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Count(y=>y.ConfirmedMember==true)))
+                .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Count(y => y.ConfirmedMember == true)))
                 .ForMember(dest => dest.Url, act => act.MapFrom(x => x.Url));
 
             CreateMap<Group, GroupOpenViewModel>()

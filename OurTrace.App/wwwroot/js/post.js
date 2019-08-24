@@ -28,16 +28,46 @@ window.onload = function(){
                 postId: postId
             },
             success: function () {
-				let likesSelector = $(likeButton).parent().children('.likes-count').first();
+				let likesSelector = $(likeButton).closest(".job-status-bar").children('.likes-count').first();
 				let newLikesHtml = $(likesSelector).html().replace(/\d+$/, function(n){ return ++n });
 				$(likesSelector).html(newLikesHtml);
-				$(likeButton).children('li').first().children('a').addClass('active');
+				$(likeButton).addClass('active');
 				$(likeButton).off('click');
 			},
 			fail: function (jqXHR, textStatus, errorThrown) {
 				console.log(textStatus); 
 			}
         });
+	});
+	
+	$(".post-comment-like").on("click", function() {
+		let likeButton = this;
+	
+		let postId = $(this).closest(".comment-section").closest(".posty").children(".post-bar").children('input[name="postId"]').val();
+		let commentId = $(this).closest(".comment").children('input[name="commentId"]').val();
+		let form = $('#_AjaxAntiForgeryPost');
+        let token = $('input[name="__RequestVerificationToken"]', form).val();
+		
+		$.ajax({
+            url: $(this).data('url'),
+            type: 'POST',
+            data: { 
+                __RequestVerificationToken: token, 
+                postId: postId,
+				commentId: commentId
+            },
+            success: function () {
+				let likesSelector = $(likeButton).closest(".comment").children('.post-comment-likes').first();
+				let newLikesHtml = $(likesSelector).html().replace(/\d+$/, function(n){ return ++n });
+				$(likesSelector).html(newLikesHtml);
+				$(likeButton).addClass('active');
+				$(likeButton).off('click');
+			},
+			fail: function (jqXHR, textStatus, errorThrown) {
+				console.log(textStatus); 
+			}
+        });
+		
 	});
 	
 	$(".post-comment-send").on("click", function() {
