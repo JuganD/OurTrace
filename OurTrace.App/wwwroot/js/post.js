@@ -1,6 +1,6 @@
 window.onload = function(){
 	DateToLocal('span.utcDate');
-	
+	$('[data-toggle="tooltip"]').tooltip();
 	InsertReadMoreButton('.postContent');
 	
 	$(".com").click(function() {

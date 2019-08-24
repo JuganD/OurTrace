@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.InputModels.Posts;
+using OurTrace.App.Models.InputModels.Share;
 using OurTrace.Services.Abstraction;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,36 @@ namespace OurTrace.App.Controllers
             }
 
             return StatusCode(403, "Forbidden");
+        }
+        [HttpGet("/Post/Share/{postId}")]
+        public async Task<IActionResult> Share(string postId)
+        {
+            var viewModel = await postService.GetShareViewAsync(postId);
+            return View(viewModel);
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Share(ShareInputModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await this.postService.SharePostAsync(this.User.Identity.Name, model))
+                {
+                    if (model.ShareLocationType == ShareLocation.FriendWall)
+                    {
+                        return RedirectToAction("Profile", "User", new { username = model.ShareLocation });
+                    }
+                    if (model.ShareLocationType == ShareLocation.GroupWall)
+                    {
+                        return RedirectToAction("Open", "Group", new { name = model.ShareLocation });
+                    }
+                    return RedirectToAction("Profile", "User", new { username = this.User.Identity.Name });
+                }  
+            }
+
+            var viewModel = await postService.GetShareViewAsync(model.PostId);
+            TempData["ShareResult"] = "Failed! Please check where are you trying to share the post: did you spelled the name correctly?, do you have rights to post there?";
+            return View(viewModel);
         }
     }
 }

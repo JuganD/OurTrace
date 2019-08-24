@@ -25,7 +25,8 @@ namespace OurTrace.Data.Models
         public DateTime? EditedOn { get; set; } // can be null if never edited
         public PostMimeType MimeType { get; set; }
         public PostVisibilityType VisibilityType { get; set; }
-        public PostType Type { get; set; }
+        public Post SharedPost { get; set; }
+        public string SharedPostId { get; set; }
 
         public string UserId { get; set; }
         public OurTraceUser User { get; set; }

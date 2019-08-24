@@ -7,6 +7,8 @@ using GeekLearning.Storage;
 using GeekLearning.Storage.Internal;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.App.Models.InputModels.Posts;
+using OurTrace.App.Models.InputModels.Share;
+using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Data;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
@@ -17,6 +19,7 @@ namespace OurTrace.Services
     {
         private readonly OurTraceDbContext dbContext;
         private readonly IRelationsService relationsService;
+        private readonly IGroupService groupService;
         private readonly IMapper automapper;
         private readonly IStore fileStore;
         private readonly WallService wallService;
@@ -24,11 +27,13 @@ namespace OurTrace.Services
 
         public PostService(OurTraceDbContext dbContext,
             IRelationsService relationsService,
+            IGroupService groupService,
             IStorageFactory storageFactory,
             IMapper automapper)
         {
             this.dbContext = dbContext;
             this.relationsService = relationsService;
+            this.groupService = groupService;
             this.automapper = automapper;
             this.wallService = new WallService(dbContext);
             this.identityService = new IdentityService(dbContext);
@@ -39,13 +44,9 @@ namespace OurTrace.Services
         {
             if (await IsUserCanPostToWallAsync(username, model.Location))
             {
-                var wall = await wallService.GetWallAsync(model.Location);
+                var wall = await wallService.GetWallWithIncludables(model.Location);
 
-                IEnumerable<string> tags = new string[0];
-                if (model.Tags != null && model.Tags.Length > 0)
-                {
-                    tags = model.Tags.Split(',').Select(x => x.Trim());
-                }
+                var tags = GetPostTags(model.Tags);
 
                 Post post = automapper.Map<Post>(model);
                 post.Location = wall;
@@ -153,7 +154,7 @@ namespace OurTrace.Services
             var user = await identityService.GetUserByName(username)
                 .SingleOrDefaultAsync();
 
-            var wall = await wallService.GetWallAsync(WallId);
+            var wall = await wallService.GetWallWithoutIncludables(WallId);
             var wallOwnerId = await wallService.GetWallOwnerIdAsync(wall);
 
             if (wallOwnerId == null) return false;
@@ -212,6 +213,76 @@ namespace OurTrace.Services
             }
 
             return false;
+        }
+        public async Task<PostViewModel> GetShareViewAsync(string postId)
+        {
+            var post = await this.dbContext.Posts
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == postId);
+            var viewModel = automapper.Map<PostViewModel>(post);
+
+            viewModel.Content = new string(viewModel.Content.Take(20).ToArray());
+            viewModel.IgnoreComments = true;
+
+            return viewModel;
+        }
+        public async Task<bool> SharePostAsync(string username, ShareInputModel model)
+        {
+            var user = await identityService.GetUserByName(username)
+                .SingleOrDefaultAsync();
+            Wall wall = null;
+
+            if (model.ShareLocationType == ShareLocation.FriendWall &&
+                await relationsService.AreFriendsWithAsync(username, model.ShareLocation))
+            {
+                wall = await wallService.GetUserWallAsync(model.ShareLocation);
+            }
+            else if (model.ShareLocationType == ShareLocation.GroupWall &&
+              await groupService.IsUserConfirmedMemberAsync(model.ShareLocation, username))
+            {
+                wall = await wallService.GetGroupWallAsync(model.ShareLocation);
+            }
+            else if (model.ShareLocationType == ShareLocation.MyWall)
+            {
+                wall = await wallService.GetUserWallAsync(username);
+            }
+
+            if (user != null && wall != null &&
+                await IsUserCanSeePostAsync(username, model.PostId) &&
+                await IsUserCanPostToWallAsync(username, wall.Id))
+            {
+                var sharedPost = new Post()
+                {
+                    Content = model.PostModel.Content,
+                    Tags = GetPostTags(model.PostModel.Tags),
+                    SharedPostId = model.PostId,
+                    Location = wall,
+                    User = user
+                };
+
+                if (model.ShareLocationType == ShareLocation.MyWall)
+                {
+                    sharedPost.VisibilityType = model.PostModel.VisibilityType;
+                }
+                else
+                {
+                    sharedPost.VisibilityType = PostVisibilityType.Public;
+                }
+
+                await this.dbContext.Posts.AddAsync(sharedPost);
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+        private IEnumerable<string> GetPostTags(string tagsString)
+        {
+            IEnumerable<string> tags = new string[0];
+            if (tagsString != null && tagsString.Length > 0)
+            {
+                tags = tagsString.Split(',').Select(x => x.Trim());
+            }
+            return tags;
         }
     }
 }

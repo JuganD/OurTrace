@@ -1,4 +1,5 @@
-﻿@model IEnumerable<OurTrace.App.Models.ViewModels.Post.PostViewModel>
+﻿@using OurTrace.Data.Models
+@model IEnumerable<OurTrace.App.Models.ViewModels.Post.PostViewModel>
 
 @if (Model.Count() == 0)
 {
@@ -20,13 +21,40 @@ else
 }
 @foreach (var post in Model)
 {
+
     <div class="posty mb-4">
         <div class="post-bar no-margin">
             <input name="postId" type="hidden" value="@post.Id" />
             <!--post-creator-menu-start-->
             <div class="post_topbar">
                 <div class="usy-dt">
-                    <img src="/file/profilepicture/@post.Creator" style="width:50px; height:50px;" alt="">
+                    <a asp-controller="File" asp-action="ProfilePicture" asp-route-username="@post.Creator" class="popup-image">
+                        <img src="@Url.Action("ProfilePicture","File",new { username=post.Creator })" style="width:50px; height:50px;" alt="">
+                    </a>
+                    @{
+                        string visibilityText = "";
+                        string visibilityClass = "";
+                        if (post.VisibilityType == PostVisibilityType.Public)
+                        {
+                            visibilityText = "Everyone";
+                            visibilityClass = "btn-success";
+                        }
+                        else if (post.VisibilityType == PostVisibilityType.FriendsOnly)
+                        {
+                            visibilityText = "Friends of " + post.Creator;
+                            visibilityClass = "btn-warning";
+                        }
+                        else
+                        {
+                            visibilityText = "Private";
+                            visibilityClass = "btn-danger";
+                        }
+                        <span data-toggle="tooltip" data-placement="top" title="This post visibility" class="@visibilityClass p-1">@visibilityText</span>
+                    }
+                    @if (post.SharedPost != null)
+                    {
+                        <span data-toggle="tooltip" data-placement="top" title="This post is shared" class="font-italic btn-info p-1">shared</span>
+                    }
                     <div class="usy-name">
                         <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@post.Creator" class="text-black-50">@post.Creator</a></h3>
                         <img src="~/images/clock.png" alt=""><span class="utcDate">@post.CreatedOn</span>
@@ -35,11 +63,12 @@ else
                 <div class="ed-opts">
                     <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
                     <ul class="ed-options">
-                        <li><a href="#" title="">Edit Post</a></li>
-                        <li><a href="#" title="">Unsaved</a></li>
-                        <li><a href="#" title="">Unbid</a></li>
-                        <li><a href="#" title="">Close</a></li>
-                        <li><a href="#" title="">Hide</a></li>
+                        @if (post.Creator == User.Identity.Name)
+                        {
+                            <li><a href="#" title="">Edit Post</a></li>
+                            <li><a href="#" title="">Delete</a></li>
+                        }
+                        <li><a href="/Post/Share/@post.Id" title="">Share</a></li>
                     </ul>
                 </div>
             </div>
@@ -47,9 +76,35 @@ else
             <!--post-content-start-->
             <div class="job_descp">
                 <div class="postContent">
-                    <div>
+                    <div class="mb-3">
                         @post.Content
                     </div>
+                    @if (post.SharedPost != null)
+                    {
+                        <div class="float-left full-width p-2" style="border-top: 2px solid gray">
+                            <div class="usy-name" style="position:relative;float:right;">
+                                <img src="~/images/clock.png" alt=""><span class="utcDate">@post.SharedPost.CreatedOn</span>
+                            </div>
+                            <a asp-controller="File" asp-action="ProfilePicture" asp-route-username="@post.SharedPost.Creator" class="popup-image">
+                                <img src="@Url.Action("ProfilePicture","File",new { username=post.SharedPost.Creator })" style="width:40px; height:40px;" alt="">
+                            </a>
+
+                            <h3>
+                                <a asp-controller="User" asp-action="Profile" asp-route-username="@post.SharedPost.Creator" class="text-black-50">@post.SharedPost.Creator</a>
+                            </h3>
+
+                            <div>
+                                @post.SharedPost.Content
+                            </div>
+                            @if (post.SharedPost.MediaUrl != null)
+                            {
+                                <a class="popup-image" href="@post.SharedPost.MediaUrl">
+                                    <img class="mt-2 img-fluid" src="@post.SharedPost.MediaUrl">
+                                </a>
+                            }
+                        </div>
+                    }
+
                     @if (post.MediaUrl != null)
                     {
                         <a class="popup-image" href="@post.MediaUrl">
@@ -70,65 +125,73 @@ else
             </div>
             <!--post-content-end-->
             <!--post-likes-shares-comments-bar-start-->
-            <div class="job-status-bar">
-                @{
-                    bool postLiked = post.Likes.Any(x => x.Username == User.Identity.Name);
-                    string postLikeClassValue = postLiked ? "active" : "post-like";
-                }
-                <ul class="like-com">
-                    <li>
-                        <span></span> <!--line breaker-->
-                        <a href="" onclick="return false" class="@postLikeClassValue" data-url="@Url.Action("Like","Post")"><i class="la la-heart"></i> Like</a>
-                    </li>
-                    <li><a href="" onclick="return false" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a></li>
-                </ul>
-                <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares</a>
-                <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes.Count</a>
-            </div>
+            @if (!post.IgnoreComments)
+            {
+                <div class="job-status-bar">
+                    @{
+                        bool postLiked = post.Likes.Any(x => x.Username == User.Identity.Name);
+                        string postLikeClassValue = postLiked ? "active" : "post-like";
+                    }
+                    <ul class="like-com">
+                        <li>
+                            <span></span> <!--line breaker-->
+                            <a href="" onclick="return false" class="@postLikeClassValue" data-url="@Url.Action("Like", "Post" )"><i class="la la-heart"></i> Like</a>
+                        </li>
+                        <li>
+                            <a href="" onclick="return false" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a>
+                        </li>
+                    </ul>
+                    <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares</a>
+                    <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes.Count</a>
+                </div>
+            }
             <!--post-likes-shares-comments-bar-end-->
         </div>
 
         <!--post-comment-section-start-->
-        <div class="comment-section" style="display: none;">
-            <div class="comment-sec">
-                <ul>
-                    @foreach (var comment in post.Comments)
-                    {
-                        <li>
-                            <div class="comment-list">
-                                <div class="bg-img">
-                                    <img src="/file/profilepicture/@comment.Creator" style="width:40px; height:40px;" alt="">
-                                </div>
-                                <div class="comment">
-                                    <input name="commentId" type="hidden" value="@comment.Id" />
-                                    <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@comment.Creator" class="text-black-50">@comment.Creator</a></h3>
-                                    <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
-                                    <p class="postContent">@comment.Content</p>
+        @if (!post.IgnoreComments)
+        {
+            <div class="comment-section" style="display: none;">
+                <div class="comment-sec">
+                    <ul>
+                        @foreach (var comment in post.Comments)
+                        {
+                            <li>
+                                <div class="comment-list">
+                                    <div class="bg-img">
+                                        <img src="/file/profilepicture/@comment.Creator" style="width:40px; height:40px;" alt="">
+                                    </div>
+                                    <div class="comment">
+                                        <input name="commentId" type="hidden" value="@comment.Id" />
+                                        <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@comment.Creator" class="text-black-50">@comment.Creator</a></h3>
+                                        <img src="~/images/clock.png" alt=""><span class="utcDate">@comment.CreatedOn</span>
+                                        <p class="postContent">@comment.Content</p>
 
-                                    @{
-                                        bool commentLiked = comment.Likes.Any(x => x.Username == User.Identity.Name);
-                                        string commentLikeClassValue = commentLiked ? "active" : "post-comment-like";
-                                    }
-                                    <a href="" onclick="return false;" class="@commentLikeClassValue" data-url="@Url.Action("LikeComment","Post")"><i class="la la-heart"></i> Like</a>
-                                    <span class="d-inline-block ml-2 post-comment-likes"><i class="la la-heart"></i> Likes @comment.Likes.Count</span>
+                                        @{
+                                            bool commentLiked = comment.Likes.Any(x => x.Username == User.Identity.Name);
+                                            string commentLikeClassValue = commentLiked ? "active" : "post-comment-like";
+                                        }
+                                        <a href="" onclick="return false;" class="@commentLikeClassValue" data-url="@Url.Action("LikeComment", "Post" )"><i class="la la-heart"></i> Like</a>
+                                        <span class="d-inline-block ml-2 post-comment-likes"><i class="la la-heart"></i> Likes @comment.Likes.Count</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            </div>
-            <!--post-send-comment-start-->
-            <div class="post-comment">
-                <div class="cm_img">
-                    <img src="/file/profilepicture/@this.User.Identity.Name" style="width:40px; height:40px;" alt="">
+                            </li>
+                        }
+                    </ul>
                 </div>
-                <div class="comment_box">
-                    <input class="post-comment-content" type="text" placeholder="Post a comment">
-                    <button class="post-comment-send" data-url="@Url.Action("Comment","Post")" onclick="return false;">Send</button>
+                <!--post-send-comment-start-->
+                <div class="post-comment">
+                    <div class="cm_img">
+                        <img src="/file/profilepicture/@this.User.Identity.Name" style="width:40px; height:40px;" alt="">
+                    </div>
+                    <div class="comment_box">
+                        <input class="post-comment-content" type="text" placeholder="Post a comment">
+                        <button class="post-comment-send" data-url="@Url.Action("Comment", "Post" )" onclick="return false;">Send</button>
+                    </div>
                 </div>
+                <!--post-send-comment-end-->
             </div>
-            <!--post-send-comment-end-->
-        </div>
+        }
         <!--post-comment-section-end-->
     </div>
 }

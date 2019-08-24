@@ -1,0 +1,32 @@
+﻿@using OurTrace.App.Models.InputModels.Share
+@using OurTrace.Data.Models
+@model ShareInputModel
+
+<form asp-controller="Post" asp-action="Share" method="post" class="p-3">
+    <input type="hidden" id="PostId" asp-for="PostId" />
+    <span>Share to:</span>
+    <select asp-for="ShareLocationType" id="options" class="ft-options btn border-secondary mb-3 mt-2">
+        <option value="1">My wall</option>
+        <option value="2">Friend's wall</option>
+        <option value="3">Group wall</option>
+    </select><br />
+    <div id="manual-field" style="display:none">
+        <span class="float-left mb-1" id="field-target"></span>
+        <input asp-for="ShareLocation" type="text" class="form-control" placeholder="Name" />
+    </div>
+    <div>
+        <span>Content</span>
+        <textarea asp-for="PostModel.Content" placeholder="Post content" class="form-control mt-2 full-width p-2"></textarea>
+    </div>
+    <div>
+        <span>Tags (separated by comma, Example: happy,graduated,school)</span>
+        <input asp-for="PostModel.Tags" class="form-control mt-2 full-width p-2" />
+    </div>
+
+    <div id="share-visibility">
+        <span>Post Visibility</span>
+        <select asp-for="PostModel.VisibilityType" asp-items="Html.GetEnumSelectList<PostVisibilityType>()" class="form-control mt-2 full-width p-2"></select>
+    </div>
+
+    <input class="btn btn-primary full-width bg-primary p-2 mt-4" type="submit" value="Share" />
+</form>

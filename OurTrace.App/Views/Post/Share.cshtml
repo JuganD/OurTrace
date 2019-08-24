@@ -1,0 +1,50 @@
+﻿@using OurTrace.App.Models.ViewModels.Post
+@using OurTrace.App.Models.InputModels.Share
+@model PostViewModel
+@{
+    ViewData["Title"] = "Share Post";
+}
+@if (TempData.ContainsKey("ShareResult"))
+{
+    <div class="full-width bg-danger text-white p-2 m-2 text-center">@TempData["ShareResult"]</div>
+    { TempData.Remove("ShareResult"); }
+}
+<section class="companies-info">
+    <div class="container">
+        <div class="company-title">
+            <h3>Share Post</h3>
+        </div>
+
+        <div class="companies-list">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="company_profile_info" style="margin-bottom:20px">
+                        <div class="company-up-info row justify-content-center">
+                            <h3>You are about to share this post</h3>
+                        </div>
+                    </div>
+
+                    <div class="product-feed-tab current" id="feed-dd">
+                        <div class="posts-section">
+                            @{
+                                var postModel = new List<PostViewModel>()
+                                                                                                                                                                                                {
+                                    Model
+                                };
+                            }
+                            <vc:posts model="@postModel"></vc:posts>
+                        </div>
+                    </div>
+                    <div class="company_profile_info">
+                        <partial name="_ShareFormInputPartial" model="new ShareInputModel()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/share.js" asp-append-version="true"></script>
+    <script src="~/js/post.js" asp-append-version="true"></script>
+}

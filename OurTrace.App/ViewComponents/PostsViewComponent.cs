@@ -18,6 +18,11 @@ namespace OurTrace.App.ViewComponents
         {
             foreach (var postModel in model)
             {
+                if (postModel.SharedPost != null)
+                {
+                    if (postModel.SharedPost.IsImageOnFileSystem == true)
+                        postModel.SharedPost.MediaUrl = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/File/Image/{postModel.SharedPost.Creator}/{postModel.SharedPost.Id}";
+                }
                 if (postModel.IsImageOnFileSystem == true)
                     postModel.MediaUrl = $"{this.HttpContext.Request.Scheme}://{this.HttpContext.Request.Host}/File/Image/{postModel.Creator}/{postModel.Id}";
             }

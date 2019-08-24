@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OurTrace.Data;
 using OurTrace.Data.Models;
+using OurTrace.Services.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,15 +21,16 @@ namespace OurTrace.Services
             this.dbContext = dbContext;
         }
 
-        internal async Task<Wall> GetWallAsync(string wallId)
+        internal async Task<Wall> GetWallWithIncludables(string wallId)
+        {
+            var query = this.dbContext.Walls
+                .Include(this.dbContext.GetIncludePaths(typeof(Wall)));
+            return await query
+                .SingleOrDefaultAsync(x => x.Id == wallId);
+        }
+        internal async Task<Wall> GetWallWithoutIncludables(string wallId)
         {
             return await this.dbContext.Walls
-                .Include(x=>x.Posts)
-                    .ThenInclude(x=>x.Likes)
-                    .ThenInclude(x=>x.User)
-                    .ThenInclude(x=>x.Comments)
-                        .ThenInclude(x=>x.Likes)
-                        .ThenInclude(x=>x.User)
                 .SingleOrDefaultAsync(x => x.Id == wallId);
         }
 
@@ -42,10 +44,23 @@ namespace OurTrace.Services
 
             return null;
         }
+        internal async Task<Wall> GetUserWallAsync(string username)
+        {
+            return (await this.dbContext.Users
+                .Include(x => x.Wall)
+                .SingleOrDefaultAsync(x => x.UserName == username)).Wall;
+        }
+
+        internal async Task<Wall> GetGroupWallAsync(string name)
+        {
+            return (await this.dbContext.Groups
+                .Include(x => x.Wall)
+                .SingleOrDefaultAsync(x => x.Name == name)).Wall;
+        }
 
         internal async Task<ICollection<Post>> GetPostsFromWallDescendingAsync(string wallId)
         {
-            var wall = await GetWallAsync(wallId);
+            var wall = await GetWallWithIncludables(wallId);
             return wall.Posts
                 .OrderByDescending(x => x.CreatedOn)
                 .ToArray();
