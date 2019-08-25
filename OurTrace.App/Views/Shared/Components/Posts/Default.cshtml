@@ -19,9 +19,9 @@ else
         @Html.AntiForgeryToken()
     </form>
 }
+
 @foreach (var post in Model)
 {
-
     <div class="posty mb-4">
         <div class="post-bar no-margin">
             <input name="postId" type="hidden" value="@post.Id" />
@@ -65,8 +65,7 @@ else
                     <ul class="ed-options">
                         @if (post.Creator == User.Identity.Name)
                         {
-                            <li><a href="#" title="">Edit Post</a></li>
-                            <li><a href="#" title="">Delete</a></li>
+                            <li><a href="" class="post-delete" onclick="return false;" data-url="@Url.Action("Delete", "Post")" title="">Delete</a></li>
                         }
                         <li><a href="/Post/Share/@post.Id" title="">Share</a></li>
                     </ul>
@@ -141,7 +140,7 @@ else
                             <a href="" onclick="return false" title="" class="com"><img src="~/images/com.png" alt=""> Comments (@post.Comments.Count)</a>
                         </li>
                     </ul>
-                    <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares</a>
+                    <a class="shares-count"><i class="la la-share"></i>Shares @post.Shares.Count</a>
                     <a class="likes-count"><i class="la la-heart"></i>Likes @post.Likes.Count</a>
                 </div>
             }

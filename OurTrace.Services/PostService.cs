@@ -12,6 +12,7 @@ using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Data;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
+using OurTrace.Services.Helpers;
 
 namespace OurTrace.Services
 {
@@ -149,6 +150,12 @@ namespace OurTrace.Services
                 .Include(x => x.User)
                 .SingleOrDefaultAsync(x => x.Id == postId)).User.UserName;
         }
+        public async Task<string> GetCommentOwnerUsernameAsync(string commentId)
+        {
+            return (await this.dbContext.Comments
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == commentId)).User.UserName;
+        }
         public async Task<bool> IsUserCanPostToWallAsync(string username, string WallId)
         {
             var user = await identityService.GetUserByName(username)
@@ -259,6 +266,11 @@ namespace OurTrace.Services
                     Location = wall,
                     User = user
                 };
+                var share = new Share()
+                {
+                    PostId = model.PostId,
+                    User = user
+                };
 
                 if (model.ShareLocationType == ShareLocation.MyWall)
                 {
@@ -270,10 +282,58 @@ namespace OurTrace.Services
                 }
 
                 await this.dbContext.Posts.AddAsync(sharedPost);
+                await this.dbContext.Shares.AddAsync(share);
                 await this.dbContext.SaveChangesAsync();
                 return true;
             }
             return false;
+        }
+        public async Task<bool> DeletePostAsync(string username, string postId)
+        {
+            var post = await this.dbContext.Posts
+                .Include(x => x.User)
+                .Include(x => x.Likes)
+                .Include(x => x.Comments)
+                    .ThenInclude(x => x.Likes)
+                .Include(x => x.Shares)
+                .SingleOrDefaultAsync(x => x.Id == postId);
+
+            if (post != null && post.User.UserName == username)
+            {
+                foreach (var like in post.Likes)
+                {
+                    this.dbContext.PostLikes.Remove(like);
+                }
+                foreach (var comment in post.Comments)
+                {
+                    this.dbContext.Comments.Remove(comment);
+                    foreach (var commentLike in comment.Likes)
+                    {
+                        this.dbContext.CommentLikes.Remove(commentLike);
+                    }
+                }
+                foreach (var share in post.Shares)
+                {
+                    this.dbContext.Shares.Remove(share);
+                }
+                this.dbContext.Posts.Remove(post);
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<PostViewModel> GetPostViewAsync(string postId)
+        {
+            var post = await this.dbContext.Posts
+                .Include(this.dbContext.GetIncludePaths(typeof(Post)))
+                .SingleOrDefaultAsync(x => x.Id == postId);
+
+            if (post != null)
+            {
+                return automapper.Map<PostViewModel>(post);
+            }
+            return null;
         }
         private IEnumerable<string> GetPostTags(string tagsString)
         {

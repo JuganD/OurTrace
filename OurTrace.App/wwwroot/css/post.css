@@ -10,3 +10,16 @@
 .utcDate {
 	display: none;
 }
+.brightness-low {
+	filter: brightness(50%);
+}
+.brightness-medium {
+	filter: brightness(80%);
+}
+.brightness-max {
+	filter: brightness(100%);
+}
+.middle-element {
+	position: absolute;
+	z-index: 9999;
+}

@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="GeekLearning.Storage" Version="0.8.0" />
     <PackageReference Include="GeekLearning.Storage.FileSystem" Version="0.8.0" />
     <PackageReference Include="GeekLearning.Storage.FileSystem.ExtendedProperties.FileSystem" Version="0.8.0" />

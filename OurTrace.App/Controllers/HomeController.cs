@@ -24,16 +24,6 @@ namespace OurTrace.App.Controllers
         }
         public IActionResult Index()
         {
-            //var userid = _userManager.GetUserId(this.User);
-            //var user = dbContext.Users
-            //    .Include(x => x.Wall)
-            //        .ThenInclude(x => x.Posts)
-            //    .SingleOrDefault(x => x.Id == userid);
-
-            //if (user != null)
-            //{
-            //    var wall = user.Wall;
-            //}
             return View();
         }
 

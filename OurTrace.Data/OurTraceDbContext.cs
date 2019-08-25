@@ -22,6 +22,7 @@ namespace OurTrace.Data
         public DbSet<Follow> Follows { get; set; }
         public DbSet<PostLike> PostLikes { get; set; }
         public DbSet<CommentLike> CommentLikes { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
 
         public OurTraceDbContext(DbContextOptions<OurTraceDbContext> options)
@@ -83,6 +84,11 @@ namespace OurTrace.Data
                 .HasForeignKey(x => x.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+                user
+                .HasMany(x => x.Notifications)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<Post>((post) =>
@@ -135,7 +141,7 @@ namespace OurTrace.Data
                 group
                 .HasMany(x => x.Members)
                 .WithOne(x => x.Group)
-                .HasForeignKey(x=>x.GroupId)
+                .HasForeignKey(x => x.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             });

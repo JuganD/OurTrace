@@ -14,9 +14,12 @@ namespace OurTrace.Services.Abstraction
         Task<bool> CommentPostAsync(string username, string postId, string content);
         Task<bool> LikeCommentAsync(string username, string commentId);
         Task<bool> SharePostAsync(string username, ShareInputModel model);
+        Task<bool> DeletePostAsync(string username, string postId);
         Task<bool> IsUserCanPostToWallAsync(string username, string WallId);
         Task<bool> IsUserCanSeePostAsync(string username, string postId);
         Task<string> GetPostOwnerUsernameAsync(string postId);
+        Task<string> GetCommentOwnerUsernameAsync(string commentId);
         Task<PostViewModel> GetShareViewAsync(string postId);
+        Task<PostViewModel> GetPostViewAsync(string postId);
     }
 }

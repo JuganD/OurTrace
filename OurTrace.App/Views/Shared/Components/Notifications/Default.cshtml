@@ -1,0 +1,37 @@
+﻿@using OurTrace.App.Models.ViewModels.Notification
+@model ICollection<NotificationViewModel>
+
+<a href="#" title="" class="not-box-open">
+    <span><img src="~/images/notification-bell.png" style="width:20px" alt=""></span>
+    @if (Model.Count(x=>!x.Seen) > 0)
+    {
+        <span id="notification-count" class="bg-danger mt-1">@Model.Count(x=>!x.Seen)</span>
+    } else
+    {
+        <span class="mt-1">0</span>
+    }
+</a>
+<div class="notification-box">
+    <div class="nt-title">
+        <form method="post" id="_AjaxAntiForgeryNotifications">
+            @Html.AntiForgeryToken()
+        </form>
+        <a id="notifications-clear" data-url="@Url.Action("MarkAllSeen","Notifications")" href="" onclick="return false;" title="">Mark all as seen</a>
+    </div>
+    <div class="nott-list">
+        @foreach (var notification in Model.Take(5))
+        {
+            string classvariable = notification.Seen ? "bg-lightgray" : "";
+            <a asp-controller="Notifications" asp-action="Open" asp-route-id="@notification.Id" class="notfication-details @classvariable">
+                <div class="notification-info">
+                    <h3>@notification.Content</h3><br />
+                    <span class="float-right utcDate" style="font-size:13px">@notification.DateIssued</span>
+                </div>
+            </a>
+        }
+
+        <div class="view-all-nots">
+            <a asp-controller="Notifications" asp-action="Last50">View Last 50 Notifications</a>
+        </div>
+    </div><!--nott-list end-->
+</div><!--notification-box end-->

@@ -21,7 +21,6 @@ namespace OurTrace.Data.Models
         public OurTraceUser Recipient { get; set; }
 
         public DateTime IssuedOn { get; set; }
-        // TODO: don't forget to change this on accepting
         public DateTime? AcceptedOn { get; set; }
     }
 }

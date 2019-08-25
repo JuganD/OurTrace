@@ -274,6 +274,7 @@ namespace OurTrace.Services
             }
             return false;
         }
+
         public async Task<IEnumerable<GroupMemberViewModel>> GetGroupMembersAsync(string groupname)
         {
             var userGroups = await GetGroup(groupname)
@@ -283,6 +284,12 @@ namespace OurTrace.Services
                 .ToListAsync();
 
             return automapper.Map<IEnumerable<GroupMemberViewModel>>(userGroups);
+        }
+        public async Task<string> GetGroupOwnerAsync(string groupname)
+        {
+            return (await this.dbContext.Groups
+                .Include(x => x.Creator)
+                .SingleOrDefaultAsync(x => x.Name == groupname)).Creator.UserName;
         }
         public async Task<bool> IsUserHaveAnyAdministratorRightsAsync(string groupname, string username)
         {

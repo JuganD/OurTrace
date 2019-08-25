@@ -20,13 +20,13 @@ namespace OurTrace.App.Models.ViewModels.Post
         public string Content { get; set; }
         public string CreatedOn { get; set; }
         public string EditedOn { get; set; }
-        public int Shares { get; set; }
         public PostViewModel SharedPost { get; set; }
         public PostMimeType MimeType { get; set; }
         public PostVisibilityType VisibilityType { get; set; }
         public string Creator { get; set; }
         public ICollection<CommentViewModel> Comments { get; set; }
         public ICollection<PostLikeViewModel> Likes { get; set; }
+        public ICollection<PostShareViewModel> Shares { get; set; }
         public IEnumerable<string> Tags { get; set; }
     }
 }

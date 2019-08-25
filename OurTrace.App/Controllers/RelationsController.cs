@@ -10,10 +10,13 @@ namespace OurTrace.App.Controllers
     public class RelationsController : Controller
     {
         private readonly IRelationsService relationsService;
+        private readonly INotificationService notificationService;
 
-        public RelationsController(IRelationsService relationsService)
+        public RelationsController(IRelationsService relationsService,
+            INotificationService notificationService)
         {
             this.relationsService = relationsService;
+            this.notificationService = notificationService;
         }
 
         [HttpPost]
@@ -25,6 +28,14 @@ namespace OurTrace.App.Controllers
             {
                 await relationsService.AddFriendshipAsync(this.User.Identity.Name, receiver);
                 await relationsService.AddFollowerAsync(this.User.Identity.Name, receiver);
+                await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                {
+                    Action = "Profile",
+                    Controller = "User",
+                    ElementId = this.User.Identity.Name,
+                    Username = receiver,
+                    Content = this.User.Identity.Name + " has followed you and offered you friendship!"
+                });
             }
 
             // Returns user to the same page
@@ -41,6 +52,14 @@ namespace OurTrace.App.Controllers
                 !string.IsNullOrEmpty(receiver))
             {
                 await relationsService.RevokeFriendshipAsync(this.User.Identity.Name, receiver);
+                await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                {
+                    Action = "Profile",
+                    Controller = "User",
+                    ElementId = this.User.Identity.Name,
+                    Username = receiver,
+                    Content = this.User.Identity.Name + " has unfriended you!"
+                });
             }
 
             // Returns user to the same page

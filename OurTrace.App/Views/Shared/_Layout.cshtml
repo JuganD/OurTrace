@@ -21,8 +21,6 @@
     <link rel="stylesheet" type="text/css" href="~/css/image-popup.css">
 </head>
 <body>
-
-
     <div class="wrapper">
         <header class="fixed-top">
             <div class="container">
@@ -69,57 +67,7 @@
                             </li>
 
                             <li>
-                                <a href="#" title="" class="not-box-open">
-                                    <span><img src="~/images/notification-bell.png" style="width:20px" alt=""></span>
-                                    0
-                                </a>
-                                <div class="notification-box">
-                                    <div class="nt-title">
-                                        <h4>Setting</h4>
-                                        <a href="#" title="">Clear all</a>
-                                    </div>
-                                    <div class="nott-list">
-                                        <div class="notfication-details">
-                                            <div class="noty-user-img">
-                                                <img src="images/resources/ny-img1.png" alt="">
-                                            </div>
-                                            <div class="notification-info">
-                                                <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                                                <span>2 min ago</span>
-                                            </div><!--notification-info -->
-                                        </div>
-                                        <div class="notfication-details">
-                                            <div class="noty-user-img">
-                                                <img src="images/resources/ny-img2.png" alt="">
-                                            </div>
-                                            <div class="notification-info">
-                                                <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                                                <span>2 min ago</span>
-                                            </div><!--notification-info -->
-                                        </div>
-                                        <div class="notfication-details">
-                                            <div class="noty-user-img">
-                                                <img src="images/resources/ny-img3.png" alt="">
-                                            </div>
-                                            <div class="notification-info">
-                                                <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                                                <span>2 min ago</span>
-                                            </div><!--notification-info -->
-                                        </div>
-                                        <div class="notfication-details">
-                                            <div class="noty-user-img">
-                                                <img src="images/resources/ny-img2.png" alt="">
-                                            </div>
-                                            <div class="notification-info">
-                                                <h3><a href="#" title="">Jassica William</a> Comment on your project.</h3>
-                                                <span>2 min ago</span>
-                                            </div><!--notification-info -->
-                                        </div>
-                                        <div class="view-all-nots">
-                                            <a href="#" title="">View All Notification</a>
-                                        </div>
-                                    </div><!--nott-list end-->
-                                </div><!--notification-box end-->
+                                <vc:notifications></vc:notifications>
                             </li>
                         </ul>
                     </nav>
@@ -152,6 +100,7 @@
     <script src="~/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/jquery.range-min.js" asp-append-version="true"></script>
     <script src="~/lib/slick/slick.min.js" asp-append-version="true"></script>
+    <script src="~/js/global.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     <script src="~/js/localtime.js" asp-append-version="true"></script>
     <script src="~/js/image-popup.js" asp-append-version="true"></script>

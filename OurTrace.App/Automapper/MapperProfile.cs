@@ -12,6 +12,8 @@ using OurTrace.App.Models.Authenticate;
 using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.App.Models.ViewModels.Group;
 using OurTrace.App.Models.ViewModels.Settings;
+using OurTrace.Services.Models;
+using OurTrace.App.Models.ViewModels.Notification;
 
 namespace OurTrace.App.Automapper
 {
@@ -36,10 +38,12 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
                 .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
-                .ForMember(dest => dest.SharedPost, actual => actual.MapFrom(x => x.SharedPost))
-                .ForMember(dest => dest.Shares, actual => actual.MapFrom(x => x.Shares.Count));
+                .ForMember(dest => dest.SharedPost, actual => actual.MapFrom(x => x.SharedPost));
 
             CreateMap<PostLike, PostLikeViewModel>()
+                .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
+
+            CreateMap<Share, PostShareViewModel>()
                 .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
 
             CreateMap<Comment, CommentViewModel>()
@@ -66,6 +70,10 @@ namespace OurTrace.App.Automapper
 
             CreateMap<OurTraceUser, ProfileFriendSuggestionViewModel>();
             CreateMap<OurTraceUser, SettingsFriendRequestViewModel>();
+
+            CreateMap<NotificationServiceModel, Notification>();
+            CreateMap<Notification, NotificationViewModel>()
+                .ForMember(dest => dest.DateIssued, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.DateIssued)));
         }
     }
 }

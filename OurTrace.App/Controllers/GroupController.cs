@@ -11,10 +11,13 @@ namespace OurTrace.App.Controllers
     public class GroupController : Controller
     {
         private readonly IGroupService groupService;
+        private readonly INotificationService notificationService;
 
-        public GroupController(IGroupService groupService)
+        public GroupController(IGroupService groupService,
+            INotificationService notificationService)
         {
             this.groupService = groupService;
+            this.notificationService = notificationService;
         }
         public async Task<IActionResult> Discover()
         {
@@ -56,6 +59,15 @@ namespace OurTrace.App.Controllers
             {
                 if (await this.groupService.JoinGroupAsync(name, this.User.Identity.Name))
                 {
+                    var groupOwner = await this.groupService.GetGroupOwnerAsync(name);
+                    await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                    {
+                        Action = "Open",
+                        Controller = "Group",
+                        ElementId = name,
+                        Username = groupOwner,
+                        Content = this.User.Identity.Name+" wants to join your group "+name+"!"
+                    });
                     return RedirectToAction("Open", new { name = name });
                 }
             }
@@ -75,6 +87,14 @@ namespace OurTrace.App.Controllers
             {
                 if (await this.groupService.AcceptMemberAsync(groupname, membername))
                 {
+                    await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                    {
+                        Action = "Open",
+                        Controller = "Group",
+                        ElementId = groupname,
+                        Username = membername,
+                        Content = "An administrator from the group " + groupname + " has accepted your join request!"
+                    });
                     return StatusCode(200, "Ok");
                 }
                 else
@@ -139,6 +159,14 @@ namespace OurTrace.App.Controllers
                     if (await this.groupService.KickMemberAsync(group, username))
                     {
                         TempData["KickResult"] = "Successful!";
+                        await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                        {
+                            Action = "Open",
+                            Controller = "Group",
+                            ElementId = group,
+                            Username = username,
+                            Content = "You have been kicked from the group " + group + "!"
+                        });
                     }
                     else
                     {

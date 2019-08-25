@@ -249,7 +249,9 @@ nav ul li:hover > ul,
 	width: 100%;
 	position: relative;
 }
-
+.bg-lightgray{
+	background-color: lightgray;
+}
 .overlay:before {
 	content: '';
 	position: absolute;

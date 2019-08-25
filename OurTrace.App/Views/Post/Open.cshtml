@@ -1,0 +1,13 @@
+﻿@using OurTrace.App.Models.ViewModels.Post
+@model IEnumerable<PostViewModel>
+
+@{
+    ViewData["Title"] = "View Post";
+}
+
+<vc:posts model="Model"></vc:posts>
+
+@section Scripts {
+    <script src="~/js/post.js" asp-append-version="true"></script>
+}
+

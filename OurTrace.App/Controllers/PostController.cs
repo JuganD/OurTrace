@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.InputModels.Posts;
 using OurTrace.App.Models.InputModels.Share;
+using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Services.Abstraction;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,13 @@ namespace OurTrace.App.Controllers
     public class PostController : Controller
     {
         private readonly IPostService postService;
+        private readonly INotificationService notificationService;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService,
+            INotificationService notificationService)
         {
             this.postService = postService;
+            this.notificationService = notificationService;
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -49,7 +53,21 @@ namespace OurTrace.App.Controllers
             if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
             {
                 if (await this.postService.LikePostAsync(this.User.Identity.Name, postId))
+                {
+                    var usernameOfPostOwner = await postService.GetPostOwnerUsernameAsync(postId);
+                    if (this.User.Identity.Name != usernameOfPostOwner)
+                    {
+                        await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                        {
+                            Action = "Open",
+                            Controller = "Post",
+                            ElementId = postId,
+                            Username = usernameOfPostOwner,
+                            Content = this.User.Identity.Name + " has liked your post!"
+                        });
+                    }
                     return StatusCode(200, "Ok");
+                }
             }
 
             return StatusCode(403, "Forbidden");
@@ -62,7 +80,21 @@ namespace OurTrace.App.Controllers
             if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
             {
                 if (await this.postService.LikeCommentAsync(this.User.Identity.Name, commentId))
+                {
+                    var usernameOfCommentOwner = await postService.GetCommentOwnerUsernameAsync(commentId);
+                    if (this.User.Identity.Name != usernameOfCommentOwner)
+                    {
+                        await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                        {
+                            Action = "Open",
+                            Controller = "Post",
+                            ElementId = postId,
+                            Username = usernameOfCommentOwner,
+                            Content = this.User.Identity.Name + " has liked your comment!"
+                        });
+                    }
                     return StatusCode(200, "Ok");
+                }
             }
 
             return StatusCode(403, "Forbidden");
@@ -75,7 +107,22 @@ namespace OurTrace.App.Controllers
             if (await postService.IsUserCanSeePostAsync(this.User.Identity.Name, postId))
             {
                 if (await this.postService.CommentPostAsync(this.User.Identity.Name, postId, content))
+                {
+                    var usernameOfPostOwner = await postService.GetPostOwnerUsernameAsync(postId);
+                    if (this.User.Identity.Name != usernameOfPostOwner)
+                    {
+                        await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                        {
+                            Action = "Open",
+                            Controller = "Post",
+                            ElementId = postId,
+                            Username = usernameOfPostOwner,
+                            Content = this.User.Identity.Name + " has commented your post!"
+                        });
+                    }
+
                     return StatusCode(200, "Ok");
+                }
             }
 
             return StatusCode(403, "Forbidden");
@@ -103,12 +150,33 @@ namespace OurTrace.App.Controllers
                         return RedirectToAction("Open", "Group", new { name = model.ShareLocation });
                     }
                     return RedirectToAction("Profile", "User", new { username = this.User.Identity.Name });
-                }  
+                }
             }
 
             var viewModel = await postService.GetShareViewAsync(model.PostId);
             TempData["ShareResult"] = "Failed! Please check where are you trying to share the post: did you spelled the name correctly?, do you have rights to post there?";
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Delete(string postId)
+        {
+            if (await postService.DeletePostAsync(this.User.Identity.Name, postId))
+            {
+                return StatusCode(200, "Ok");
+            }
+            return StatusCode(403, "Forbidden");
+        }
+        [HttpGet("/Post/Open/{Id}")]
+        public async Task<IActionResult> Open(string id)
+        {
+            var postmodel = await this.postService.GetPostViewAsync(id);
+            if (postmodel != null)
+            {
+                return View(new List<PostViewModel>() { postmodel });
+            }
+            return NotFound();
         }
     }
 }

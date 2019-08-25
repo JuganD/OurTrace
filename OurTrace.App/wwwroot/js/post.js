@@ -1,5 +1,4 @@
 window.onload = function(){
-	DateToLocal('span.utcDate');
 	$('[data-toggle="tooltip"]').tooltip();
 	InsertReadMoreButton('.postContent');
 	
@@ -108,6 +107,51 @@ window.onload = function(){
 			return false;  
 		}
 	});   
+	$(".post-delete").on("click", function() {
+		let deleteButton = this;
+		
+		let form = $('#_AjaxAntiForgeryPost');
+        let token = $('input[name="__RequestVerificationToken"]', form).val();
+		let post = $(this).closest('.posty');
+		let middleElement = $("<div class=\"middle-element\" style=\"width:50%\"><span class=\"form-control mb-2 text-center\">Are you sure?</span><button class=\"form-control mb-1 btn-danger post-delete-yes\">Yes</button><button class=\"form-control btn-secondary post-delete-no\">No</button></div>");
+		let postId = $(post).children('.post-bar').children('input[name="postId"]').val();
+		
+		
+		$(post).append(middleElement);
+		$(post).addClass("brightness-low");
+		$(middleElement).center({ against: post });
+		$(post).addClass("brightness-max");
+		$(post).children(".post-bar").addClass("brightness-low");
+		$(post).children(".post-bar").children(".post_topbar").children(".ed-opts").children(".ed-options").removeClass("active");
+		
+		$(".post-delete-no").on("click", function() {
+			$(middleElement).remove();
+			$(post).removeClass("brightness-low");
+			$(post).removeClass("brightness-max");
+			$(post).children(".post-bar").removeClass("brightness-low");
+			
+			$(this).unbind();
+		});
+		$(".post-delete-yes").on("click", function() {
+			$.ajax({
+				url: $(deleteButton).data('url'),
+				type: 'POST',
+				data: { 
+					__RequestVerificationToken: token, 
+					postId: postId
+				},
+				success: function () {
+					$(post).fadeOut(800, function() {
+						$(post).remove();
+					});
+				},
+				fail: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus); 
+				}
+			});
+			$(this).unbind();
+		});
+	});
 }
 function InsertReadMoreButton(selector){
 	$(selector).each(function() {
@@ -123,34 +167,11 @@ function isOverflown(element) {
     return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
 }
 
-function DateToLocal(selector){
-	let currentDates = [];
-	$(selector).each(function () {
-		currentDates.push(this.innerHTML);
-	});
-	
-	let arrayLength = currentDates.length;
-	for (let i = 0; i < arrayLength; i++) {
-		let dateStr = JSON.parse(currentDates[i]);
-		if (dateStr.slice(-1) != "Z"){
-			dateStr = dateStr+"Z";
-		}
-		currentDates[i] = new Date(dateStr);
-	}
-	
-	let counter = 0;
-	$(selector).each(function () {
-		let d = currentDates[counter];
-		var datestring = GetDateStringFromDate(d);
-		this.innerHTML = datestring;
-		$(this).fadeIn();
-		counter++;
-	});
-}
-function time_with_leading_zeros(time) 
-{ 
-  return (time < 10 ? '0' : '') + time;
-}
-function GetDateStringFromDate(date){
-	return date.getDate()  + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " " + time_with_leading_zeros(date.getHours()) + ":" + time_with_leading_zeros(date.getMinutes()) + ":" + time_with_leading_zeros(date.getSeconds());
-}
+/*! Copyright 2011, Ben Lin (http://dreamerslab.com/)
+* Licensed under the MIT License (LICENSE.txt).
+*
+* Version: 1.1.1
+*
+* Requires: jQuery 1.2.6+
+*/
+;(function($,window){var get_win_size=function(){if(window.innerWidth!=undefined)return[window.innerWidth,window.innerHeight];else{var B=document.body;var D=document.documentElement;return[Math.max(D.clientWidth,B.clientWidth),Math.max(D.clientHeight,B.clientHeight)]}};$.fn.center=function(opt){var $w=$(window);var scrollTop=$w.scrollTop();return this.each(function(){var $this=$(this);var configs=$.extend({against:"window",top:false,topPercentage:0.5,resize:true},opt);var centerize=function(){var against=configs.against;var against_w_n_h;var $against;if(against==="window")against_w_n_h=get_win_size();else if(against==="parent"){$against=$this.parent();against_w_n_h=[$against.width(),$against.height()];scrollTop=0}else{$against=$this.parents(against);against_w_n_h=[$against.width(),$against.height()];scrollTop=0}var x=(against_w_n_h[0]-$this.outerWidth())*0.5;var y=(against_w_n_h[1]-$this.outerHeight())*configs.topPercentage+scrollTop;if(configs.top)y=configs.top+scrollTop;$this.css({"left":x,"top":y})};centerize();if(configs.resize===true)$w.resize(centerize)})}})(jQuery,window);

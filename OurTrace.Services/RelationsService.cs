@@ -27,6 +27,8 @@ namespace OurTrace.Services
         }
         public async Task<bool> AreFriendsWithAsync(string firstUser, string secondUser)
         {
+            if (firstUser == secondUser) return true;
+
             if (await this.dbContext.Friendships.AnyAsync(x => x.Sender.UserName == firstUser && x.Recipient.UserName == secondUser && x.AcceptedOn != null) ||
                 await this.dbContext.Friendships.AnyAsync(x => x.Recipient.UserName == firstUser && x.Sender.UserName == secondUser && x.AcceptedOn != null))
                 return true;

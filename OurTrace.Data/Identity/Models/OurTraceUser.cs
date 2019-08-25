@@ -17,6 +17,7 @@ namespace OurTrace.Data.Identity.Models
             this.Groups = new List<Group>();
             this.Following = new List<Follow>();
             this.Followers = new List<Follow>();
+            this.Notifications = new List<Notification>();
             this.Wall = new Wall();
             this.JoinedOn = DateTime.UtcNow;
         }
@@ -37,6 +38,7 @@ namespace OurTrace.Data.Identity.Models
         public ICollection<Group> Groups { get; set; }
         public ICollection<Follow> Following { get; set; }
         public ICollection<Follow> Followers { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 
     // There are only two genders OKAY ? :@

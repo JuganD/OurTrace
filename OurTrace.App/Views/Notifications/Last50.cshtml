@@ -1,0 +1,36 @@
+﻿@using OurTrace.App.Models.ViewModels.Notification
+@model ICollection<NotificationViewModel>
+@{
+    ViewData["Title"] = "Last50";
+}
+
+<section class="companies-info">
+    <div class="container">
+        <div class="company-title">
+            <h3 class="bg-dark text-light">Your last 50 notifications</h3>
+            <form asp-controller="Notifications" asp-action="MarkAllSeen" asp-route-redir="true" method="post">
+                <button class="float-right bg-primary p-2 mt-3 text-light">Mark all as seen</button>
+            </form>
+        </div>
+        <div class="companies-list">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pt-1 pb-1 bg-dark mb-1 full-width"></div> <!--separator-->
+                    @foreach (var notification in Model)
+                    {
+                        string seenvariable = notification.Seen ? "" : "Not";
+                        string classvariable = notification.Seen ? "brightness-medium" : "";
+
+                        <a asp-controller="Notifications" asp-action="Open" asp-route-id="@notification.Id" class="company_profile_info @classvariable" style="margin-bottom:20px;color: #000000; text-decoration: none;">
+                            <span class="float-right pr-3 pt-3" style="display:inline-block">@seenvariable Seen</span>
+                            <div class=" justify-content-center pb-3 pt-3" style="display:inline-block">
+                                <span>@notification.Content</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
