@@ -5,10 +5,10 @@
     ViewData["Title"] = Context.Request.Query["name"] + " members";
 }
 <div class="row mt-2">
-    @if (TempData.ContainsKey("KickResult"))
+    @if (TempData.ContainsKey("ViewAllMembersResult"))
     {
-        <div class="full-width bg-primary text-white p-2 m-2 text-center">@TempData["KickResult"]</div>
-        { TempData.Remove("KickResult"); }
+        <div class="full-width bg-primary text-white p-2 m-2 text-center">@TempData["ViewAllMembersResult"]</div>
+        { TempData.Remove("ViewAllMembersResult"); }
     }
     <div class="col-md-6">
         <div id="search-bar" class="widget widget-portfolio suggestions-list">
@@ -21,6 +21,7 @@
                 <input class="form-control" type="text" id="myInput" onkeyup="filterSearch()" placeholder="Search..">
             </div>
             <div id="searchPanel" class="pf-gallery-extended">
+            <input id="current-user-elevation" type="hidden" value="@((int)ViewData["Elevation"])" />
                 <ul>
                     @if (Model.Any())
                     {
@@ -28,6 +29,7 @@
                         {
                             <li>
                                 <a asp-controller="User" asp-action="Profile" asp-route-username="@member.Username" class="text-black-50 member-link">
+                                    <input class="user-elevation" type="hidden" value="@member.Elevation.ToString()" data-value="@((int)member.Elevation)" />
                                     <img src="/file/profilepicture/@member.Username" style="width:60px;height:60px" alt="" data-toggle="tooltip" title="@member.FullName" search-title="@member.FullName">
                                     <div style="word-wrap:break-word">@@@member.Username</div>
                                 </a>
@@ -47,7 +49,8 @@
                         <div class="company-up-info">
                             <img id="user-data-img" src="" alt="">
                             <h3 id="user-data-name"></h3>
-                            <h4 id="user-data-fullname"></h4>
+                            <h4 id="user-data-fullname" class="mb-1"></h4>
+                            <h4 id="user-data-elevation" ></h4>
                         </div>
                         <a id="user-data-viewprofile" href="#" title="" class="view-more-pro">View Profile</a>
                         @if ((bool)ViewData["IsUserAdministrator"] == true)
@@ -58,6 +61,14 @@
                                 <input id="user-data-kick-username" type="hidden" value="" name="username" />
                                 <input type="submit" class="view-more-pro" value="Kick from group" />
                             </form>
+                            if ((int)ViewData["Elevation"] > 0)
+                            {
+                                <form asp-controller="Group" asp-action="PromoteMember" id="promote-member-box" method="post">
+                                    <input type="hidden" value="@Context.Request.Query["name"]" name="group" />
+                                    <input id="user-data-promote-username" type="hidden" value="" name="username" />
+                                    <input id="user-data-promote-submit" type="submit" class="view-more-pro" value="Promote" />
+                                </form>
+                            }
                         }
                     </div><!--company_profile_info end-->
                 </div>

@@ -15,8 +15,10 @@ namespace OurTrace.Services.Abstraction
         Task<bool> KickMemberAsync(string groupname, string username);
         Task<bool> JoinGroupAsync(string groupname, string username);
         Task<bool> AcceptMemberAsync(string groupname, string username);
+        Task<bool> ElevateUserAsync(string groupname, string username);
         Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username);
         Task<string> GetGroupOwnerAsync(string groupname);
+        Task<int> GetUserRoleAsElevationAsync(string groupname, string username);
         Task<IEnumerable<GroupWindowViewModel>> GetUserGroupsAsync(string username);
         Task<IEnumerable<GroupMemberViewModel>> GetGroupMembersAsync(string groupname);
         Task<GroupOpenViewModel> PrepareGroupForViewAsync(string name, string username);

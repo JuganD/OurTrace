@@ -193,19 +193,10 @@ namespace OurTrace.Services
             GroupAdminType roleType = GroupAdminType.Admin;
             if (Enum.TryParse(roleName, true, out roleType))
             {
-                var user = await identityService.GetUserByName(username)
-                    .Include(x => x.Groups)
-                    .SingleOrDefaultAsync();
-
-                var group = user.Groups.SingleOrDefault(x => x.Name == groupname);
-
-                if (user != null && group != null)
-                {
-                    return this.dbContext.GroupAdmins.Any(x =>
-                        x.Group == group &&
-                        x.User == user &&
-                        x.AdminType == roleType);
-                }
+                return await this.dbContext.GroupAdmins.AnyAsync(x =>
+                    x.Group.Name == groupname &&
+                    x.User.UserName == username &&
+                    x.AdminType == roleType);
             }
             return false;
         }
@@ -283,7 +274,23 @@ namespace OurTrace.Services
                 .Where(x => x.ConfirmedMember == true)
                 .ToListAsync();
 
-            return automapper.Map<IEnumerable<GroupMemberViewModel>>(userGroups);
+            var adminsOfThatGroup = await this.dbContext.GroupAdmins
+                .Where(x => x.Group.Name == groupname)
+                .Include(x => x.User)
+                .ToListAsync();
+
+            var members = automapper.Map<IEnumerable<GroupMemberViewModel>>(userGroups);
+            foreach (var member in members)
+            {
+                var groupAdmin = adminsOfThatGroup
+                    .SingleOrDefault(x => x.User.UserName == member.Username);
+
+                if (groupAdmin != null)
+                {
+                    member.Elevation = groupAdmin.AdminType;
+                }
+            }
+            return members;
         }
         public async Task<string> GetGroupOwnerAsync(string groupname)
         {
@@ -293,17 +300,56 @@ namespace OurTrace.Services
         }
         public async Task<bool> IsUserHaveAnyAdministratorRightsAsync(string groupname, string username)
         {
-            var user = await identityService.GetUserByName(username)
-                .SingleOrDefaultAsync();
-            var group = await GetGroup(groupname)
-                .SingleOrDefaultAsync();
-
-            if (user != null && group != null)
+            var groupAdmin = await this.dbContext.GroupAdmins
+                    .SingleOrDefaultAsync(x => x.User.UserName == username &&
+                                               x.Group.Name == groupname);
+            if (groupAdmin != null)
             {
-                var groupAdmin = await this.dbContext.GroupAdmins
-                    .SingleOrDefaultAsync(x => x.User == user && x.Group == group);
-                if (groupAdmin != null)
+                return true;
+            }
+            return false;
+        }
+        public async Task<int> GetUserRoleAsElevationAsync(string groupname, string username)
+        {
+            var groupAdmin = await this.dbContext.GroupAdmins
+                    .SingleOrDefaultAsync(x => x.Group.Name == groupname &&
+                                               x.User.UserName == username);
+
+            if (groupAdmin != null)
+            {
+                return (int)groupAdmin.AdminType;
+            }
+            return 0; // means its not admin - admins start from 1 -> positive elevation
+        }
+        public async Task<bool> ElevateUserAsync(string groupname, string username)
+        {
+            var groupAdmin = await this.dbContext.GroupAdmins
+                .SingleOrDefaultAsync(x => x.User.UserName == username &&
+                                           x.Group.Name == groupname);
+            if (groupAdmin == null)
+            {
+                var user = await identityService.GetUserByName(username)
+                .SingleOrDefaultAsync();
+                var group = await GetGroup(groupname)
+                    .SingleOrDefaultAsync();
+                await this.dbContext.GroupAdmins
+                    .AddAsync(new GroupAdmin()
+                    {
+                        Group = group,
+                        User = user,
+                        AdminType = GroupAdminType.Moderator
+                    });
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                int currentElevation = (int)groupAdmin.AdminType;
+                int maxElevation = Enum.GetValues(typeof(GroupAdminType)).Cast<int>().Max();
+                if (maxElevation > currentElevation)
                 {
+                    groupAdmin.AdminType = (GroupAdminType)currentElevation + 1;
+                    await this.dbContext.SaveChangesAsync();
                     return true;
                 }
             }

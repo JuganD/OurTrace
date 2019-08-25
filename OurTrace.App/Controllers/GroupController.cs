@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OurTrace.App.Models.InputModels.Group;
+using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
@@ -66,7 +67,7 @@ namespace OurTrace.App.Controllers
                         Controller = "Group",
                         ElementId = name,
                         Username = groupOwner,
-                        Content = this.User.Identity.Name+" wants to join your group "+name+"!"
+                        Content = this.User.Identity.Name + " wants to join your group " + name + "!"
                     });
                     return RedirectToAction("Open", new { name = name });
                 }
@@ -122,8 +123,12 @@ namespace OurTrace.App.Controllers
 
                 bool isCurrentUserAdministrator =
                     await this.groupService.IsUserHaveAnyAdministratorRightsAsync(name, this.User.Identity.Name);
-
                 ViewData.Add("IsUserAdministrator", isCurrentUserAdministrator);
+
+                if (isCurrentUserAdministrator)
+                {
+                    ViewData.Add("Elevation", await this.groupService.GetUserRoleAsElevationAsync(name, this.User.Identity.Name));
+                }
 
                 return View(members);
             }
@@ -158,7 +163,7 @@ namespace OurTrace.App.Controllers
                 {
                     if (await this.groupService.KickMemberAsync(group, username))
                     {
-                        TempData["KickResult"] = "Successful!";
+                        TempData["ViewAllMembersResult"] = "Successful!";
                         await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
                         {
                             Action = "Open",
@@ -170,17 +175,17 @@ namespace OurTrace.App.Controllers
                     }
                     else
                     {
-                        TempData["KickResult"] = "Failed!";
+                        TempData["ViewAllMembersResult"] = "Failed!";
                     }
                 }
                 else
                 {
-                    TempData["KickResult"] = "Not enough privileges to kick this user.";
+                    TempData["ViewAllMembersResult"] = "Not enough privileges to kick this user.";
                 }
             }
             else
             {
-                TempData["KickResult"] = "Invalid data.";
+                TempData["ViewAllMembersResult"] = "Invalid data.";
             }
 
             return RedirectToAction("ViewAllMembers", new { name = group });
@@ -214,6 +219,57 @@ namespace OurTrace.App.Controllers
                 }
             }
             return View();
+        }
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> PromoteMember(string group, string username)
+        {
+            if (string.IsNullOrEmpty(group) || string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("ViewAllMembers", new { name = group });
+            }
+
+            bool issuerParticipatesInGroup = await this.groupService
+                .IsUserConfirmedMemberAsync(group, this.User.Identity.Name);
+
+            bool promotedUserParticipatesInGroup = await this.groupService
+                .IsUserConfirmedMemberAsync(group, username);
+
+            if (issuerParticipatesInGroup && promotedUserParticipatesInGroup)
+            {
+                int issuerElevation = await this.groupService.GetUserRoleAsElevationAsync(group, this.User.Identity.Name);
+                int promotedUserElevation = await this.groupService.GetUserRoleAsElevationAsync(group, username);
+
+                if (issuerElevation > promotedUserElevation)
+                {
+                    if (await this.groupService.ElevateUserAsync(group, username))
+                    {
+                        TempData["ViewAllMembersResult"] = "Successful!";
+                        await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                        {
+                            Action = "Open",
+                            Controller = "Group",
+                            ElementId = group,
+                            Username = username,
+                            Content = "An administrator of the group " + group + " has promoted you to " + ((GroupAdminType)promotedUserElevation + 1).ToString() + "!"
+                        });
+                    }
+                    else
+                    {
+                        TempData["ViewAllMembersResult"] = "Failed!";
+                    }
+                }
+                else
+                {
+                    TempData["ViewAllMembersResult"] = "Not enough privileges to promote this user.";
+                }
+            }
+            else
+            {
+                TempData["ViewAllMembersResult"] = "Invalid data.";
+            }
+
+            return RedirectToAction("ViewAllMembers", new { name = group });
         }
     }
 }

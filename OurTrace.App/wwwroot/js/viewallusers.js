@@ -1,5 +1,7 @@
 $(window).on("load", function() {
+	let currentUserElevation = $("#current-user-elevation").val();
 	let originalKickHref = $("#user-data-kick").attr("href");
+	let promoteSubmitButtonValue = $("#user-data-promote-submit").val();
 	$('[data-toggle="tooltip"]').tooltip();
 	
 	$(".member-link").click(function(){
@@ -9,16 +11,40 @@ $(window).on("load", function() {
 		let username = $(this).children("div").first().html();
 		let usernameCleared = username.slice(1);
 		let imgSrc = $(img).attr("src");
+		let elevation = $(this).children('input[type="hidden"]').val();
+		if (elevation == "0"){
+			elevation = "Member";
+		}
+		let elevationAsInt = $(this).children('input[type="hidden"]').data('value');
 
-		
 		$("#none-message").fadeOut(200, function() {
 						$("#user-data").fadeIn();
 					});
 		$("#user-data-img").attr("src",imgSrc);
 		$("#user-data-name").html(username);
 		$("#user-data-fullname").html(fullName);
+		$("#user-data-elevation").html(elevation);
 		$("#user-data-viewprofile").attr("href",profileLink);
 		$("#user-data-kick-username").val(usernameCleared);
+		$("#user-data-promote-username").val(usernameCleared);
+		
+		if (parseInt(currentUserElevation) > parseInt(elevationAsInt)){
+			$("#promote-member-box").show();
+			let elevationString = "";
+			if (elevationAsInt == "0"){
+				elevationString = "Moderator"
+			}
+			if (elevationAsInt == "1"){
+				elevationString = "Administrator"
+			}
+			if (elevationString != ""){
+				$("#user-data-promote-submit").val(promoteSubmitButtonValue+" to "+elevationString);
+			}
+			
+			
+		} else {
+			$("#promote-member-box").hide();
+		}
 		
 		return false;
 	});
