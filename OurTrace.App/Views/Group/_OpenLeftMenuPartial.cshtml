@@ -6,9 +6,18 @@
         <div class="user_profile">
             <!--group-image-start-->
             <div class="user-pro-img">
-                <a class="popup-image" asp-controller="File" asp-action="GroupPicture" asp-route-username="@Model.Name">
-                    <img src="@Url.Action("GroupPicture","File",new { username = Model.Name })" style="width:170px; height: 170px;" alt="">
+                @if (Model.IsOwner == true)
+                {
+                <a class="image-change-menu" onclick="return false" href="">
+                    <img src="@Url.Action("GroupPicture","File",new { name = Model.Name })" style="width:170px; height: 170px;" alt="">
                 </a>
+                }
+                else
+                {
+                    <a class="popup-image" asp-controller="File" asp-action="GroupPicture" asp-route-name="@Model.Name">
+                        <img src="@Url.Action("GroupPicture","File",new { name = Model.Name })" style="width:170px; height: 170px;" alt="">
+                    </a>
+                }
             </div>
             <!--group-image-end-->
             <!--group-join-start-->

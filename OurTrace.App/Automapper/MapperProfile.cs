@@ -37,7 +37,6 @@ namespace OurTrace.App.Automapper
             CreateMap<Post, PostViewModel>()
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
-                .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
                 .ForMember(dest => dest.SharedPost, actual => actual.MapFrom(x => x.SharedPost));
 
             CreateMap<PostLike, PostLikeViewModel>()

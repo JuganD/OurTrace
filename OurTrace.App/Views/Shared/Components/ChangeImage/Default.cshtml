@@ -1,0 +1,17 @@
+﻿@using OurTrace.App.Models.ViewModels.Global
+@model ChangeImageViewModel
+
+<div class="image-change-popup post-popup">
+    <div class="post-project">
+        <h3>Change Images</h3>
+        <div class="post-project-fields">
+            <form asp-controller="File" asp-action="ChangePicture" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="IsGroup" value="@Model.IsGroup.ToString()" />
+                <input type="hidden" name="GroupName" value="@Model.GroupName" />
+                <partial name="_ChangeImageFormContentPartial" model="null" />
+            </form>
+        </div>
+        <a href="#" title=""><i class="la la-times-circle-o close-change-image"></i></a>
+    </div>
+</div>
+

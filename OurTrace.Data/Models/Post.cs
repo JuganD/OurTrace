@@ -22,7 +22,6 @@ namespace OurTrace.Data.Models
         public string Content { get; set; }
         public bool IsImageOnFileSystem { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime? EditedOn { get; set; } // can be null if never edited
         public PostMimeType MimeType { get; set; }
         public PostVisibilityType VisibilityType { get; set; }
         public Post SharedPost { get; set; }

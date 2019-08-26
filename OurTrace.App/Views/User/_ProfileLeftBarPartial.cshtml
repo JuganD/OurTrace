@@ -6,9 +6,19 @@
         <div class="user_profile">
             <!--user-image-section-start-->
             <div class="user-pro-img">
-                <a class="popup-image" asp-controller="File" asp-action="ProfilePicture" asp-route-username="@Model.Username">
-                    <img src="@Url.Action("ProfilePicture","File",new { username=Model.Username })" style="width:170px; height: 170px;" alt="">
-                </a>
+                @if (Model.IsHimself)
+                {
+                    <a class="image-change-menu" onclick="return false" href="">
+                        <img src="@Url.Action("ProfilePicture","File",new { name=Model.Username })" style="width:170px; height: 170px;" alt="">
+                    </a>
+                }
+                else
+                {
+                    <a class="popup-image" asp-controller="File" asp-action="ProfilePicture" asp-route-name="@Model.Username">
+                        <img src="@Url.Action("ProfilePicture","File",new { name=Model.Username })" style="width:170px; height: 170px;" alt="">
+                    </a>
+                }
+
             </div>
             <!--user-image-section-end-->
             <!--user-actions-section-start-->

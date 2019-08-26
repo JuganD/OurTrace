@@ -5,10 +5,12 @@
     ViewData["Title"] = "Profile";
 }
 <!--cover-start-->
-<section class="cover-sec">
-    <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
-</section>
+<div class="cover-sec @(Model.IsHimself ? "image-change-menu" : "")">
+    <img src="@Url.Action("CoverPicture","File",new { name=Model.Username })" style="width:100%; height: 400px;" alt="">
+</div>
 <!--cover-end-->
+
+<vc:change-image is-group="false" group-name="" ></vc:change-image>
 
 <div class="main-section">
     <div class="container">
@@ -24,4 +26,5 @@
 
 @section Scripts {
     <script src="~/js/post.js" asp-append-version="true"></script>
+    <script src="~/js/image-change.js" asp-append-version="true"></script>
 }

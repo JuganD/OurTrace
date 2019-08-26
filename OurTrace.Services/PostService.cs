@@ -21,24 +21,24 @@ namespace OurTrace.Services
         private readonly OurTraceDbContext dbContext;
         private readonly IRelationsService relationsService;
         private readonly IGroupService groupService;
+        private readonly IFileService fileService;
         private readonly IMapper automapper;
-        private readonly IStore fileStore;
         private readonly WallService wallService;
         private readonly IdentityService identityService;
 
         public PostService(OurTraceDbContext dbContext,
             IRelationsService relationsService,
             IGroupService groupService,
-            IStorageFactory storageFactory,
+            IFileService fileService,
             IMapper automapper)
         {
             this.dbContext = dbContext;
             this.relationsService = relationsService;
             this.groupService = groupService;
+            this.fileService = fileService;
             this.automapper = automapper;
             this.wallService = new WallService(dbContext);
             this.identityService = new IdentityService(dbContext);
-            this.fileStore = storageFactory.GetStore("LocalFileStorage");
         }
 
         public async Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model)
@@ -62,12 +62,7 @@ namespace OurTrace.Services
                 // FILE SAVING PROCEDURE
                 if (model.MediaFile != null && model.MediaFile.Length > 0)
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        model.MediaFile.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        await fileStore.SaveAsync(fileBytes, new PrivateFileReference(Path.Combine(username, post.Id)), "image/jpeg");
-                    }
+                    await this.fileService.SaveImageAsync(model.MediaFile, username, post.Id);
                     post.IsImageOnFileSystem = true;
                 }
                 else if (model.ExternalMediaUrl != null)

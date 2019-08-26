@@ -61,9 +61,15 @@ namespace OurTrace.Services
         internal async Task<ICollection<Post>> GetPostsFromWallDescendingAsync(string wallId)
         {
             var wall = await GetWallWithIncludables(wallId);
-            return wall.Posts
+            var result = wall.Posts
                 .OrderByDescending(x => x.CreatedOn)
                 .ToArray();
+            foreach (var post in result)
+            {
+                // newest on the bottom
+                post.Comments = post.Comments.OrderBy(x => x.CreatedOn).ToArray();
+            }
+            return result;
         }
 
         internal async Task<bool> IsWallBelongsToGroup(string wallId)

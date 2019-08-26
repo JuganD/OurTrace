@@ -5,10 +5,12 @@
     ViewData["Title"] = "Group";
 }
 <!--cover-start-->
-<section class="cover-sec">
-    <img src="~/images/default_background.jpg" style="width:100%; height: 400px;" alt="">
+<section class="cover-sec @(Model.IsOwner ? "image-change-menu" : "")">
+    <img src="@Url.Action("CoverPicture","File",new { name="Group_"+Model.Name })" style="width:100%; height: 400px;" alt="">
 </section>
 <!--cover-end-->
+
+<vc:change-image is-group="true" group-name="@Model.Name"></vc:change-image>
 
 <div class="main-section">
     <div class="container">
@@ -26,4 +28,5 @@
     <script src="~/js/post.js" asp-append-version="true"></script>
     <script src="~/js/joinrequests.js" asp-append-version="true"></script>
     <script src="~/js/group.js" asp-append-version="true"></script>
+    <script src="~/js/image-change.js" asp-append-version="true"></script>
 }

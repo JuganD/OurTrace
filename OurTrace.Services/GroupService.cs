@@ -134,6 +134,9 @@ namespace OurTrace.Services
                 groupViewModel.IsAdministrator = await
                     IsUserHaveRoleAsync(name, username, "Admin");
 
+                groupViewModel.IsOwner = await
+                    GetGroupOwnerAsync(name) == username;
+
                 groupViewModel.GroupRank = this.dbContext.Groups
                     .OrderByDescending(x => x.Members.Count)
                     .ThenBy(x => x.CreatedOn)
@@ -294,9 +297,13 @@ namespace OurTrace.Services
         }
         public async Task<string> GetGroupOwnerAsync(string groupname)
         {
-            return (await this.dbContext.Groups
+            if (groupname != null)
+            {
+                return (await this.dbContext.Groups
                 .Include(x => x.Creator)
                 .SingleOrDefaultAsync(x => x.Name == groupname)).Creator.UserName;
+            }
+            return null;
         }
         public async Task<bool> IsUserHaveAnyAdministratorRightsAsync(string groupname, string username)
         {

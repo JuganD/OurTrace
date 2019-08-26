@@ -18,7 +18,10 @@ namespace OurTrace.App.Models.ViewModels.Group
         [Ignore]
         public bool IsModerator { get; set; } // view-pointing variable
         [Ignore]
+        public bool IsOwner { get; set; } // view-pointing variable
+        [Ignore]
         public int GroupRank { get; set; } // view-pointing variable
+        
         public ICollection<PostViewModel> Posts { get; set; }
         public ICollection<GroupMemberViewModel> JoinRequests { get; set; }
         public ICollection<GroupMemberViewModel> Members { get; set; }
