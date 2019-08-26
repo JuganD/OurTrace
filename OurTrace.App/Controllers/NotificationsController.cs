@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,14 @@ namespace OurTrace.App.Controllers
             if (notification != null)
             {
                 var redirectPartial = Url.Action(notification.Action, notification.Controller);
+                // Because it wants parameters
                 if (string.IsNullOrEmpty(redirectPartial))
                 {
                     redirectPartial = "/" + notification.Controller + "/" + notification.Action;
+                    
                 }
                 var redirectLocation = redirectPartial + "/" + notification.ElementId;
+                redirectLocation = Regex.Replace(redirectLocation, @"/+", @"/");
                 return Redirect(redirectLocation);
             }
             return NotFound();

@@ -3,7 +3,20 @@
 
 @if (!Model.IsHimself)
 {
-
+    @if (!Model.IsFollowing)
+    {
+        <form asp-controller="Relations" asp-action="Follow" method="post">
+            <input type="hidden" name="receiver" value="@Model.Username" />
+            <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Follow</button></div>
+        </form>
+    }
+    else
+    {
+        <form asp-controller="Relations" asp-action="Unfollow" method="post">
+            <input type="hidden" name="receiver" value="@Model.Username" />
+            <div style="width:100%"><button class="btn-danger" style="width:100%" type="submit" value="submit"> Unfollow</button></div>
+        </form>
+    }
     @if (!Model.AreFriends)
     {
         if (Model.PendingFriendship)
@@ -40,19 +53,6 @@
             <input type="hidden" name="receiver" value="@Model.Username" />
             <div style="width:100%"><button class="btn-danger" style="width:100%" type="submit" value="submit"> Unfriend</button></div>
         </form>
-    }
-    @if (!Model.IsFollowing)
-    {
-        <form asp-controller="Relations" asp-action="Follow" method="post">
-            <input type="hidden" name="receiver" value="@Model.Username" />
-            <div style="width:100%"><button class="btn-success" style="width:100%" type="submit" value="submit"> Follow</button></div>
-        </form>
-    }
-    else
-    {
-        <form asp-controller="Relations" asp-action="Unfollow" method="post">
-            <input type="hidden" name="receiver" value="@Model.Username" />
-            <div style="width:100%"><button class="btn-danger" style="width:100%" type="submit" value="submit"> Unfollow</button></div>
-        </form>
+        <a asp-controller="Message" asp-action="Chat" asp-route-name="@Model.Username" class="btn btn-primary full-width bg-primary mt-1" method="post">Send Message</a>
     }
 }

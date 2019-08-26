@@ -14,6 +14,7 @@ using OurTrace.App.Models.ViewModels.Group;
 using OurTrace.App.Models.ViewModels.Settings;
 using OurTrace.Services.Models;
 using OurTrace.App.Models.ViewModels.Notification;
+using OurTrace.App.Models.ViewModels.Message;
 
 namespace OurTrace.App.Automapper
 {
@@ -73,6 +74,10 @@ namespace OurTrace.App.Automapper
             CreateMap<NotificationServiceModel, Notification>();
             CreateMap<Notification, NotificationViewModel>()
                 .ForMember(dest => dest.DateIssued, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.DateIssued)));
+
+            CreateMap<Message, MessageViewModel>()
+                .ForMember(dest => dest.Sender, actual => actual.MapFrom(x => x.Sender.UserName))
+                .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)));
         }
     }
 }

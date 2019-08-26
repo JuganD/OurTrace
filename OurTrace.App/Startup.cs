@@ -67,6 +67,7 @@ namespace OurTrace.App
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IMessageService, MessageService>();
 
 
             services.AddMvc(options =>

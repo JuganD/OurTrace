@@ -326,6 +326,7 @@ namespace OurTrace.Services
 
             if (post != null)
             {
+                post.Comments = post.Comments.OrderBy(x => x.CreatedOn).ToArray();
                 return automapper.Map<PostViewModel>(post);
             }
             return null;
