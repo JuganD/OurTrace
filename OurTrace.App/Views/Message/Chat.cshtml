@@ -37,8 +37,8 @@
                 }
                 <div class="chat-container @containerClass">
                     <img src="@Url.Action("ProfilePicture","File",new { name = currentMessage.Sender })" alt="" class="@messagesAndAvatarClass" style="width:100%;">
-                    <div class="chat-username @messagesAndAvatarClass">@currentMessage.Sender</div>
-                    <div class="@messagesAndAvatarClass">@currentMessage.Content</div>
+                    <div class="chat-username chat-text @messagesAndAvatarClass">@currentMessage.Sender</div>
+                    <div class="chat-text @messagesAndAvatarClass">@currentMessage.Content</div>
                     <span class="utcDate @timeClass">@currentMessage.CreatedOn</span>
                 </div>
             }

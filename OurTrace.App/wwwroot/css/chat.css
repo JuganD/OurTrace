@@ -1,5 +1,5 @@
 body {
-	background-color: #888
+	background-color: #032b49
 }
 .chat-username {
 	font-family: "Comic Sans MS", cursive, sans-serif;
@@ -19,6 +19,7 @@ body {
 }
 .paddy-container {
 	border: 2px solid #dedede;
+	border-radius: 5px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
@@ -28,8 +29,9 @@ body {
 }
 .chat-container {
   border: 2px solid #dedede;
-  background-color: #f1f1f1;
   border-radius: 5px;
+  background-color: #f1f1f1;
+  word-wrap: break-word;
   padding: 10px;
   margin: 10px 0;
 }
@@ -65,5 +67,7 @@ body {
 }
 .chat-text-right {
 	text-align: right;
+}
+.chat-text {
 	margin-bottom: 5px;
 }
