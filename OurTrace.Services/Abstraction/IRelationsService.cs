@@ -18,6 +18,7 @@ namespace OurTrace.Services.Abstraction
         Task RevokeFriendshipAsync(string senderUsername, string receiverUsername);
         Task RevokeFollowingAsync(string senderUsername, string receiverUsername);
         Task<ICollection<ProfileFriendSuggestionViewModel>> GetFriendsOfFriendsAsync(string username, int count);
+        Task<ICollection<string>> GetFriendsUsernamesAsync(string username);
         Task<ICollection<SettingsFriendRequestViewModel>> GetPendingFriendRequestsAsync(string username);
     }
 }

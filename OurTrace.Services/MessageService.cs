@@ -14,16 +14,36 @@ namespace OurTrace.Services
     {
         private readonly OurTraceDbContext dbContext;
         private readonly IMapper automapper;
+        private readonly IRelationsService relationsService;
         private readonly IdentityService identityService;
 
         public MessageService(OurTraceDbContext dbContext,
-            IMapper automapper)
+            IMapper automapper,
+            IRelationsService relationsService)
         {
             this.dbContext = dbContext;
             this.automapper = automapper;
-
+            this.relationsService = relationsService;
             this.identityService = new IdentityService(dbContext);
         }
+
+        public async Task<ICollection<string>> GetAllUsernamesOfMessageIssuersAsync(string username)
+        {
+            var recipients = await this.dbContext.Messages
+                .Where(x => x.Sender.UserName == username)
+                .Select(x => x.Recipient.UserName)
+                .ToListAsync();
+
+            var senders = await this.dbContext.Messages
+                .Where(x => x.Recipient.UserName == username)
+                .Select(x => x.Sender.UserName)
+                .ToListAsync();
+
+            var friends = await this.relationsService.GetFriendsUsernamesAsync(username);
+
+            return recipients.Union(senders).Union(friends).ToList();
+        }
+
         public async Task<ICollection<MessageViewModel>> GetMessagesAsync(string sender, string recipient)
         {
             var messages = await this.dbContext.Messages
@@ -31,8 +51,8 @@ namespace OurTrace.Services
                           x.Recipient.UserName == recipient) ||
                           (x.Sender.UserName == recipient &&
                           x.Recipient.UserName == sender))
-                .Include(x=>x.Sender)
-                .OrderBy(x=>x.CreatedOn)
+                .Include(x => x.Sender)
+                .OrderBy(x => x.CreatedOn)
                 .ToListAsync();
 
             var viewModel = automapper.Map<ICollection<MessageViewModel>>(messages);

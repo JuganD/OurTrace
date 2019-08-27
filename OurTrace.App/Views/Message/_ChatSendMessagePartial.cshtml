@@ -3,6 +3,8 @@
 
 <form asp-controller="Message" asp-action="SendMessage" method="post">
     <input id="recipient-input" name="Recipient" type="hidden" value="" />
-    <textarea asp-for="Content" id="send-message-box" class="float-left p-2 ml-2 col-md-9" style="height: 80px" ></textarea>
-    <button type="submit" class="bg-white float-right col-md-2" style="height: 80px; margin-top:-2px">Send</button>
+    <div class="mf-field">
+        <input asp-for="Content" type="text" placeholder="Type a message here">
+        <button type="submit">Send</button>
+    </div>
 </form>

@@ -226,5 +226,22 @@ namespace OurTrace.Services
 
             return follow;
         }
+
+        public async Task<ICollection<string>> GetFriendsUsernamesAsync(string username)
+        {
+            var sentFriendships = await this.dbContext.Friendships
+                .Where(x => x.AcceptedOn != null &&
+                           (x.Sender.UserName == username))
+                .Select(x=>x.Recipient.UserName)
+                .ToListAsync();
+
+            var receivedFriendships = await this.dbContext.Friendships
+                .Where(x => x.AcceptedOn != null &&
+                           (x.Recipient.UserName == username))
+                .Select(x=>x.Sender.UserName)
+                .ToListAsync();
+
+            return sentFriendships.Union(receivedFriendships).ToList();
+        }
     }
 }

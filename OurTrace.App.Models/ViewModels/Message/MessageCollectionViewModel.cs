@@ -11,6 +11,7 @@ namespace OurTrace.App.Models.ViewModels.Message
             this.Messages = new List<MessageViewModel>();
         }
         public string Recipient { get; set; }
+        public ICollection<string> OtherFriendsMessages { get; set; }
         public ICollection<MessageViewModel> Messages { get; set; }
     }
 }

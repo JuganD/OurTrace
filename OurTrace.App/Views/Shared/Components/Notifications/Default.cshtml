@@ -22,9 +22,13 @@
         @foreach (var notification in Model.Take(5))
         {
             string classvariable = notification.Seen ? "bg-lightgray" : "";
+            if (notification.Content.Length > 50)
+            {
+                notification.Content = notification.Content.Substring(0, 50) + "...";
+            }
             <a asp-controller="Notifications" asp-action="Open" asp-route-id="@notification.Id" class="notfication-details @classvariable">
                 <div class="notification-info">
-                    <h3>@notification.Content</h3><br />
+                    <h3 class="text-break">@notification.Content</h3><br />
                     <span class="float-right utcDate" style="font-size:13px">@notification.DateIssued</span>
                 </div>
             </a>

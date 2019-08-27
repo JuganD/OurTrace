@@ -29,11 +29,16 @@ namespace OurTrace.App.Controllers
         [HttpGet("Message/{name}")]
         public async Task<IActionResult> Chat(string name)
         {
+            if (name == this.User.Identity.Name)
+            {
+                return NotFound();
+            }
             // Authorize users
             if (await this.relationsService.AreFriendsWithAsync(this.User.Identity.Name, name))
             {
                 var viewModel = new MessageCollectionViewModel();
                 viewModel.Recipient = name;
+                viewModel.OtherFriendsMessages = await this.messageService.GetAllUsernamesOfMessageIssuersAsync(this.User.Identity.Name);
                 viewModel.Messages = await this.messageService
                     .GetMessagesAsync(this.User.Identity.Name, name);
 

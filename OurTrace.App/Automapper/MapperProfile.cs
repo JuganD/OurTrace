@@ -15,6 +15,7 @@ using OurTrace.App.Models.ViewModels.Settings;
 using OurTrace.Services.Models;
 using OurTrace.App.Models.ViewModels.Notification;
 using OurTrace.App.Models.ViewModels.Message;
+using OurTrace.App.Models.ViewModels.Search;
 
 namespace OurTrace.App.Automapper
 {
@@ -78,6 +79,22 @@ namespace OurTrace.App.Automapper
             CreateMap<Message, MessageViewModel>()
                 .ForMember(dest => dest.Sender, actual => actual.MapFrom(x => x.Sender.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)));
+
+            CreateMap<OurTraceUser, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.UserName))
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.FullName));
+
+            CreateMap<Group, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.Name))
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Members.Count+" members"));
+
+            CreateMap<Post, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
+
+            CreateMap<Comment, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
         }
     }
 }

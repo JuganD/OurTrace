@@ -8,5 +8,6 @@ namespace OurTrace.Services.Abstraction
     {
         Task<ICollection<MessageViewModel>> GetMessagesAsync(string sender, string recipient);
         Task SendMessageAsync(string sender, string recipient, string content);
+        Task<ICollection<string>> GetAllUsernamesOfMessageIssuersAsync(string username);
     }
 }

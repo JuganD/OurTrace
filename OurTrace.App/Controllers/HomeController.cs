@@ -9,18 +9,10 @@ namespace OurTrace.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SignInManager<OurTraceUser> _signInManager;
-        private readonly OurTraceDbContext dbContext;
-        private readonly UserManager<OurTraceUser> _userManager;
 
-        public HomeController(
-            UserManager<OurTraceUser> userManager,
-            SignInManager<OurTraceUser> signInManager,
-            OurTraceDbContext dbContext)
+        public HomeController()
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            this.dbContext = dbContext;
+
         }
         public IActionResult Index()
         {

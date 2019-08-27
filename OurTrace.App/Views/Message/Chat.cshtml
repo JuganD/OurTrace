@@ -8,47 +8,97 @@
     <link rel="stylesheet" type="text/css" href="~/css/chat.css">
 }
 
-<div class="offset-3 col-md-6">
-    <div class="chat-container chatbox-container-teal chat-container-username">
-        <img src="@Url.Action("ProfilePicture","File",new { name = Model.Recipient})" alt="Avatar" style="width:100%;">
-        <span id="recipient-name" class="font-weight-bold">@Model.Recipient</span>
-    </div>
+<section class="messages-page">
+    <div class="container">
+        <div class="messages-sec">
+            <div class="row">
+                <div class="col-lg-4 col-md-12 no-pdd">
+                    <div class="msgs-list">
+                        <div class="msg-title">
+                            <h3>Messages</h3>
+                            <ul>
+                                <li><a href="#" title=""><i class="fa fa-cog"></i></a></li>
+                                <li><a href="#" title=""><i class="fa fa-ellipsis-v"></i></a></li>
+                            </ul>
+                        </div><!--msg-title end-->
+                        <div class="messages-list">
+                            <ul>
+                                @foreach (var username in Model.OtherFriendsMessages)
+                                {
+                                    var senderActiveClassVariable = Model.Recipient == username ? "active" : "";
 
-    <div class="paddy-container">
-        <div id="chatbox-chat-container">
-            @if (Model.Messages.Count == 0)
-            {
-                <div class="bg-white text-center p-3 ml-2 mr-2">
-                    No messages... yet.
-                </div>
-            }
-            @for (int i = 0; i < Model.Messages.Count; i++)
-            {
-                var currentMessage = Model.Messages.ElementAt(i);
-                var containerClass = "";
-                var timeClass = "time-left";
-                var messagesAndAvatarClass = "";
+                                    <li class="@senderActiveClassVariable">
+                                        <a asp-controller="Message" asp-action="Chat" asp-route-name="@username">
+                                            <div class="usr-msg-details">
+                                                <div class="usr-ms-img">
+                                                    <img src="@Url.Action("ProfilePicture","File",new { name = username})" alt="Avatar" style="width:100%;">
+                                                </div>
+                                                <div class="usr-mg-info">
+                                                    <h3>@username</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
 
-                if (currentMessage.Sender == this.User.Identity.Name)
-                {
-                    containerClass = "chat-darker";
-                    timeClass = "time-right";
-                    messagesAndAvatarClass = "chat-text-right";
-                }
-                <div class="chat-container @containerClass">
-                    <img src="@Url.Action("ProfilePicture","File",new { name = currentMessage.Sender })" alt="" class="@messagesAndAvatarClass" style="width:100%;">
-                    <div class="chat-username chat-text @messagesAndAvatarClass">@currentMessage.Sender</div>
-                    <div class="chat-text @messagesAndAvatarClass">@currentMessage.Content</div>
-                    <span class="utcDate @timeClass">@currentMessage.CreatedOn</span>
+                            </ul>
+                        </div><!--messages-list end-->
+                    </div><!--msgs-list end-->
                 </div>
-            }
+                <div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
+                    <div class="main-conversation-box">
+                        <div class="message-bar-head">
+                            <div class="usr-msg-details">
+                                <div class="usr-ms-img">
+                                    <img src="@Url.Action("ProfilePicture","File",new { name = Model.Recipient})" alt="Avatar" style="width:100%;">
+                                </div>
+                                <div class="usr-mg-info">
+                                    <h3 id="recipient-name">@Model.Recipient</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="chatbox-chat-container" class="messages-line">
+                            <div style="margin-top:130px"></div> <!--separator-->
+                            @if (Model.Messages.Count == 0)
+                            {
+                                <div class="bg-white text-center p-3 ml-2 mr-2">
+                                    No messages... yet.
+                                </div>
+                            }
+                            @foreach (var message in Model.Messages)
+                            {
+                                var locationClass = "st3";
+                                var secondaryLocationClass = "st3";
+
+                                if (message.Sender == this.User.Identity.Name)
+                                {
+                                    locationClass = "ta-right";
+                                    secondaryLocationClass = "";
+                                }
+                                <div class="main-message-box @locationClass">
+                                    <div class="message-dt @secondaryLocationClass">
+                                        <div class="message-inner-dt">
+                                            <p>@message.Content</p>
+                                        </div>
+                                        <span class="utcDate">@message.CreatedOn</span>
+                                    </div>
+                                    <div class="messg-usr-img">
+                                        <img src="@Url.Action("ProfilePicture","File",new { name = message.Sender})" alt="Avatar" style="width:100%;">
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="message-send-area">
+                        <partial name="_ChatSendMessagePartial" model="null" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div id="chat-send-message-container" class="paddy-container mt-2 typing-msg">
-        <partial name="_ChatSendMessagePartial" model="null" />
-    </div>
-
-</div>
+</section>
 
 
 @section Scripts {

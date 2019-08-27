@@ -29,7 +29,6 @@ namespace OurTrace.App.Controllers
                 if (string.IsNullOrEmpty(redirectPartial))
                 {
                     redirectPartial = "/" + notification.Controller + "/" + notification.Action;
-                    
                 }
                 var redirectLocation = redirectPartial + "/" + notification.ElementId;
                 redirectLocation = Regex.Replace(redirectLocation, @"/+", @"/");
