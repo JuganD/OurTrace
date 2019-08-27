@@ -453,7 +453,7 @@ nav ul ul li a {
 .notification-box.active {
 	opacity: 1;
 	visibility: visible;
-	z-index: 999999999;
+	z-index: 99999;
 }
 .nt-title {
 	float: left;
@@ -4948,6 +4948,7 @@ a:hover {
 
 .forum-sec {
 	background-color: #fff;
+	z-index: 1;
 }
 .forum-links {
 	float: left;
@@ -4975,6 +4976,8 @@ a:hover {
 	color: #b2b2b2;
 	font-size: 14px;
 	font-weight: 600;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 .forum-links-btn {
 	float: left;

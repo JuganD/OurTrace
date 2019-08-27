@@ -1,0 +1,16 @@
+﻿@model string
+
+<section class="forum-sec fixed-top" style="margin-top: 58px">
+    <div class="container">
+        <div id="categories-list" class="forum-links">
+            <ul>
+                <li><a asp-controller="Search" asp-action="All" asp-route-query="@Model">All</a></li>
+                <li><a asp-controller="Search" asp-action="Users" asp-route-query="@Model">Users</a></li>
+                <li><a asp-controller="Search" asp-action="Groups" asp-route-query="@Model">Groups</a></li>
+                <li><a asp-controller="Search" asp-action="Posts" asp-route-query="@Model">Posts</a></li>
+                <li><a asp-controller="Search" asp-action="Comments" asp-route-query="@Model">Comments</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+<div class="mt-5"></div>

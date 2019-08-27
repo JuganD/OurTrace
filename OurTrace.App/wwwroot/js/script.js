@@ -6,6 +6,14 @@ $(window).on("load", function() {
         $(".wrapper").addClass("overlay");
         return false;
     });
+	
+	//  ============= SEARCHBAR =========
+	$("#search-submit").on("click", function() {
+		let action = $(this).parent().attr('action');
+		let query = $("#search-query").val();
+		$(this).parent().attr('action',action+"/"+query);
+		$(this).parent().submit();
+	});
 
     //  ============= POST PROJECT POPUP FUNCTION =========
 

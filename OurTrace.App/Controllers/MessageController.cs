@@ -34,17 +34,14 @@ namespace OurTrace.App.Controllers
                 return NotFound();
             }
             // Authorize users
-            if (await this.relationsService.AreFriendsWithAsync(this.User.Identity.Name, name))
-            {
-                var viewModel = new MessageCollectionViewModel();
-                viewModel.Recipient = name;
-                viewModel.OtherFriendsMessages = await this.messageService.GetAllUsernamesOfMessageIssuersAsync(this.User.Identity.Name);
-                viewModel.Messages = await this.messageService
-                    .GetMessagesAsync(this.User.Identity.Name, name);
+            var viewModel = new MessageCollectionViewModel();
+            viewModel.Recipient = name;
+            viewModel.AreFriends = await this.relationsService.AreFriendsWithAsync(this.User.Identity.Name, name);
+            viewModel.OtherFriendsMessages = await this.messageService.GetAllUsernamesOfMessageIssuersAsync(this.User.Identity.Name);
+            viewModel.Messages = await this.messageService
+                .GetMessagesAsync(this.User.Identity.Name, name);
 
-                return View(viewModel);
-            }
-            return Unauthorized();
+            return View(viewModel);
         }
 
         [HttpPost]

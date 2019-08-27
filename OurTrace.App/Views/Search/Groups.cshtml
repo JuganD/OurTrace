@@ -1,0 +1,37 @@
+﻿@using OurTrace.App.Models.ViewModels.Search
+@model SearchDefaultViewModel
+
+@{
+    if (Layout != null)
+    {
+        { Layout = "_LayoutSearch"; }
+        <input id="search-location" type="hidden" value="Groups" />
+    }
+}
+
+@if (Model.Values.Any())
+{
+    <a asp-controller="Search" asp-action="Groups" asp-route-query="@Model.Query" class="full-width text-center mb-2 p-2 mt-2 font-weight-bold">Groups (@Model.Values.Count)</a>
+    <div class="forum-questions">
+        @foreach (var result in Model.Values.Take(Model.Count == 0 ? Model.Values.Count : Model.Count))
+        {
+            <a asp-controller="Group" asp-action="Open" asp-route-name="@result.Content" class="usr-question">
+                <div class="usr_img">
+                    <img src="@Url.Action("GroupPicture","File",new { name=result.Content })" alt="">
+                </div>
+                <div class="usr_quest">
+                    <h3>@result.Content</h3>
+                    <h4 class="font-weight-light" style="color: black">@result.DescriptiveContent</h4>
+                </div>
+            </a>
+        }
+        @if (Layout == null)
+        {
+            <partial name="_SearchMorePartial" model="Model" />
+        }
+    </div>
+}
+else if (Layout != null)
+{
+    <div class="text-center p-2 bg-white">Nothing found</div>
+}

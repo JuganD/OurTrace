@@ -53,7 +53,7 @@
                                     <img src="@Url.Action("ProfilePicture","File",new { name = Model.Recipient})" alt="Avatar" style="width:100%;">
                                 </div>
                                 <div class="usr-mg-info">
-                                    <h3 id="recipient-name">@Model.Recipient</h3>
+                                    <h3><a id="recipient-name" asp-controller="User" asp-action="Profile" asp-route-username="@Model.Recipient">@Model.Recipient</a></h3>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,13 @@
                         </div>
                     </div>
                     <div class="message-send-area">
-                        <partial name="_ChatSendMessagePartial" model="null" />
+                        @if (Model.AreFriends)
+                        {
+                            <partial name="_ChatSendMessagePartial" model="null" />
+                        } else
+                        {
+                            <div class="text-center" style="height:45px">You cannot send messages, because you are no longer friends.</div>
+                        }
                     </div>
                 </div>
             </div>

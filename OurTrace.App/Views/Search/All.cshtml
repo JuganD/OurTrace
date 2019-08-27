@@ -1,9 +1,22 @@
 ﻿@using OurTrace.App.Models.ViewModels.Search
-@model IDictionary<SearchResultType, ICollection<SearchResultViewModel>>
+@model SearchAllViewModel
 
 @{
-    ViewData["Title"] = "Search";
+
+    Layout = "_LayoutSearch";
 }
+<input id="search-location" type="hidden" value="All" />
+<div id="values">
+    <partial name="Users" model="@(new SearchDefaultViewModel() { Count=5, Query=Model.Query, Values=Model.Users })" />
+    <partial name="Groups" model="@(new SearchDefaultViewModel() { Count=5, Query=Model.Query, Values=Model.Groups })" />
+    <partial name="Posts" model="@(new SearchDefaultViewModel() { Count=5, Query=Model.Query, Values=Model.Posts })" />
+    <partial name="Comments" model="@(new SearchDefaultViewModel() { Count=5, Query=Model.Query, Values=Model.Comments })" />
+</div>
 
-<h1>All</h1>
-
+@section Scripts  {
+    <script>
+        if ($('#values').children().length == 0) {
+            $('#values').append("<div class=\"text-center bg-white p-2\">Nothing found</div>");
+        }
+    </script>
+}

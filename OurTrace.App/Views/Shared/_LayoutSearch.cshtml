@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Search";
+    Layout = "_Layout";
+}
+
+@section Css {
+    <link rel="stylesheet" type="text/css" href="~/css/search.css">
+    @RenderSection("Css", required: false)
+}
+<partial name="_SearchCategoriesPartial" model="Model.Query" />
+
+<section class="forum-page">
+    <div class="container">
+        <div class="forum-questions-sec">
+            <div class="row">
+                <div class="col-lg-10">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+}

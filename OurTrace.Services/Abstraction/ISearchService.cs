@@ -8,10 +8,10 @@ namespace OurTrace.Services.Abstraction
 {
     public interface ISearchService
     {
-        Task<ICollection<SearchResultViewModel>> SearchForPeopleAsync(string query);
-        Task<ICollection<SearchResultViewModel>> SearchForGroupsAsync(string query);
-        Task<ICollection<SearchResultViewModel>> SearchForPostsAsync(string query);
-        Task<ICollection<SearchResultViewModel>> SearchForCommentsAsync(string query);
-        Task<IDictionary<SearchResultType, ICollection<SearchResultViewModel>>> SearchForEverythingAsync(string query);
+        Task<SearchDefaultViewModel> SearchForUsersAsync(string query);
+        Task<SearchDefaultViewModel> SearchForGroupsAsync(string query);
+        Task<SearchDefaultViewModel> SearchForPostsAsync(string query, string username);
+        Task<SearchDefaultViewModel> SearchForCommentsAsync(string query, string username);
+        Task<SearchAllViewModel> SearchForEverythingAsync(string query, string username);
     }
 }

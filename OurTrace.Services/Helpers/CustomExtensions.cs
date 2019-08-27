@@ -49,6 +49,5 @@ namespace OurTrace.Services.Helpers
                 entityType = stack.Peek().Current.GetTargetType();
             }
         }
-
     }
 }

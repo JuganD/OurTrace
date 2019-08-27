@@ -1,0 +1,11 @@
+﻿@using OurTrace.App.Models.ViewModels.Search
+@model SearchDefaultViewModel
+
+@{
+    int postsLeft = Model.Values.Count - Model.Count;
+    if (postsLeft > 0)
+    {
+        <a asp-controller="Search" asp-action="Users" asp-route-query="@Model.Query" class="forum-questions text-center p-2">...and @postsLeft more</a>
+    }
+}
+
