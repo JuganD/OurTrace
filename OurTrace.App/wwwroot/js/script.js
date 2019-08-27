@@ -1,6 +1,7 @@
 $(window).on("load", function() {
     "use strict";
-
+	let SearchAction = $("#search-submit").parent().attr('action');
+	
 	$(".all-users").on("click", function(){
         $(".all-users-popup").addClass("active");
         $(".wrapper").addClass("overlay");
@@ -9,9 +10,9 @@ $(window).on("load", function() {
 	
 	//  ============= SEARCHBAR =========
 	$("#search-submit").on("click", function() {
-		let action = $(this).parent().attr('action');
-		let query = $("#search-query").val();
-		$(this).parent().attr('action',action+"/"+query);
+		
+		let searchQuery = $("#search-query").val();
+		$(this).parent().attr('action',SearchAction+"/"+searchQuery);
 		$(this).parent().submit();
 	});
 

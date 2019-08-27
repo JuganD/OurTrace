@@ -1,4 +1,5 @@
-﻿@{
+﻿@using OurTrace.App.Models.ViewModels.Search
+@{
     ViewData["Title"] = "Search";
     Layout = "_Layout";
 }
@@ -7,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="~/css/search.css">
     @RenderSection("Css", required: false)
 }
-<partial name="_SearchCategoriesPartial" model="Model.Query" />
+@if (Model is SearchDefaultViewModel || Model is SearchAllViewModel)
+{
+    <partial name="_SearchCategoriesPartial" model="Model.Query" />
+}
+
 
 <section class="forum-page">
     <div class="container">
