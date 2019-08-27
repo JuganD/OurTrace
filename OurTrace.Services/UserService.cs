@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.App.Models.ViewModels.Profile;
@@ -6,6 +7,7 @@ using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -117,6 +119,12 @@ namespace OurTrace.Services
             }
             return model;
         }
+        public async Task<bool> UserExistsAsync(string username)
+        {
+            return await this.identityService
+                .GetUserByName(username)
+                .SingleOrDefaultAsync() != null;
+        }
 
         private IQueryable<OurTraceUser> IncludeFriendship(IQueryable<OurTraceUser> query)
         {
@@ -147,5 +155,7 @@ namespace OurTrace.Services
                     .ThenInclude(x => x.Recipient)
                 .Include(x => x.Comments);
         }
+
+        
     }
 }

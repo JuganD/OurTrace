@@ -16,28 +16,43 @@ namespace OurTrace.App.Controllers
         private readonly IMessageService messageService;
         private readonly IRelationsService relationsService;
         private readonly INotificationService notificationService;
+        private readonly IUserService userService;
 
         public MessageController(IMessageService messageService,
             IRelationsService relationsService,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IUserService userService)
         {
             this.messageService = messageService;
             this.relationsService = relationsService;
             this.notificationService = notificationService;
+            this.userService = userService;
         }
 
-        [HttpGet("Message/{name}")]
+        [HttpGet]
+        [Route("Message/{name?}")]
         public async Task<IActionResult> Chat(string name)
         {
-            if (name == this.User.Identity.Name)
+            bool ignoreQuery = false;
+            if (name == this.User.Identity.Name || !await this.userService.UserExistsAsync(name))
             {
-                return NotFound();
+                ignoreQuery = true;
             }
+
             // Authorize users
             var viewModel = new MessageCollectionViewModel();
+            viewModel.OtherFriendsMessages = await this.messageService.GetAllUsernamesOfMessageIssuersAsync(this.User.Identity.Name);
+
+            if (ignoreQuery)
+            {
+                if (viewModel.OtherFriendsMessages.Any())
+                    name = viewModel.OtherFriendsMessages.First();
+                else
+                    return View("Error", "No friends avaible to chat with! Consider adding some!");
+            }
+
             viewModel.Recipient = name;
             viewModel.AreFriends = await this.relationsService.AreFriendsWithAsync(this.User.Identity.Name, name);
-            viewModel.OtherFriendsMessages = await this.messageService.GetAllUsernamesOfMessageIssuersAsync(this.User.Identity.Name);
             viewModel.Messages = await this.messageService
                 .GetMessagesAsync(this.User.Identity.Name, name);
 

@@ -4,7 +4,7 @@
 <form asp-controller="Message" asp-action="SendMessage" method="post">
     <input id="recipient-input" name="Recipient" type="hidden" value="" />
     <div class="mf-field">
-        <input asp-for="Content" type="text" placeholder="Type a message here">
+        <input asp-for="Content" type="text" autocomplete="off" placeholder="Type a message here">
         <button type="submit">Send</button>
     </div>
 </form>

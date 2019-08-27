@@ -3,6 +3,10 @@ $(window).on("load", function() {
 	$('#Content').focus();
 	let recipientName = $("#recipient-name").html();
 	$("#recipient-input").val(recipientName);
+	
+	$(".message-send-area").on("click",function() {
+		$('#Content').focus();
+	});
 });
 	
 function updateScroll(){

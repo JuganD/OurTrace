@@ -17,6 +17,7 @@ using OurTrace.App.Models.ViewModels.Notification;
 using OurTrace.App.Models.ViewModels.Message;
 using OurTrace.App.Models.ViewModels.Search;
 using OurTrace.App.Automapper.Resolvers;
+using OurTrace.App.Models.ViewModels.Advert;
 
 namespace OurTrace.App.Automapper
 {
@@ -98,6 +99,8 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.ContextVariables, actual => actual.MapFrom<DictionaryAddResolver>())
                 .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
+
+            CreateMap<Advert, AdvertViewModel>();
         }
     }
 }

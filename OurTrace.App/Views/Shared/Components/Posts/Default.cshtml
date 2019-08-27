@@ -117,7 +117,7 @@ else
                     {
                         if (!string.IsNullOrEmpty(tag))
                         {
-                            <li><a href="#" title="">@tag</a></li>
+                            <li><a asp-controller="Search" asp-action="Posts" asp-route-query="@tag" title="">@tag</a></li>
                         }
                     }
                 </ul>

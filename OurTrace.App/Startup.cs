@@ -48,7 +48,7 @@ namespace OurTrace.App
 
                 });
 
-            services.AddIdentity<OurTraceUser, IdentityRole>(options =>
+            services.AddIdentity<OurTraceUser, OurTraceRole>(options =>
                   {
                       options.Password.RequireDigit = false;
                       options.Password.RequiredLength = 6;
@@ -69,6 +69,8 @@ namespace OurTrace.App
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IAdvertService, AdvertService>();
+            services.AddScoped<UserManager<OurTraceUser>, UserManager<OurTraceUser>>();
 
 
             services.AddMvc(options =>
@@ -95,8 +97,6 @@ namespace OurTrace.App
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
-
             app.UseAuthentication();
 
             app.UseMvc(routes =>

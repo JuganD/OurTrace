@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OurTrace.Data.Identity.Models;
 using OurTrace.Services.Abstraction;
 
 namespace OurTrace.App.Controllers
@@ -11,13 +13,10 @@ namespace OurTrace.App.Controllers
     public class UserController : Controller
     {
         private readonly IUserService userService;
-        private readonly IMapper mapper;
 
-        public UserController(IUserService userService,
-            IMapper mapper)
+        public UserController(IUserService userService)
         {
             this.userService = userService;
-            this.mapper = mapper;
         }
         public async Task<IActionResult> Profile(string username)
         {

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace OurTrace.Data
 {
-    public class OurTraceDbContext : IdentityDbContext<OurTraceUser, IdentityRole, string>
+    public class OurTraceDbContext : IdentityDbContext<OurTraceUser, OurTraceRole, string>
     {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
@@ -23,6 +23,7 @@ namespace OurTrace.Data
         public DbSet<PostLike> PostLikes { get; set; }
         public DbSet<CommentLike> CommentLikes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Advert> Adverts { get; set; }
 
 
         public OurTraceDbContext(DbContextOptions<OurTraceDbContext> options)
@@ -34,6 +35,7 @@ namespace OurTrace.Data
             base.OnModelCreating(builder);
 
             var splitStringConverter = new ValueConverter<IEnumerable<string>, string>(v => string.Join(";", v), v => v.Split(new[] { ';' }));
+
 
             builder.Entity<OurTraceUser>((user) =>
             {

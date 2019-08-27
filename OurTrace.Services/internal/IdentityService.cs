@@ -1,13 +1,9 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OurTrace.App.Models.Authenticate;
-using OurTrace.App.Models.ViewModels.Profile;
+using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
-using OurTrace.Data.Models;
-using OurTrace.Services.Abstraction;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,12 +20,6 @@ namespace OurTrace.Services
         internal IdentityService(OurTraceDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }
-        
-        // Day 7941: Still no use for this method.
-        public async Task<List<OurTraceUser>> GetAllUsersAsync()
-        {
-            return await dbContext.Users.ToListAsync();
         }
 
         public IQueryable<OurTraceUser> GetUserByName(string username)

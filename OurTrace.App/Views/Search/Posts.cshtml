@@ -15,7 +15,8 @@
     <div class="forum-questions">
         @foreach (var result in Model.Values.Take(Model.Count == 0 ? Model.Values.Count : Model.Count))
         {
-            <a asp-controller="Post" asp-action="Open" asp-route-id="@result.ContextVariables["Id"]" class="usr-question">
+        <div class="usr-question">
+            <a asp-controller="Post" asp-action="Open" asp-route-id="@result.ContextVariables["Id"]">
                 <div class="usr_img">
                     <img src="@Url.Action("ProfilePicture","File",new { name=result.Content })" alt="">
                 </div>
@@ -23,7 +24,22 @@
                     <h3>@result.Content</h3>
                     <div class="font-weight-light" style="color: black"><p class="font-weight-bold">Post content:</p> @result.DescriptiveContent</div>
                 </div>
+
             </a>
+
+            @if (!string.IsNullOrEmpty(result.ContextVariables["Tags"]))
+            {
+                <ul class="skill-tags ml-4 pl-1 mt-2">
+                    <li class="ml-5">Tags</li>
+                    @foreach (var tag in result.ContextVariables["Tags"].Split(';'))
+                    {
+                        <li><a asp-controller="Search" asp-action="Posts" asp-route-query="@tag" title="">@tag</a></li>
+                    }
+                </ul>
+            }
+        </div>
+
+
         }
         @if (Layout == null)
         {

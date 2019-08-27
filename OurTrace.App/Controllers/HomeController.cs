@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
 using OurTrace.App.Models;
+using System.Threading.Tasks;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OurTrace.App.Controllers
 {

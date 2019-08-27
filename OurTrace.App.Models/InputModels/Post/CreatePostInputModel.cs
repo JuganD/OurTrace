@@ -15,8 +15,8 @@ namespace OurTrace.App.Models.InputModels.Posts
         {
             this.Errors = new List<string>();
         }
-        [Required(ErrorMessage ="The post must have some content.")]
-        [StringLength(1000, MinimumLength = 5, ErrorMessage ="Post content minimum length is 5 characters and maximum length it 1000 characters")]
+        [Required(ErrorMessage = "The post must have some content.")]
+        [StringLength(1000, MinimumLength = 5, ErrorMessage = "Post content minimum length is 5 characters and maximum length it 1000 characters")]
         public string Content { get; set; }
 
         [Ignore]
@@ -31,7 +31,8 @@ namespace OurTrace.App.Models.InputModels.Posts
         public string Location { get; set; }
 
         [Ignore]
-        [RegularExpression("(?:^)((?:(?:[\\w\\.]+)(?:, ?|$))+)", ErrorMessage ="Tags must be words (without special symbols), separated by comma ','")]
+        [RegularExpression("(?:^)((?:(?:[\\w\\.]+)(?:, ?|$))+)", ErrorMessage = "Tags must be words (without special symbols), separated by comma ','")]
+        [ValidTags("Each tag must be at least 3 characters long!")]
         public string Tags { get; set; }
 
         public PostVisibilityType VisibilityType { get; set; }

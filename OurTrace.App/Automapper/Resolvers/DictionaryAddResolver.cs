@@ -20,6 +20,7 @@ namespace OurTrace.App.Automapper.Resolvers
         public IDictionary<string, string> Resolve(Post source, SearchResultViewModel destination, IDictionary<string, string> destMember, ResolutionContext context)
         {
             destMember.Add("Id", source.Id);
+            destMember.Add("Tags", string.Join(";", source.Tags));
             return destMember;
         }
     }
