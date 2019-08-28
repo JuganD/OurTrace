@@ -17,7 +17,6 @@ namespace OurTrace.Data.Models
         public string Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime? EditedOn { get; set; } // can be null if never edited
 
         public string UserId { get; set; }
         public OurTraceUser User { get; set; }

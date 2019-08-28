@@ -7,19 +7,45 @@ using OurTrace.App.Models;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using OurTrace.Services.Abstraction;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OurTrace.App.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IHomeService homeService;
 
-        public HomeController()
+        public HomeController(IHomeService homeService)
         {
-
+            this.homeService = homeService;
         }
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                string userId = await this.homeService.GetUserIdFromName(this.User.Identity.Name);
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    var newsFeedModel = await this.homeService.GetNewsfeedViewModelAsync(userId);
+                    return View(newsFeedModel);
+                }
+            }
             return View();
+        }
+        [Authorize]
+        [AutoValidateAntiforgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> ReceivePosts()
+        {
+            string userId = await this.homeService.GetUserIdFromName(this.User.Identity.Name);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var model = await this.homeService.GetNewsfeedViewModelAsync(userId);
+                return ViewComponent("Posts", new { model = model.Posts });
+            }
+            return Unauthorized();
         }
 
         public IActionResult Privacy()

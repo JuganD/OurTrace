@@ -1399,6 +1399,11 @@ main {
 	font-weight: 500;
 	display: block;
 	margin-bottom: 15px;
+	line-height: 1.5em;
+    height: 6em;
+	overflow:hidden;
+    width: 100%;
+	word-wrap: break-word;
 }
 .user-profy ul {
 	float: left;

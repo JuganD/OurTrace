@@ -21,17 +21,18 @@ namespace OurTrace.Services
             this.dbContext = dbContext;
         }
 
-        internal async Task<Wall> GetWallWithIncludables(string wallId)
+        internal IQueryable<Wall> GetWallWithIncludables(string wallId)
         {
             var query = this.dbContext.Walls
-                .Include(this.dbContext.GetIncludePaths(typeof(Wall)));
-            return await query
-                .SingleOrDefaultAsync(x => x.Id == wallId);
+                .Include(this.dbContext.GetIncludePaths(typeof(Wall)))
+                .Where(x=>x.Id==wallId);
+
+            return query;
         }
-        internal async Task<Wall> GetWallWithoutIncludables(string wallId)
+        internal IQueryable<Wall> GetWallWithoutIncludables(string wallId)
         {
-            return await this.dbContext.Walls
-                .SingleOrDefaultAsync(x => x.Id == wallId);
+            return this.dbContext.Walls
+                .Where(x => x.Id == wallId);
         }
 
         internal async Task<string> GetWallOwnerIdAsync(Wall wall)
@@ -41,6 +42,16 @@ namespace OurTrace.Services
 
             var group = await this.dbContext.Groups.SingleOrDefaultAsync(x => x.Wall == wall);
             if (group != null) return group.Id;
+
+            return null;
+        }
+        internal async Task<string> GetWallOwnerNameAsync(Wall wall)
+        {
+            var user = await this.dbContext.Users.SingleOrDefaultAsync(x => x.Wall == wall);
+            if (user != null) return user.UserName;
+
+            var group = await this.dbContext.Groups.SingleOrDefaultAsync(x => x.Wall == wall);
+            if (group != null) return group.Name;
 
             return null;
         }
@@ -60,7 +71,8 @@ namespace OurTrace.Services
 
         internal async Task<ICollection<Post>> GetPostsFromWallDescendingAsync(string wallId)
         {
-            var wall = await GetWallWithIncludables(wallId);
+            var wall = await GetWallWithIncludables(wallId)
+                .SingleOrDefaultAsync();
             var result = wall.Posts
                 .OrderByDescending(x => x.CreatedOn)
                 .ToArray();

@@ -45,7 +45,9 @@ namespace OurTrace.Services
         {
             if (await IsUserCanPostToWallAsync(username, model.Location))
             {
-                var wall = await wallService.GetWallWithIncludables(model.Location);
+                var wall = await wallService
+                    .GetWallWithIncludables(model.Location)
+                    .SingleOrDefaultAsync();
 
                 var tags = GetPostTags(model.Tags);
 
@@ -156,7 +158,10 @@ namespace OurTrace.Services
             var user = await identityService.GetUserByName(username)
                 .SingleOrDefaultAsync();
 
-            var wall = await wallService.GetWallWithoutIncludables(WallId);
+            var wall = await wallService
+                .GetWallWithoutIncludables(WallId)
+                .SingleOrDefaultAsync();
+
             var wallOwnerId = await wallService.GetWallOwnerIdAsync(wall);
 
             if (wallOwnerId == null) return false;

@@ -18,6 +18,7 @@ using OurTrace.App.Models.ViewModels.Message;
 using OurTrace.App.Models.ViewModels.Search;
 using OurTrace.App.Automapper.Resolvers;
 using OurTrace.App.Models.ViewModels.Advert;
+using OurTrace.App.Models.ViewModels.Home;
 
 namespace OurTrace.App.Automapper
 {
@@ -33,6 +34,11 @@ namespace OurTrace.App.Automapper
                                                x.SentFriendships.Count(y => y.AcceptedOn != null) +
                                                x.ReceivedFriendships.Count(y => y.AcceptedOn != null)))
                 .ForMember(dest => dest.Sex, actual => actual.MapFrom(x => x.Sex));
+
+            CreateMap<OurTraceUser, NewsfeedViewModel>()
+                .ForMember(dest => dest.FullName, actual => actual.MapFrom(x => x.FullName))
+                .ForMember(dest => dest.Following, actual => actual.MapFrom(x => x.Following.Count))
+                .ForMember(dest => dest.Followers, actual => actual.MapFrom(x => x.Followers.Count));
 
             CreateMap<RegisterInputModel, OurTraceUser>();
             CreateMap<CreatePostInputModel, Post>()
@@ -51,7 +57,6 @@ namespace OurTrace.App.Automapper
 
             CreateMap<Comment, CommentViewModel>()
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
-                .ForMember(dest => dest.EditedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.EditedOn)))
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName));
 
             CreateMap<CommentLike, CommentLikeViewModel>()
@@ -88,7 +93,7 @@ namespace OurTrace.App.Automapper
 
             CreateMap<Group, SearchResultViewModel>()
                 .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.Name))
-                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Members.Count+" members"));
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Members.Count + " members"));
 
             CreateMap<Post, SearchResultViewModel>()
                 .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))

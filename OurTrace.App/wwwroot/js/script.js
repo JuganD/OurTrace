@@ -256,7 +256,15 @@ $(window).on("load", function() {
 
     //  ============= PORTFOLIO SLIDER FUNCTION =========
 
-    $('.profiles-slider').slick({
+    ProfileSliderSlick('.profiles-slider');
+
+
+
+
+
+});
+function ProfileSliderSlick(selector){
+	$(selector).slick({
         slidesToShow: 3,
         slck:true,
         slidesToScroll: 1,
@@ -296,11 +304,6 @@ $(window).on("load", function() {
 
 
     });
-
-
-
-
-
-});
+}
 
 

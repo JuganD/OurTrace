@@ -1,22 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Data;
 using OurTrace.Data.Identity.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using OurTrace.Services.Abstraction;
 using System.Threading.Tasks;
 
 namespace OurTrace.Services
 {
-    internal class RoleService
+    public class RoleService : IRoleService
     {
         private readonly IdentityService identityService;
         private readonly RoleManager<OurTraceRole> roleManager;
         private readonly UserManager<OurTraceUser> userManager;
 
-        internal RoleService(OurTraceDbContext dbContext,
+        public RoleService(OurTraceDbContext dbContext,
             RoleManager<OurTraceRole> roleManager,
             UserManager<OurTraceUser> userManager)
         {

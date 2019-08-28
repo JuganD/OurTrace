@@ -67,7 +67,7 @@ namespace OurTrace.Services
                 for (int i = 0; i < count; i++)
                 {
                     int advertChosen = rand.Next(0, advertsCount - 1);
-                    var currentAdvert = advertsQuery.ElementAt(advertChosen);
+                    var currentAdvert = await advertsQuery.Skip(advertChosen).Take(1).SingleOrDefaultAsync();
                     if (currentAdvert != null &&
                        !advertsResult.Any(x => x.Id == currentAdvert.Id))
                     {

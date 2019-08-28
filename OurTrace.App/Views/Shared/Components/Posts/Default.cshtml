@@ -22,6 +22,38 @@ else
 
 @foreach (var post in Model)
 {
+    @if (post.Adverts != null && post.Adverts.Count > 0)
+    {
+        <div class="top-profiles">
+            <div class="pf-hd">
+                <h3>Amazing offers are waiting for you</h3>
+                <i class="la la-ellipsis-v"></i>
+            </div>
+            <div class="profiles-slider">
+                @foreach (var advert in post.Adverts)
+                {
+                    <div class="user-profy">
+                        @if (advert.Type == AdvertType.User)
+                        {
+                            <img src="@Url.Action("ProfilePicture","File",new { name=advert.IssuerName })" style="width:50px; height:50px;" alt="">
+                            <h3>@advert.IssuerName</h3>
+                            <span>@advert.Content</span>
+                            <a asp-controller="User" asp-action="Profile" asp-route-username="@advert.IssuerName">View Profile</a>
+                        }
+                        else if (advert.Type == AdvertType.Group)
+                        {
+                            <img src="@Url.Action("GroupPicture","File",new { name=advert.IssuerName })" style="width:50px; height:50px;" alt="">
+                            <p>Group</p>
+                            <h3>@advert.IssuerName</h3>
+                            <span>@advert.Content</span>
+                            <a asp-controller="Group" asp-action="Open" asp-route-name="@advert.IssuerName">View Group</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <div class="posty mb-4">
         <div class="post-bar no-margin">
             <input name="postId" type="hidden" value="@post.Id" />
@@ -54,6 +86,12 @@ else
                     @if (post.SharedPost != null)
                     {
                         <span data-toggle="tooltip" data-placement="top" title="This post is shared" class="font-italic btn-info p-1">shared</span>
+                    }
+                    @if (post.PostGroupName != null)
+                    {
+                        <a asp-controller="Group" asp-action="Open" asp-route-name="@post.PostGroupName">
+                            <span data-toggle="tooltip" data-placement="top" title="This post is from group @post.PostGroupName" class="font-italic btn-dark p-1">Group Post</span>
+                        </a>
                     }
                     <div class="usy-name">
                         <h3><a asp-controller="User" asp-action="Profile" asp-route-username="@post.Creator" class="text-black-50">@post.Creator</a></h3>
