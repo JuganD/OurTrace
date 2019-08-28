@@ -11,5 +11,6 @@ namespace OurTrace.App.Models.ViewModels.Advert
         public AdvertType Type { get; set; }
         public string IssuerName { get; set; }
         public string Content { get; set; }
+        public int ViewsLeft { get; set; }
     }
 }

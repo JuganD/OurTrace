@@ -1,10 +1,11 @@
 ﻿using OurTrace.Data.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace OurTrace.App.Areas.Administration.Models.InputModels
+namespace OurTrace.App.Models.Advert
 {
-    public class AddAdvertInputModel
+    public class ModifyAdvertInputModel
     {
+        public string Id { get; set; }
         [Required]
         public AdvertType Type { get; set; }
 

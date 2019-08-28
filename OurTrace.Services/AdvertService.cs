@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using OurTrace.App.Models.Advert;
 using OurTrace.App.Models.ViewModels.Advert;
 using OurTrace.Data;
 using OurTrace.Data.Models;
@@ -23,19 +24,24 @@ namespace OurTrace.Services
             this.automapper = automapper;
         }
 
-        public async Task AddAdvertAsync(string issuerName, AdvertType type, string content, int viewsLeft)
+        public async Task AddAdvertAsync(ModifyAdvertInputModel model)
         {
-            if (!string.IsNullOrEmpty(issuerName) && viewsLeft > 0)
+            if (!string.IsNullOrEmpty(model.IssuerName) && model.ViewsLeft > 0)
             {
                 await this.dbContext.Adverts.AddAsync(new Advert()
                 {
-                    IssuerName = issuerName,
-                    Type = type,
-                    Content = content,
-                    ViewsLeft = viewsLeft
+                    IssuerName = model.IssuerName,
+                    Type = model.Type,
+                    Content = model.Content,
+                    ViewsLeft = model.ViewsLeft
                 });
                 await this.dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> AdvertExistsAsync(string id)
+        {
+            return await this.dbContext.Adverts.AnyAsync(x => x.Id == id);
         }
 
         public async Task<ICollection<AdvertViewModel>> GetAllAdvertsAsync()
@@ -72,6 +78,27 @@ namespace OurTrace.Services
             }
             await this.dbContext.SaveChangesAsync();
             return advertsResult;
+        }
+
+        public async Task<bool> ModifyAdvertByIdAsync(ModifyAdvertInputModel model)
+        {
+            var advert = await this.dbContext.Adverts.SingleOrDefaultAsync(x => x.Id == model.Id);
+            if (advert != null)
+            {
+                if (!string.IsNullOrEmpty(model.IssuerName))
+                    advert.IssuerName = model.IssuerName;
+
+                if (!string.IsNullOrEmpty(model.Content))
+                    advert.Content = model.Content;
+
+                if (model.ViewsLeft >= 0)
+                    advert.ViewsLeft = model.ViewsLeft;
+
+                advert.Type = model.Type;
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

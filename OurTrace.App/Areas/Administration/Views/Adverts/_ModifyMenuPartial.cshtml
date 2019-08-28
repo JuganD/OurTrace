@@ -1,0 +1,40 @@
+﻿@using OurTrace.App.Models.Advert
+@using OurTrace.Data.Models
+@model ModifyAdvertInputModel
+
+
+<section class="col-md-5">
+    <div class="col-md-12 text-center mb-4">
+        <div id="ModifyExistingButton" class="mr-5 col-md-5 btn btn-primary p-2">Modify Existing</div>
+        <div id="CreateNewButton" class="col-md-5 btn btn-primary p-2">Create New</div>
+    </div>
+    <div class="form-group">
+        <form asp-controller="Adverts" asp-action="Modify" method="post">
+            <div id="IdBox" class="mb-3">
+                <div class="col-md-2 float-left form-control-plaintext">Id</div>
+                <input readonly="readonly" id="Id" asp-for="Id" class="form-control col-md-10" />
+            </div>
+            <div class="mb-3">
+                <span class="col-md-2 float-left form-control-plaintext">Issuer Name</span>
+                <input id="IssuerName" asp-for="IssuerName" class="form-control col-md-10" />
+            </div>
+            <div class="mb-3">
+                <span class="col-md-2 float-left form-control-plaintext">Description</span>
+                <input id="Content" asp-for="Content" class="form-control col-md-10" />
+            </div>
+            <div class="mb-3">
+                <span class="col-md-2 float-left form-control-plaintext">Type</span>
+                <select id="Type" asp-for="Type" class="form-control col-md-10" asp-items="Html.GetEnumSelectList<AdvertType>()">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <span class="col-md-4 float-left form-control-plaintext">Total Views Left</span>
+                <input id="ViewsLeft" asp-for="ViewsLeft" class="form-control col-md-8 ml-5" />
+            </div>
+            <div>
+                <input id="SubmitButton" type="submit" class="form-control btn btn-success text-white" value="Modify" />
+            </div>
+        </form>
+    </div>
+</section>

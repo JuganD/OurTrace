@@ -1,0 +1,13 @@
+﻿@using OurTrace.App.Models.ViewModels.Advert
+@model ICollection<AdvertViewModel>
+@{
+    ViewData["Title"] = "Adverts";
+    Layout = "_LayoutAdministration";
+}
+<a href="/" class="col-md-6 offset-3 btn btn-secondary p-2 mb-5">Back to OurTrace</a>
+<partial name="_ModifyMenuPartial" model="null" />
+<partial name="_TablePartial" model="Model" />
+
+@section Scripts {
+    <script src="~/js/administration.js" asp-append-version="true"></script>
+}
