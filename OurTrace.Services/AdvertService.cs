@@ -56,7 +56,8 @@ namespace OurTrace.Services
             var advertsCount = await advertsQuery.CountAsync();
 
             ICollection<AdvertViewModel> advertsResult = new List<AdvertViewModel>();
-
+            if (advertsCount > 0)
+            {
                 Random rand = new Random();
                 for (int i = 0; i < count; i++)
                 {
@@ -69,6 +70,8 @@ namespace OurTrace.Services
                         currentAdvert.ViewsLeft -= 1;
                     }
                 }
+            }
+                
             await this.dbContext.SaveChangesAsync();
             return advertsResult;
         }

@@ -41,7 +41,7 @@ namespace OurTrace.Services
             this.identityService = new IdentityService(dbContext);
         }
 
-        public async Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model)
+        public async Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model, bool saveMedia)
         {
             if (await IsUserCanPostToWallAsync(username, model.Location))
             {
@@ -62,17 +62,19 @@ namespace OurTrace.Services
                 }
 
                 // FILE SAVING PROCEDURE
-                if (model.MediaFile != null && model.MediaFile.Length > 0)
+                if (saveMedia)
                 {
-                    await this.fileService.SaveImageAsync(model.MediaFile, username, post.Id);
-                    post.IsImageOnFileSystem = true;
+                    if (model.MediaFile != null && model.MediaFile.Length > 0)
+                    {
+                        await this.fileService.SaveImageAsync(model.MediaFile, username, post.Id);
+                        post.IsImageOnFileSystem = true;
+                    }
+                    else if (model.ExternalMediaUrl != null)
+                    {
+                        post.MediaUrl = model.ExternalMediaUrl;
+                    }
                 }
-                else if (model.ExternalMediaUrl != null)
-                {
-                    post.MediaUrl = model.ExternalMediaUrl;
-                }
-                // logic separator
-
+                
 
 
                 wall.Posts.Add(post);

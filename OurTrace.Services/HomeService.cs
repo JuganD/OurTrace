@@ -4,6 +4,7 @@ using OurTrace.App.Models;
 using OurTrace.App.Models.ViewModels.Home;
 using OurTrace.App.Models.ViewModels.Post;
 using OurTrace.Data;
+using OurTrace.Data.Identity.Models;
 using OurTrace.Data.Models;
 using OurTrace.Services.Abstraction;
 using OurTrace.Services.Helpers;
@@ -17,7 +18,7 @@ namespace OurTrace.Services
 {
     public class HomeService : IHomeService
     {
-        private static readonly ConcurrentDictionary<string, NewsfeedDataModel> NewsfeedState = 
+        private static readonly ConcurrentDictionary<string, NewsfeedDataModel> NewsfeedState =
             new ConcurrentDictionary<string, NewsfeedDataModel>();
 
         private readonly OurTraceDbContext dbContext;
@@ -103,14 +104,49 @@ namespace OurTrace.Services
 
                 // Don't look down! It's scary!
 
+                // FRIENDS
                 var friendsOfTarget = await this.relationsService.GetFriendsUsernamesAsync(newsfeedState.Username);
                 var friendsPosts = friendsOfTarget
-                    .Select(x=> this.wallService.GetUserWallAsync(x).GetAwaiter().GetResult())
-                    .SelectMany(x=>this.wallService.GetWallWithIncludables(x.Id).Take(5))
-                    .SelectMany(x=>x.Posts
-                             .Where(y=>y.UserId != userId)
-                             .OrderByDescending(y=>y.CreatedOn))
+                    .Select(x => this.wallService.GetUserWallAsync(x).GetAwaiter().GetResult())
+                    .SelectMany(x => this.wallService.GetWallWithIncludables(x.Id).Take(5))
+                    .SelectMany(x => x.Posts
+                             .Where(y => y.UserId != userId)
+                             .OrderByDescending(y => y.CreatedOn))
                     .ToList();
+
+                // FRIENDS END
+
+                // FOLLOWERS
+                var followingOfTargetAll = (await this.identityService
+                    .GetUserByName(newsfeedState.Username)
+                    .SingleOrDefaultAsync()).Following;
+
+                var followingOfTargetSender = followingOfTargetAll
+                    .Where(x => x.Sender.UserName != newsfeedState.Username)
+                    .Select(x=>x.Sender)
+                    .ToList();
+
+                var followingOfTargetRecipient = followingOfTargetAll
+                    .Where(x => x.Recipient.UserName != newsfeedState.Username)
+                    .Select(x => x.Recipient)
+                    .ToList();
+
+                var followingOfTarget = new List<OurTraceUser>();
+                followingOfTarget.AddRange(followingOfTargetRecipient);
+                followingOfTarget.AddRange(followingOfTargetSender);
+                followingOfTarget = followingOfTarget
+                    .DistinctBy(x => x.UserName)
+                    .ToList();
+
+                var followingPosts = followingOfTarget
+                    .SelectMany(x => x.Posts.Where(y => y.VisibilityType == PostVisibilityType.Public))
+                    .OrderByDescending(y => y.CreatedOn)
+                    .Select(y => automapper.Map<PostViewModel>(y))
+                    .ToList();
+
+                // FOLLOWERS END
+
+                // GROUPS
 
                 var groupsOfTarget = await this.dbContext.UserGroups
                     .Include(x => x.Group)
@@ -118,21 +154,27 @@ namespace OurTrace.Services
                     .Where(x => x.User.Id == userId && x.ConfirmedMember == true)
                     .ToListAsync();
 
-                
+
                 var postsOfGroupsOfTarget = groupsOfTarget
                     .SelectMany(x => wallService.GetWallWithIncludables(x.Group.Wall.Id).Take(5))
                     .SelectMany(x => x.Posts
                             .Where(y => y.UserId != userId && y.VisibilityType == PostVisibilityType.Public)
                             .OrderByDescending(y => y.CreatedOn)
                             .Select(y => automapper.Map<PostViewModel>(y))
-                            .Select(y => { y.PostGroupName = this.wallService
-                                .GetWallOwnerNameAsync(x).GetAwaiter().GetResult(); return y; }))
+                            .Select(y =>
+                            {
+                                y.PostGroupName = this.wallService
+                     .GetWallOwnerNameAsync(x).GetAwaiter().GetResult(); return y;
+                            }))
                     .ToList();
+
+                // GROUPS END
 
                 newsfeedState.Model.Posts = resultPosts.Union(
                     automapper.Map<ICollection<PostViewModel>>(friendsPosts))
                     .Union(postsOfGroupsOfTarget)
-                    .DistinctBy(x=>x.Id)
+                    .Union(followingPosts)
+                    .DistinctBy(x => x.Id)
                     .ToList()
                     .Shuffle();
 
@@ -162,7 +204,7 @@ namespace OurTrace.Services
                 userState.Username = await this.identityService.GetUserById(userId)
                     .Select(x => x.UserName)
                     .SingleOrDefaultAsync();
-                
+
                 NewsfeedState.TryAdd(userId, userState);
             }
             else

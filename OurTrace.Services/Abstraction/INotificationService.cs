@@ -8,7 +8,7 @@ namespace OurTrace.Services.Abstraction
     public interface INotificationService
     {
         Task AddNotificationToUserAsync(NotificationServiceModel notificationModel);
-        Task<NotificationViewModel> MarkNotificationAsSeenAsync(string id);
+        Task<NotificationViewModel> MarkNotificationAsSeenAndReturnItAsync(string id);
         Task MarkAllNotificationsAsSeenAsync(string username);
         Task<ICollection<NotificationViewModel>> GetUserNotificationsAsync(string username, int count, bool orderedDescending);
     }

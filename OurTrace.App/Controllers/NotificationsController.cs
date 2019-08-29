@@ -21,7 +21,7 @@ namespace OurTrace.App.Controllers
         public async Task<IActionResult> Open(string id)
         {
             var notification = await this.notificationService
-                .MarkNotificationAsSeenAsync(id);
+                .MarkNotificationAsSeenAndReturnItAsync(id);
             if (notification != null)
             {
                 var redirectPartial = Url.Action(notification.Action, notification.Controller);

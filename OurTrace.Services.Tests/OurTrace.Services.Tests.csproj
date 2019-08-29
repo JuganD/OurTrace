@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OurTrace.App.Models\OurTrace.App.Models.csproj" />
+    <ProjectReference Include="..\OurTrace.App\OurTrace.App.csproj" />
+    <ProjectReference Include="..\OurTrace.Data\OurTrace.Data.csproj" />
+    <ProjectReference Include="..\OurTrace.Services\OurTrace.Services.csproj" />
+  </ItemGroup>
+
+</Project>

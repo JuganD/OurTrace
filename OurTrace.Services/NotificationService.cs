@@ -91,7 +91,7 @@ namespace OurTrace.Services
                 await this.dbContext.SaveChangesAsync();
             }
         }
-        public async Task<NotificationViewModel> MarkNotificationAsSeenAsync(string id)
+        public async Task<NotificationViewModel> MarkNotificationAsSeenAndReturnItAsync(string id)
         {
             var notification = await this.dbContext.Notifications
                 .SingleOrDefaultAsync(x => x.Id == id);

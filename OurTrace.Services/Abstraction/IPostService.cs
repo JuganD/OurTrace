@@ -9,7 +9,7 @@ namespace OurTrace.Services.Abstraction
 {
     public interface IPostService
     {
-        Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model);
+        Task<bool> CreateNewPostAsync(string username, CreatePostInputModel model, bool saveMedia);
         Task<bool> LikePostAsync(string username, string postId);
         Task<bool> CommentPostAsync(string username, string postId, string content);
         Task<bool> LikeCommentAsync(string username, string commentId);

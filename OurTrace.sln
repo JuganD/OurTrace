@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurTrace.Data", "OurTrace.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurTrace.Services", "OurTrace.Services\OurTrace.Services.csproj", "{8D17CA4B-0BC8-44B6-9EC5-1CB2BAFD546C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurTrace.App.Models", "OurTrace.App.Models\OurTrace.App.Models.csproj", "{0C541F5B-C353-43FA-B222-C468636AFF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurTrace.App.Models", "OurTrace.App.Models\OurTrace.App.Models.csproj", "{0C541F5B-C353-43FA-B222-C468636AFF04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurTrace.Services.Tests", "OurTrace.Services.Tests\OurTrace.Services.Tests.csproj", "{D9DE9A70-AFE5-4758-9D3A-4AF81109503A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0C541F5B-C353-43FA-B222-C468636AFF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C541F5B-C353-43FA-B222-C468636AFF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C541F5B-C353-43FA-B222-C468636AFF04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9DE9A70-AFE5-4758-9D3A-4AF81109503A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9DE9A70-AFE5-4758-9D3A-4AF81109503A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9DE9A70-AFE5-4758-9D3A-4AF81109503A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9DE9A70-AFE5-4758-9D3A-4AF81109503A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

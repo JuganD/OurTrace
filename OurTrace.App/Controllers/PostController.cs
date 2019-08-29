@@ -30,7 +30,7 @@ namespace OurTrace.App.Controllers
             var referer = Request.Headers["Referer"].ToString();
             if (ModelState.IsValid)
             {
-                await postService.CreateNewPostAsync(this.User.Identity.Name, model);
+                await postService.CreateNewPostAsync(this.User.Identity.Name, model, true);
             }
             else
             {

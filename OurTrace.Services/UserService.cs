@@ -38,7 +38,7 @@ namespace OurTrace.Services
                 .SingleOrDefaultAsync();
 
             if (visitingUser == null) return null;
-            
+
             ProfileViewModel model = mapper.Map<ProfileViewModel>(visitingUser);
 
             model.Posts = mapper.Map<ICollection<PostViewModel>>(await wallService.GetPostsFromWallDescendingAsync(model.WallId));
@@ -67,8 +67,8 @@ namespace OurTrace.Services
                     {
                         model.PendingFriendship = true;
                     }
-                    if (actualUser.ReceivedFriendships.Any( x=> 
-                        x.Sender == visitingUser && x.AcceptedOn == null))
+                    if (actualUser.ReceivedFriendships.Any(x =>
+                       x.Sender == visitingUser && x.AcceptedOn == null))
                     {
                         model.CanAcceptFriendship = true;
                     }
@@ -108,11 +108,11 @@ namespace OurTrace.Services
             ProfileLastPicturesViewModel model = new ProfileLastPicturesViewModel();
             foreach (var post in posts)
             {
-                if (post.MediaUrl == null)
+                if (post.IsImageOnFileSystem)
                 {
                     model.InternalIds.Add(post.Id);
                 }
-                else
+                else if (post.MediaUrl != null)
                 {
                     model.ExternalUrls.Add(post.MediaUrl);
                 }
@@ -156,6 +156,6 @@ namespace OurTrace.Services
                 .Include(x => x.Comments);
         }
 
-        
+
     }
 }

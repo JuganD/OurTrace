@@ -91,23 +91,6 @@ namespace OurTrace.Services
         }
 
 
-        public async Task AddLikeAsync(string postId, string userId)
-        {
-            var user = await identityService.GetUserById(userId).SingleOrDefaultAsync();
-            var post = await this.dbContext.Posts.SingleOrDefaultAsync(x => x.Id == postId);
-
-            if (!post.Likes.Any(x => x.User == user && x.Post == post))
-            {
-                post.Likes.Add(new PostLike()
-                {
-                    Post = post,
-                    User = user
-                });
-                await this.dbContext.SaveChangesAsync();
-            }
-        }
-
-
         public async Task AddFollowerAsync(string senderUsername, string receiverUsername)
         {
             if (senderUsername != receiverUsername)
@@ -137,7 +120,6 @@ namespace OurTrace.Services
 
         public async Task<ICollection<ProfileFriendSuggestionViewModel>> GetFriendsOfFriendsAsync(string username, int count)
         {
-            // TODO: rework
             string userId = (await identityService.GetUserByName(username)
                 .SingleOrDefaultAsync()).Id;
 

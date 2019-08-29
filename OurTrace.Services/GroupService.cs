@@ -69,7 +69,6 @@ namespace OurTrace.Services
 
         public async Task<IEnumerable<GroupWindowViewModel>> DiscoverGroupsAsync(string username)
         {
-            // TODO: figure out a better algoritm for finding groups
             var famousGroups = await dbContext.Groups
                 .Where(x => !x.Members.Any(y => y.User.UserName == username && y.ConfirmedMember == true))
                 .Include(x => x.Members)
