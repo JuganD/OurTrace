@@ -16,6 +16,10 @@ namespace OurTrace.App.Models.ViewModels.Home
         public int Followers { get; set; }
         public int Following { get; set; }
         [Ignore]
+        public AdvertViewModel HotOffer { get; set; }
+        [Ignore]
+        public ICollection<string> MemberOfGroups { get; set; }
+        [Ignore]
         public ICollection<PostViewModel> Posts { get; set; }
     }
 }

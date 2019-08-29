@@ -57,12 +57,6 @@ namespace OurTrace.Services
 
             ICollection<AdvertViewModel> advertsResult = new List<AdvertViewModel>();
 
-            if (advertsCount <= count)
-            {
-                advertsResult = this.automapper.Map<ICollection<AdvertViewModel>>(await advertsQuery.ToListAsync());
-            }
-            else
-            {
                 Random rand = new Random();
                 for (int i = 0; i < count; i++)
                 {
@@ -75,7 +69,6 @@ namespace OurTrace.Services
                         currentAdvert.ViewsLeft -= 1;
                     }
                 }
-            }
             await this.dbContext.SaveChangesAsync();
             return advertsResult;
         }

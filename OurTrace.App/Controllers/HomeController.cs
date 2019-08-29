@@ -9,6 +9,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace OurTrace.App.Controllers
 {
@@ -29,6 +30,7 @@ namespace OurTrace.App.Controllers
                 if (!string.IsNullOrEmpty(userId))
                 {
                     var newsFeedModel = await this.homeService.GetNewsfeedViewModelAsync(userId);
+                    
                     return View(newsFeedModel);
                 }
             }

@@ -5179,6 +5179,16 @@ a:hover {
 .widget-user ul li > span img {
 	padding-right: 5px;
 }
+.widget-big > .widget-about h3 {
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+.widget-big > .widget-about p {
+	min-height: 150px;
+	max-height: 300px;
+	overflow: hidden;
+	word-wrap: break-word;
+}
 
 
 /* ============== widget-adver ============ */

@@ -24,18 +24,21 @@ namespace OurTrace.Services
         private readonly IMapper automapper;
         private readonly IAdvertService advertService;
         private readonly IRelationsService relationsService;
+        private readonly IGroupService groupService;
         private readonly IdentityService identityService;
         private readonly WallService wallService;
 
         public HomeService(OurTraceDbContext dbContext,
             IMapper automapper,
             IAdvertService advertService,
-            IRelationsService relationsService)
+            IRelationsService relationsService,
+            IGroupService groupService)
         {
             this.dbContext = dbContext;
             this.automapper = automapper;
             this.advertService = advertService;
             this.relationsService = relationsService;
+            this.groupService = groupService;
             this.identityService = new IdentityService(dbContext);
             this.wallService = new WallService(dbContext);
         }
@@ -57,6 +60,12 @@ namespace OurTrace.Services
                     viewModel.Posts.Random().Adverts = await this.advertService.
                         GetRandomAdvertsAndSanctionThemAsync(5);
                 }
+
+                viewModel.MemberOfGroups = (await this.groupService
+                            .GetUserGroupsAsync(user.UserName))
+                        .Select(x => x.Name).ToList();
+
+                viewModel.HotOffer = (await this.advertService.GetRandomAdvertsAndSanctionThemAsync(1)).FirstOrDefault();
 
                 return viewModel;
             }
