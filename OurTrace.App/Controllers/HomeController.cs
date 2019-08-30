@@ -17,18 +17,14 @@ namespace OurTrace.App.Controllers
     public class HomeController : Controller
     {
         private readonly IHomeService homeService;
-        private readonly ISeeder seeder;
 
-        public HomeController(IHomeService homeService,
-            ISeeder seeder)
+        public HomeController(IHomeService homeService)
         {
             this.homeService = homeService;
-            this.seeder = seeder;
         }
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            await this.seeder.SeedAdverts(50);
             if (this.User.Identity.IsAuthenticated)
             {
                 string userId = await this.homeService.GetUserIdFromName(this.User.Identity.Name);
