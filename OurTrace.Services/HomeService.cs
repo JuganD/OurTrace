@@ -78,20 +78,16 @@ namespace OurTrace.Services
             var newsfeedState = await GetNewsfeedStateModelById(userId);
             if (newsfeedState.Model.Posts.Count - newsfeedState.Location > 20 || overrideCounter)
             {
-                List<PostViewModel> resultPosts;
                 if (!overrideCounter)
                 {
                     newsfeedState.Model.Posts = newsfeedState.Model.Posts
                     .Skip(newsfeedState.Location)
-                    .Take(20)
                     .ToList();
 
                     newsfeedState.Location += 20;
                 }
 
-                resultPosts = newsfeedState.Model.Posts.ToList();
-
-                return resultPosts;
+                return newsfeedState.Model.Posts.Take(20).ToList();
             }
             else
             {
@@ -119,6 +115,8 @@ namespace OurTrace.Services
                 // FOLLOWERS
                 var followingOfTargetAll = (await this.identityService
                     .GetUserByName(newsfeedState.Username)
+                    .Include(x=>x.Following)
+                        .ThenInclude(x=>x.Recipient)
                     .SingleOrDefaultAsync()).Following;
 
                 var followingOfTargetSender = followingOfTargetAll

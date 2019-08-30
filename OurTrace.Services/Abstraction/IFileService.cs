@@ -9,5 +9,6 @@ namespace OurTrace.Services.Abstraction
     public interface IFileService
     {
         Task SaveImageAsync(IFormFile file, string folder, string fileName);
+        Task SaveImageAsync(string fileUrl, string folder, string fileName);
     }
 }

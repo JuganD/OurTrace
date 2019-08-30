@@ -122,13 +122,29 @@ else
                             <div class="usy-name" style="position:relative;float:right;">
                                 <img src="~/images/clock.png" alt=""><span class="utcDate">@post.SharedPost.CreatedOn</span>
                             </div>
-                            <a asp-controller="File" asp-action="ProfilePicture" asp-route-name="@post.SharedPost.Creator" class="popup-image">
-                                <img src="@Url.Action("ProfilePicture","File",new { name=post.SharedPost.Creator })" style="width:40px; height:40px;" alt="">
-                            </a>
+                            @if (post.SharedPost.Creator == null)
+                            {
+                                <a asp-controller="File" asp-action="ProfilePicture" asp-route-name="@post.Creator" class="popup-image">
+                                    <img src="@Url.Action("ProfilePicture","File",new { name=post.Creator })" style="width:40px; height:40px;" alt="">
+                                </a>
 
-                            <h3>
-                                <a asp-controller="User" asp-action="Profile" asp-route-username="@post.SharedPost.Creator" class="text-black-50">@post.SharedPost.Creator</a>
-                            </h3>
+                                <h3>
+                                    <a asp-controller="User" asp-action="Profile" asp-route-username="@post.Creator" class="text-black-50">@post.Creator</a>
+                                </h3>
+                            }
+                            else
+                            {
+                                <a asp-controller="File" asp-action="ProfilePicture" asp-route-name="@post.SharedPost.Creator" class="popup-image">
+                                    <img src="@Url.Action("ProfilePicture","File",new { name=post.SharedPost.Creator })" style="width:40px; height:40px;" alt="">
+                                </a>
+
+                                <h3>
+                                    <a asp-controller="User" asp-action="Profile" asp-route-username="@post.SharedPost.Creator" class="text-black-50">@post.SharedPost.Creator</a>
+                                </h3>
+                            }
+
+
+
 
                             <div>
                                 @post.SharedPost.Content

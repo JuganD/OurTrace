@@ -13,6 +13,7 @@ using OurTrace.Services;
 using AutoMapper;
 using GeekLearning.Storage;
 using GeekLearning.Storage.Configuration;
+using OurTrace.Services.Seeding;
 
 namespace OurTrace.App
 {
@@ -61,6 +62,7 @@ namespace OurTrace.App
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Authentication/User");
 
+            services.AddScoped<ISeeder, OurTraceDbContextSeeder>();
             services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<IRelationsService, RelationsService>();
             services.AddScoped<IUserService, UserService>();
@@ -80,6 +82,7 @@ namespace OurTrace.App
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

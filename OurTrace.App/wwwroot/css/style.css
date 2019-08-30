@@ -1716,6 +1716,11 @@ main {
 	float: left;
 	width: 100%;
 }
+.widget-about p {
+	word-wrap: break-word;
+	margin-left: 5px;
+	margin-right: 5px;
+}
 .sign_link {
 	float: left;
 	width: 100%;

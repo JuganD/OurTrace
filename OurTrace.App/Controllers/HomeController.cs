@@ -10,20 +10,25 @@ using Microsoft.Extensions.DependencyInjection;
 using OurTrace.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using OurTrace.Services.Seeding;
 
 namespace OurTrace.App.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IHomeService homeService;
+        private readonly ISeeder seeder;
 
-        public HomeController(IHomeService homeService)
+        public HomeController(IHomeService homeService,
+            ISeeder seeder)
         {
             this.homeService = homeService;
+            this.seeder = seeder;
         }
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            await this.seeder.SeedAdverts(50);
             if (this.User.Identity.IsAuthenticated)
             {
                 string userId = await this.homeService.GetUserIdFromName(this.User.Identity.Name);

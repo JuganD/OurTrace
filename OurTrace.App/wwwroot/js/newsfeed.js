@@ -27,8 +27,8 @@ function CallHtmlPosts(){
 				$(dom_nodes).children(".profiles-slider").each(function (){
 					ProfileSliderSlick($(this));
 				});
-				
-				
+				DateToLocal($(dom_nodes).find(".utcDate"));
+				//console.log($(dom_nodes).find(".utcDate"));
 			},
 			fail: function (jqXHR, textStatus, errorThrown) {
 				console.log(textStatus); 
