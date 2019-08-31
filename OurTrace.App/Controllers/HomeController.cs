@@ -61,5 +61,10 @@ namespace OurTrace.App.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [Route("/Error/{code:int}")]
+        public IActionResult Error(int code)
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, StatusCode = code });
+        }
     }
 }

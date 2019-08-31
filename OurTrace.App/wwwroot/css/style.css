@@ -4673,6 +4673,7 @@ a:hover {
 .messages-list ul {
 	float: left;
 	width: 100%;
+	max-height: 600px;
 }
 .messages-list ul li {
 	float: left;

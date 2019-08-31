@@ -22,7 +22,7 @@
                             </ul>
                         </div><!--msg-title end-->
                         <div class="messages-list">
-                            <ul>
+                            <ul style="overflow-y:scroll">
                                 @foreach (var username in Model.OtherFriendsMessages)
                                 {
                                     var senderActiveClassVariable = Model.Recipient == username ? "active" : "";

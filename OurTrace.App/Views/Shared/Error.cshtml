@@ -2,15 +2,25 @@
 @{
     ViewData["Title"] = "Error";
 }
+<h1 class="text-danger text-center bg-white mt-3 font-weight-bold" style="font-size:50px">ERROR</h1>
+<div class="bg-white text-center" style="width: 100%">
+    <div class="col-md-6 offset-4 pb-3">
+        <img src="~/images/error.gif" style="height: 400px;width: 600px;" />
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+        @if (Model.StatusCode != 0)
+        {
+            <h1 class="text-danger font-weight-bold" style="font-size:40px">Code: @Model.StatusCode</h1>
+        }
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
-<h2>Contact an administrator if you keep receiving this error.</h2>
-
+        @if (Model.ShowRequestId)
+        {
+            <div class="mt-2" style="font-size:20px;width: 600px;">
+                <h2 class="text-danger">An error occurred while processing your request.</h2>
+                <p>
+                    <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                </p>
+                <h2>Contact an administrator if you keep receiving this error.</h2>
+            </div>
+        }
+    </div>
+</div>

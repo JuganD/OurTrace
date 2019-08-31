@@ -26,6 +26,15 @@ namespace OurTrace.App.Automapper
     {
         public MapperProfile()
         {
+            UserRelated_Mappings();
+            PostRelated_Mappings();
+            GroupRelated_Mappings();
+            Notification_Mappings();
+            Message_Mappings();
+            Advert_Mappings();
+        }
+        private void UserRelated_Mappings()
+        {
             CreateMap<OurTraceUser, ProfileViewModel>()
                 .ForMember(dest => dest.Years, actual => actual.MapFrom(x => AgeCalculator.GetYears(x.BirthDate ?? DateTime.Now)))
                 .ForMember(dest => dest.Following, actual => actual.MapFrom(x => x.Following.Count))
@@ -40,7 +49,16 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Following, actual => actual.MapFrom(x => x.Following.Count))
                 .ForMember(dest => dest.Followers, actual => actual.MapFrom(x => x.Followers.Count));
 
+            CreateMap<OurTraceUser, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.UserName))
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.FullName));
+
             CreateMap<RegisterInputModel, OurTraceUser>();
+            CreateMap<OurTraceUser, ProfileFriendSuggestionViewModel>();
+            CreateMap<OurTraceUser, SettingsFriendRequestViewModel>();
+        }
+        private void PostRelated_Mappings()
+        {
             CreateMap<CreatePostInputModel, Post>()
                 .ForMember(x => x.Location, option => option.Ignore());
 
@@ -48,9 +66,13 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.Creator, actual => actual.MapFrom(x => x.User.UserName))
                 .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)))
                 .ForMember(dest => dest.SharedPost, actual => actual.MapFrom(x => x.SharedPost));
-
             CreateMap<PostLike, PostLikeViewModel>()
                 .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
+
+            CreateMap<Post, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
+                .ForMember(dest => dest.ContextVariables, actual => actual.MapFrom<DictionaryAddResolver>())
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
 
             CreateMap<Share, PostShareViewModel>()
                 .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
@@ -62,6 +84,14 @@ namespace OurTrace.App.Automapper
             CreateMap<CommentLike, CommentLikeViewModel>()
                 .ForMember(dest => dest.Username, actual => actual.MapFrom(x => x.User.UserName));
 
+            CreateMap<Comment, SearchResultViewModel>()
+                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
+                .ForMember(dest => dest.ContextVariables, actual => actual.MapFrom<DictionaryAddResolver>())
+                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
+
+        }
+        private void GroupRelated_Mappings()
+        {
             CreateMap<Group, GroupWindowViewModel>()
                 .ForMember(dest => dest.Name, act => act.MapFrom(x => x.Name))
                 .ForMember(dest => dest.Members, act => act.MapFrom(x => x.Members.Count(y => y.ConfirmedMember == true)))
@@ -76,35 +106,24 @@ namespace OurTrace.App.Automapper
                 .ForMember(dest => dest.FullName, act => act.MapFrom(x => x.User.FullName))
                 .ForMember(dest => dest.JoinedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.JoinedOn)));
 
-            CreateMap<OurTraceUser, ProfileFriendSuggestionViewModel>();
-            CreateMap<OurTraceUser, SettingsFriendRequestViewModel>();
-
-            CreateMap<NotificationServiceModel, Notification>();
-            CreateMap<Notification, NotificationViewModel>()
-                .ForMember(dest => dest.DateIssued, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.DateIssued)));
-
-            CreateMap<Message, MessageViewModel>()
-                .ForMember(dest => dest.Sender, actual => actual.MapFrom(x => x.Sender.UserName))
-                .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)));
-
-            CreateMap<OurTraceUser, SearchResultViewModel>()
-                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.UserName))
-                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.FullName));
-
             CreateMap<Group, SearchResultViewModel>()
                 .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.Name))
                 .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Members.Count + " members"));
-
-            CreateMap<Post, SearchResultViewModel>()
-                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
-                .ForMember(dest => dest.ContextVariables, actual => actual.MapFrom<DictionaryAddResolver>())
-                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
-
-            CreateMap<Comment, SearchResultViewModel>()
-                .ForMember(dest => dest.Content, actual => actual.MapFrom(x => x.User.UserName))
-                .ForMember(dest => dest.ContextVariables, actual => actual.MapFrom<DictionaryAddResolver>())
-                .ForMember(dest => dest.DescriptiveContent, actual => actual.MapFrom(x => x.Content));
-
+        }
+        private void Notification_Mappings()
+        {
+            CreateMap<NotificationServiceModel, Notification>();
+            CreateMap<Notification, NotificationViewModel>()
+                .ForMember(dest => dest.DateIssued, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.DateIssued)));
+        }
+        private void Message_Mappings()
+        {
+            CreateMap<Message, MessageViewModel>()
+                .ForMember(dest => dest.Sender, actual => actual.MapFrom(x => x.Sender.UserName))
+                .ForMember(dest => dest.CreatedOn, actual => actual.MapFrom(x => JsonConvert.SerializeObject(x.CreatedOn)));
+        }
+        private void Advert_Mappings()
+        {
             CreateMap<Advert, AdvertViewModel>();
         }
     }
