@@ -17,6 +17,7 @@ $(window).on("load", function() {
 	var connection =
             new signalR.HubConnectionBuilder()
                 .withUrl("/chathub")
+				.withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
                 .build();
 
         connection.on("NewMessage",
@@ -29,7 +30,7 @@ $(window).on("load", function() {
             connection.invoke("Send",recipientName,messageText);
 			$("#message-input-box").val("");
 			
-			let currentMessage = {sender:currentUsername, content:messageText};
+			let currentMessage = {Sender:currentUsername, Content:messageText};
 			AddMessageToChat(currentMessage,false);
         });
 
@@ -45,7 +46,10 @@ function AddMessageToChat(message,isSender) {
 		class1 = "ta-right";
 		class2 = "";
 	}
-    var chatMessage = "<div class=\"main-message-box "+class1+"\">"+"<div class=\"message-dt "+class2+"\">"+"<div class=\"message-inner-dt\">"+"<p>"+message.content+"</p>"+"</div>"+"<span style=\"display:inline-block\">"+GetDateStringFromDate(new Date())+"</span>"+"</div>"+"<div class=\"messg-usr-img\">"+"<img src=\"/File/ProfilePicture/"+message.sender+"\""+"alt=\"Avatar\" style=\"width:100%;\">"+"</div>"+"</div>";
+	
+	let messageContent = message.Content == undefined ? message.content : message.Content;
+	let messageSender = message.Sender == undefined ? message.sender : message.Sender;
+    var chatMessage = "<div class=\"main-message-box "+class1+"\">"+"<div class=\"message-dt "+class2+"\">"+"<div class=\"message-inner-dt\">"+"<p>"+messageContent+"</p>"+"</div>"+"<span style=\"display:inline-block\">"+GetDateStringFromDate(new Date())+"</span>"+"</div>"+"<div class=\"messg-usr-img\">"+"<img src=\"/File/ProfilePicture/"+messageSender+"\""+"alt=\"Avatar\" style=\"width:100%;\">"+"</div>"+"</div>";
     $("#chatbox-chat-container").append(chatMessage);
 	updateScroll();
 }
