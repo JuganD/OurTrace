@@ -30,19 +30,21 @@ namespace OurTrace.App.Hubs
             if (await this.relationsService.AreFriendsWithAsync(this.Context.User.Identity.Name, username))
             {
                 await this.messageService.SendMessageAsync(this.Context.User.Identity.Name, username, message);
-                await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
-                {
-                    Action = "/",
-                    Controller = "Message",
-                    ElementId = this.Context.User.Identity.Name,
-                    Username = username,
-                    Content = this.Context.User.Identity.Name + " said: " + message
-                });
                 IClientProxy userproxy;
                 var userIdFetchResult = ConnectedUsers.TryGetValue(username, out userproxy);
                 if (userIdFetchResult)
                 {
                     await userproxy.SendAsync("NewMessage", new MessageViewModel() {Sender = this.Context.User.Identity.Name, Content = message });
+                } else
+                {
+                    await this.notificationService.AddNotificationToUserAsync(new Services.Models.NotificationServiceModel()
+                    {
+                        Action = "/",
+                        Controller = "Message",
+                        ElementId = this.Context.User.Identity.Name,
+                        Username = username,
+                        Content = this.Context.User.Identity.Name + " said: " + message
+                    });
                 }
             }
         }
