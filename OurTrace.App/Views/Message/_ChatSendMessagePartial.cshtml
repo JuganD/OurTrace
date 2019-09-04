@@ -1,10 +1,10 @@
 ﻿@using OurTrace.App.Models.InputModels.Message
 @model SendMessageInputModel
 
-<form asp-controller="Message" asp-action="SendMessage" method="post">
+<div>
     <input id="recipient-input" name="Recipient" type="hidden" value="" />
     <div class="mf-field">
-        <input asp-for="Content" type="text" autocomplete="off" placeholder="Type a message here">
-        <button type="submit">Send</button>
+        <input id="message-input-box" type="text" autocomplete="off" placeholder="Type a message here">
+        <button id="sendButton" type="submit">Send</button>
     </div>
-</form>
+</div>

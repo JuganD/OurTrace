@@ -7,7 +7,7 @@
 @section Css {
     <link rel="stylesheet" type="text/css" href="~/css/chat.css">
 }
-
+<input type="hidden" id="current-user-name" value="@User.Identity.Name" />
 <section class="messages-page">
     <div class="container">
         <div class="messages-sec">
@@ -95,7 +95,8 @@
                         @if (Model.AreFriends)
                         {
                             <partial name="_ChatSendMessagePartial" model="null" />
-                        } else
+                        }
+                        else
                         {
                             <div class="text-center" style="height:45px">You cannot send messages, because you are no longer friends.</div>
                         }
@@ -109,4 +110,5 @@
 
 @section Scripts {
     <script src="~/js/chat.js" asp-append-version="true"></script>
+    <script src="~/js/signalr.min.js" asp-append-version="true"></script>
 }

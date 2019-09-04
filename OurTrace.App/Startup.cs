@@ -14,6 +14,7 @@ using AutoMapper;
 using GeekLearning.Storage;
 using GeekLearning.Storage.Configuration;
 using OurTrace.Services.Seeding;
+using OurTrace.App.Hubs;
 
 namespace OurTrace.App
 {
@@ -76,7 +77,7 @@ namespace OurTrace.App
             services.AddScoped<UserManager<OurTraceUser>, UserManager<OurTraceUser>>();
             services.AddTransient<IRoleService, RoleService>();
 
-
+            services.AddSignalR().AddMessagePackProtocol();
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -104,6 +105,9 @@ namespace OurTrace.App
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
+            app.UseSignalR(
+               route => route.MapHub<ChatHub>("/chathub"));
 
             app.UseMvc(routes =>
             {
